@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import cx from 'classnames';
 import UiButton from '../UiButton';
-import { ReactComponent as AddPackageSvg } from '../../assets/svg/add-icon.svg';
-import { ReactComponent as DeletePackageSvg } from '../../assets/svg/delete.svg';
+import PackageListItem from '../PackageListItem';
 
 const test = [1, 2, 3, 4];
 
@@ -36,23 +34,11 @@ const PackageTab = () => {
       </button>
       <div className="package-tab__list">
         {test.map((el) => (
-          <div
-            onClick={() => handlePackageSelect(el)}
-            role="presentation"
-            className={cx(
-              'package-tab-item',
-              selectedPackages[el] && 'package-tab-item--selected',
-            )}
-          >
-            <button type="button" className="package-tab-item__action-btn">
-              {selectedPackages[el] ? <DeletePackageSvg /> : <AddPackageSvg />}
-            </button>
-            <div className="package-tab-item__img" />
-            <p className="package-tab-item__title">
-              A#12 Ready-to-eat meals and rations meals
-            </p>
-            <p className="package-tab-item__date">12 Aug 2021</p>
-          </div>
+          <PackageListItem
+            key={el}
+            onclick={() => handlePackageSelect(el)}
+            selected={selectedPackages[el]}
+          />
         ))}
       </div>
     </div>
