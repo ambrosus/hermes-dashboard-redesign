@@ -15,7 +15,10 @@ export default class HermesExtendedApi {
   }
 
   sign(privateKey, data) {
-    return this.web3.eth.accounts.sign(this.serializeForHashing(data), privateKey).signature;
+    return this.web3.eth.accounts.sign(
+      this.serializeForHashing(data),
+      privateKey,
+    ).signature;
   }
 
   calculateHash(data) {
@@ -31,23 +34,27 @@ export default class HermesExtendedApi {
   }
 
   serializeForHashing(object) {
-    const isDict = (subject) => typeof subject === 'object' && !Array.isArray(subject);
+    const isDict = (subject) =>
+      typeof subject === 'object' && !Array.isArray(subject);
     const isString = (subject) => typeof subject === 'string';
     const isArray = (subject) => Array.isArray(subject);
 
     if (isDict(object)) {
-      const content = Object.keys(object).sort()
+      const content = Object.keys(object)
+        .sort()
         .map((key) => `"${key}":${this.serializeForHashing(object[key])}`)
         .join(',');
       return `{${content}}`;
     } else if (isArray(object)) {
-      const content = object.map((item) => this.serializeForHashing(item)).join(',');
+      const content = object
+        .map((item) => this.serializeForHashing(item))
+        .join(',');
       return `[${content}]`;
     } else if (isString(object)) {
       return `"${object}"`;
     }
     return object.toString();
-  };
+  }
 
   generateToken(privateKey, seconds = 86400 * 10000) {
     const idData = {
@@ -55,10 +62,12 @@ export default class HermesExtendedApi {
       validUntil: this.unixTime() + seconds,
     };
 
-    const token = base64url(this.serializeForHashing({
-      idData,
-      signature: this.sign(privateKey, idData)
-    }));
+    const token = base64url(
+      this.serializeForHashing({
+        idData,
+        signature: this.sign(privateKey, idData),
+      }),
+    );
 
     return token;
   }
@@ -68,17 +77,17 @@ export default class HermesExtendedApi {
     const idData = {
       createdBy: address,
       sequenceNumber: 0,
-      timestamp: this.unixTime()
+      timestamp: this.unixTime(),
     };
 
     const content = {
       idData,
-      signature: this.sign(secret, idData)
+      signature: this.sign(secret, idData),
     };
 
     const asset = {
       assetId: this.calculateHash(content),
-      content
+      content,
     };
 
     return asset;
@@ -91,18 +100,18 @@ export default class HermesExtendedApi {
       timestamp: this.unixTime(),
       accessLevel: 0,
       createdBy: address,
-      dataHash: this.calculateHash(dataArray)
+      dataHash: this.calculateHash(dataArray),
     };
 
     const content = {
       idData,
       signature: this.sign(secret, idData),
-      data: dataArray
+      data: dataArray,
     };
 
     const event = {
       eventId: this.calculateHash(content),
-      content
+      content,
     };
 
     return event;
@@ -110,9 +119,9 @@ export default class HermesExtendedApi {
 
   getHeaders(privateKey) {
     return {
-      'Authorization': `AMB_TOKEN ${this.generateToken(privateKey)}`,
+      Authorization: `AMB_TOKEN ${this.generateToken(privateKey)}`,
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      Accept: 'application/json',
     };
   }
 
@@ -133,8 +142,11 @@ export default class HermesExtendedApi {
     try {
       const address = this.privateKeyToAddress(secret);
       const asset = this.generateAsset(secret);
-      const result = await axios.post(`${this.extendedApiUrl}/asset2/create/${asset.assetId}`,
-        asset, {headers: this.getHeaders(secret)});
+      const result = await axios.post(
+        `${this.extendedApiUrl}/asset2/create/${asset.assetId}`,
+        asset,
+        { headers: this.getHeaders(secret) },
+      );
       if (result.status !== 200) {
         throw new Error(`${result.status} ${result.statusText}`);
       }
@@ -149,8 +161,11 @@ export default class HermesExtendedApi {
     try {
       const address = this.privateKeyToAddress(secret);
       const event = this.generateEvent(assetId, data, secret);
-      const result = await axios.post(`${this.extendedApiUrl}/event2/create/${event.eventId}`,
-        event, {headers: this.getHeaders(secret)});
+      const result = await axios.post(
+        `${this.extendedApiUrl}/event2/create/${event.eventId}`,
+        event,
+        { headers: this.getHeaders(secret) },
+      );
       if (result.status !== 200) {
         throw new Error(`${result.status} ${result.statusText}`);
       }
@@ -172,11 +187,14 @@ export default class HermesExtendedApi {
         email: `${account.address}@no.com`,
         fullName: account.address,
         accessLevel: 100,
-        permissions: ['create_asset', 'create_event']
-      }
+        permissions: ['create_asset', 'create_event'],
+      };
 
-      const result = await axios.post(`${this.extendedApiUrl}/account2/create/${account.address}`,
-        payload, {headers: this.getHeaders(this.builtInPrivateKey)});
+      const result = await axios.post(
+        `${this.extendedApiUrl}/account2/create/${account.address}`,
+        payload,
+        { headers: this.getHeaders(this.builtInPrivateKey) },
+      );
       if (result.status !== 200) {
         throw new Error(`${result.status} ${result.statusText}`);
       }
@@ -191,7 +209,7 @@ export default class HermesExtendedApi {
 function start() {
   try {
     if (!EXT_URI || !MASTER_PRIVATE_KEY) {
-      console.error("Required env: EXT_URI, MASTER_PRIVATE_KEY");
+      console.error('Required env: EXT_URI, MASTER_PRIVATE_KEY');
       return;
     }
     console.log('START');
