@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { DashboardTab, AccountsTab, SettingsTab } from './components/Tabs';
 import Sidebar from './components/Sidebar';
+import { ACCOUNTS_TAB, DASHBOARD_TAB, SETTINGS_TAB } from '../../../config';
 
 const Organization = () => {
   const [tab, setTab] = useState(() => <DashboardTab />);
 
   const viewActiveTab = (tabType) => {
     switch (tabType) {
-      case 'DASHBOARD_TAB':
+      case DASHBOARD_TAB:
         return setTab(<DashboardTab />);
-      case 'ACCOUNTS_TAB':
+      case ACCOUNTS_TAB:
         return setTab(<AccountsTab />);
-      case 'SETTINGS_TAB':
+      case SETTINGS_TAB:
         return setTab(<SettingsTab />);
       default:
         return setTab(<DashboardTab />);

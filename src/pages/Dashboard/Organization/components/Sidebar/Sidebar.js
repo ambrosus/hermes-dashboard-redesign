@@ -5,6 +5,11 @@ import cx from 'classnames';
 import diagramIcon from '../../../../../assets/svg/leaderboard.svg';
 import accountIcon from '../../../../../assets/svg/people.svg';
 import settingsIcon from '../../../../../assets/svg/settings.svg';
+import {
+  ACCOUNTS_TAB,
+  DASHBOARD_TAB,
+  SETTINGS_TAB,
+} from '../../../../../config';
 
 const Sidebar = (props) => {
   const [activeMenuTab, setActiveMenuTab] = useState('DASHBOARD_TAB');
@@ -17,11 +22,11 @@ const Sidebar = (props) => {
       <div
         role="presentation"
         className="organization-sidebar__item"
-        onClick={() => setActiveMenuHandler('DASHBOARD_TAB')}
+        onClick={() => setActiveMenuHandler(DASHBOARD_TAB)}
       >
         <ReactSVG
           className={cx('svg', {
-            'svg-active': activeMenuTab === 'DASHBOARD_TAB',
+            'svg-active': activeMenuTab === DASHBOARD_TAB,
           })}
           src={diagramIcon}
         />{' '}
@@ -30,11 +35,11 @@ const Sidebar = (props) => {
       <div
         role="presentation"
         className="organization-sidebar__item"
-        onClick={() => setActiveMenuHandler('ACCOUNTS_TAB')}
+        onClick={() => setActiveMenuHandler(ACCOUNTS_TAB)}
       >
         <ReactSVG
           className={cx('svg', {
-            'svg-active': activeMenuTab === 'ACCOUNTS_TAB',
+            'svg-active': activeMenuTab === ACCOUNTS_TAB,
           })}
           src={accountIcon}
         />{' '}
@@ -43,11 +48,11 @@ const Sidebar = (props) => {
       <div
         role="presentation"
         className="organization-sidebar__item"
-        onClick={() => setActiveMenuHandler('SETTINGS_TAB')}
+        onClick={() => setActiveMenuHandler(SETTINGS_TAB)}
       >
         <ReactSVG
           className={cx('svg', {
-            'svg-active': activeMenuTab === 'SETTINGS_TAB',
+            'svg-active': activeMenuTab === SETTINGS_TAB,
           })}
           src={settingsIcon}
         />{' '}

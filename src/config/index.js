@@ -1,0 +1,3 @@
+export const DASHBOARD_TAB = 'DASHBOARD_TAB';
+export const ACCOUNTS_TAB = 'ACCOUNTS_TAB';
+export const SETTINGS_TAB = 'SETTINGS_TAB';
