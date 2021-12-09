@@ -1,0 +1,24 @@
+.ui-toggle {
+  &__option span {
+    color: $color-gray;
+    display: flex;
+    align-items: center;
+    padding: 12px 33px;
+    justify-content: center;
+  }
+
+  &__option {
+    background: white;
+    border-radius: 90px;
+    width: 49%;
+  }
+
+  &__options-wrapper {
+    min-height: 48px;
+    border-radius: 90px;
+    background: $whiteToGray;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px;
+  }
+}

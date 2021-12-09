@@ -1,0 +1,108 @@
+.btn {
+  border: none;
+  cursor: pointer;
+  background: $color-primary;
+  color: $white;
+  min-width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  min-height: 32px;
+  max-height: 54px;
+  padding: 0 25px;
+  border-radius: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  font-family: Rubik;
+
+  p {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+  }
+
+  img {
+    margin-right: 8px;
+  }
+
+  // types
+
+  &.secondary {
+    background-color: $color-blue;
+    padding: 0 10px !important;
+  }
+
+  &.primary {
+    background-color: $color-primary;
+  }
+
+  &.plain {
+    background-color: $whiteToGray;
+    color: $color-gray;
+
+    &.selected {
+      background-color: $color-gray;
+      color: white;
+    }
+
+    img {
+      margin-right: 0;
+    }
+  }
+
+  &.light {
+    background: #ffffff;
+    color: $color-gray;
+    border: 1px solid $color-gray;
+  }
+
+  &.pale {
+    padding: 12px;
+    min-width: 160px;
+    width: min-content;
+    background: $whiteToGray;
+    color: $color-gray;
+  }
+
+  &.icon {
+    height: 32px;
+    width: 32px;
+    border-radius: 12px;
+    padding: 0;
+    background: $whiteToGray;
+
+    img {
+      margin-right: 0;
+    }
+  }
+
+  //priority
+  &.icon-btn {
+    padding: 6px !important;
+  }
+
+  &.outline {
+    border: 1px solid $color-blue;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background-color: $white !important;
+    color: $color-gray;
+  }
+}
+
+button[disabled=disabled], button:disabled {
+  background: $color-blue !important;
+  opacity: 0.8;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+

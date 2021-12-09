@@ -1,0 +1,30 @@
+.asset-page {
+  padding-top: 50px;
+
+  &__type {
+    display: flex;
+    align-items: center;
+    width: min-content;
+    background: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(55, 29, 199, 0.15);
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-right: auto;
+
+    svg {
+      margin-right: 5px;
+
+      path {
+        fill: #333333;
+      }
+    }
+  }
+
+  &__top-info {
+    display: flex;
+  }
+
+  &__images-wrapper {
+    display: flex;
+  }
+}

@@ -1,0 +1,28 @@
+.auth-page {
+  &__choose-text {
+    margin: 65px 0 25px;
+    font-weight: 400;
+  }
+
+  &__tabs-btn {
+    min-width: 204px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    box-shadow: 0 1px rgb(255 255 255 / 25%);
+    color: $color-gray;
+
+    &--selected {
+      color: white;
+      box-shadow: 0 2px #fff, inset 0 -1px #fff;
+    }
+  }
+}
+
+.tooltip-info-btn {
+  fill: $color-gray;
+
+  &:hover {
+    fill: #00b7f9;
+  }
+}

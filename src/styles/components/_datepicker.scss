@@ -1,0 +1,39 @@
+.daterangepicker {
+  background: #FFFFFF;
+  box-shadow: 0px 4px 12px rgba(74, 56, 174, 0.15);
+  border-radius: 12px;
+  border: 0;
+
+  &::before {
+    content: none;
+  }
+
+  .drp-buttons {
+    display: flex!important;
+    align-items: center;
+
+    button {
+      padding: 8px 16px!important;
+      width: min-content;
+    }
+
+    .cancelBtn {
+      background: $color-gray-light;
+      margin-left: auto;
+    }
+  }
+
+  .calendar-table th, .calendar-table td {
+    line-height: 31px;
+  }
+
+  td.active, td.active:hover, .end-date {
+    background: $color-primary!important;
+    color: white!important;
+  }
+
+  td.in-range {
+    color: $color-primary;
+    background: $whiteToGray;
+  }
+}

@@ -1,0 +1,37 @@
+.auth-input {
+  position: relative;
+
+  &__input {
+    border: 1px solid $color-gray;
+    background: transparent;
+    padding: 12px 25px 12px 16px;
+    width: 100%;
+
+    &--error {
+      border-color: #d64040;
+    }
+  }
+
+  &__label {
+    display: block;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 500;
+    margin-bottom: 10px;
+
+    &--error {
+      color: #d64040!important;
+    }
+  }
+
+  &__right-el {
+    position: absolute;
+    right: 15px;
+    bottom: 8px;
+  }
+
+  &__error-message {
+    color: #d64040!important;
+    font-size: 11px;
+  }
+}

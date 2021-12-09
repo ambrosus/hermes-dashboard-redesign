@@ -1,0 +1,17 @@
+.event-page {
+  background: #e5e5e5;
+  padding-top: 50px;
+  padding-bottom: 120px;
+
+  &__similar-event {
+    max-width: 160px;
+    background: #fff;
+    color: $color-gray;
+    margin-left: auto;
+  }
+
+  &__back {
+    margin-top: 60px;
+    background: $color-gray;
+  }
+}

@@ -1,0 +1,18 @@
+.auth-request {
+  &__form {
+    margin-top: 30px;
+  }
+
+  &__checkbox {
+    margin-top: 20px;
+  }
+
+  &__submit {
+    margin-top: 40px;
+  }
+
+  .auth-input {
+    margin-top: 25px;
+    width: 410px;
+  }
+}

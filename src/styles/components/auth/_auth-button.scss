@@ -1,0 +1,23 @@
+.auth-button {
+  color: #122283;
+  background: #ffffff;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 15px;
+  width: 192px;
+  padding: 11px 0;
+  margin: 0 auto;
+  display: block;
+
+  &--plain {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    transition: .3s;
+
+    &:hover {
+      border-color: $color-gray;
+      color: $color-gray;
+    }
+  }
+}
