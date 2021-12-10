@@ -24,10 +24,7 @@ const Organization = () => {
       <div className="sidebar">
         <Sidebar setActiveTab={viewActiveTab} />
       </div>
-      <div className="content">
-        <div className="organization-container__heading">Dashboard</div>
-        {tab}
-      </div>
+      <div className="content">{tab}</div>
       <div className="sidebar" />
     </div>
   );
