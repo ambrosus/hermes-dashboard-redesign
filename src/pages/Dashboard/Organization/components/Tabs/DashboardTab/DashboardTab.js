@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+/*eslint-disable*/
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -10,6 +11,9 @@ import {
   Legend,
 } from 'chart.js';
 import faker from 'faker';
+import Utils from 'moment';
+
+import TabOptions from './components/TabOptions';
 
 ChartJS.register(
   CategoryScale,
@@ -26,11 +30,10 @@ export const options = {
       position: 'top',
     },
     title: {
-      display: true,
+      display: false,
     },
   },
 };
-
 const labels = [
   { month: 'January', days: faker.datatype.number({ min: 0, max: 31 }) },
   { month: 'February', days: faker.datatype.number({ min: 0, max: 28 }) },
@@ -46,40 +49,86 @@ const labels = [
   { month: 'December', days: faker.datatype.number({ min: 0, max: 31 }) },
 ];
 
-export const data = {
-  labels: labels.map((month) => month.month),
-  datasets: [
-    {
-      label: 'Label',
-      data: labels.map((month) => {
-        console.log(faker.datatype.number({ min: 0, max: month.days }));
-        return faker.datatype.number({ min: 0, max: month.days });
-      }),
-      backgroundColor: '#4A38AE',
-    },
-  ],
-};
+const DashboardTab = () => {
+  const [activePeriod, setActivePeriod] = useState('7d');
+  const [groupBy, setGroupBy] = useState('7d');
+  // group: ['24h', '7d', 'mtd', '28d', '12m'],
+ const format=()=> {
+    switch (groupBy) {
+      case '24h':
+        return 'HH';
+      case '7d':
+        return 'DD-MM';
+      case '28d':
+        return 'DD-MM';
+      case '12m':
+        return 'MMMM';
+      default:
+        return 'Y-MM-DD-HH';
+    }
+  }
+    const getGroup=()=> {
+        switch (groupBy) {
+            case '24h':
+                return 'hour';
+            case '12m':
+                return 'month';
+            default:
+                return 'day';
+        }
+    }
+  //mock
+  const handlePeriod = (period) => {
+    switch (period) {
+      case '24h':
+        return 1;
+      case '7d':
+        return 7;
+      case '28d':
+        return 30;
+      case '12m':
+        return 365;
+    }
+  };
 
-const DashboardTab = () => (
-  <div className="dashboard-tab">
-    <div className="organization-container__heading">DashboardTab</div>
-    <div className="dashboard-tab__options">
-      <div className="sort-by-type">
-        <button type="button">Assets</button>
-        <button type="button">Events</button>
-      </div>
-      <div className="sort-by-period">
-        <button type="button">Day</button>
-        <button type="button">Week</button>
-        <button type="button">Month</button>
-        <button type="button">Year</button>
-      </div>
+  const data = {
+    labels: labels.map((month) => month.month),
+    datasets: [
+      {
+        label: 'Assets',
+        data: labels.map(() => {
+          return faker.datatype.number({
+            min: 0,
+            max: handlePeriod(activePeriod),
+          });
+        }),
+        backgroundColor: '#4A38AE',
+      },
+      {
+        label: 'Events',
+        data: labels.map(() => {
+          return faker.datatype.number({ min: 0, max:  handlePeriod(activePeriod)});
+        }),
+        backgroundColor: '#9dd58d',
+      },
+    ],
+  };
+  return (
+    <div className="dashboard-tab">
+      <div className="organization-container__heading">DashboardTab</div>
+      <TabOptions period={activePeriod} setPeriod={setActivePeriod} />
+      <div className="space-25" />
+      <Bar
+        options={options}
+        data={data}
+        style={{
+          boxShadow: '0px 4px 12px rgba(55, 29, 199, 0.15)',
+          borderRadius: 12,
+          padding: 20,
+        }}
+      />
     </div>
-    <div>
-      {' '}
-      <Bar options={options} data={data} />
-    </div>
-  </div>
-);
+  );
+};
 
 export default DashboardTab;
