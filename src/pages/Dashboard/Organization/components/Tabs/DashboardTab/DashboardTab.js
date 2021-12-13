@@ -34,7 +34,7 @@ ChartJS.register(
 
 const DashboardTab = () => {
   const [display, setDisplay] = useState('asset');
-  const [groupBy, setGroupBy] = useState('24h');
+  const [groupBy, setGroupBy] = useState('7d');
   const [data, setData] = useState(null);
   let Dlabels = [];
   let Ddata = [];
@@ -80,10 +80,6 @@ const DashboardTab = () => {
         start = getTimestampSubDays(7);
         break;
 
-      case 'mtd':
-        start = getTimestampMonthStart();
-        break;
-
       case '28d':
         start = getTimestampSubDays(28);
         break;
@@ -110,14 +106,17 @@ const DashboardTab = () => {
         display,
         start,
         end,
-        getGroup,
+        getGroup(type),
       );
+      console.log(formattingGroup(type));
       kakoitoTimeSeries.count.map((stat) => {
         Dlabels.push(
           moment(stat.timestamp * 1000).format(formattingGroup(type)),
         );
         Ddata.push(stat.count);
       });
+      console.log(kakoitoTimeSeries);
+
       setData({
         data: {
           labels: Dlabels,
@@ -139,14 +138,6 @@ const DashboardTab = () => {
               display: false,
             },
             scales: {
-              xAxes: [
-                {
-                  maxBarThickness: 5,
-                  gridLines: {
-                    display: false,
-                  },
-                },
-              ],
               yAxes: [
                 {
                   ticks: {
