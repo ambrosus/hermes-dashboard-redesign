@@ -61,7 +61,7 @@ export const getTimeRangeCountAggregate = async (
 };
 
 export const getTimeRangeCountAggregateForOrganization = async (
-  organizationId,
+  organizationId = 9,
   collection,
   start,
   end,

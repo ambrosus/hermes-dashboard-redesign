@@ -59,7 +59,7 @@ const AssetItem = ({ isOnAssetPage, assetData }) => {
         )}
       >
         <Link to={`/dashboard/assets/${assetId}`} className="asset-item__title">
-          {assetName}
+          {assetName.toString()}
         </Link>
         <div className="asset-item-info">
           <div className="asset-item-info__events">1434 Events</div>

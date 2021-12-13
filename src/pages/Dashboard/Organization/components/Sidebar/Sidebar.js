@@ -12,7 +12,7 @@ import {
 } from '../../../../../config';
 
 const Sidebar = (props) => {
-  const [activeMenuTab, setActiveMenuTab] = useState('DASHBOARD_TAB');
+  const [activeMenuTab, setActiveMenuTab] = useState(DASHBOARD_TAB);
   const setActiveMenuHandler = (tabName) => {
     setActiveMenuTab(tabName);
     props.setActiveTab(tabName);
@@ -21,7 +21,9 @@ const Sidebar = (props) => {
     <div className="organization-sidebar">
       <div
         role="presentation"
-        className="organization-sidebar__item"
+        className={cx('organization-sidebar__item', {
+          'organization-sidebar__item-active': activeMenuTab === DASHBOARD_TAB,
+        })}
         onClick={() => setActiveMenuHandler(DASHBOARD_TAB)}
       >
         <ReactSVG
@@ -34,7 +36,9 @@ const Sidebar = (props) => {
       </div>
       <div
         role="presentation"
-        className="organization-sidebar__item"
+        className={cx('organization-sidebar__item', {
+          'organization-sidebar__item-active': activeMenuTab === ACCOUNTS_TAB,
+        })}
         onClick={() => setActiveMenuHandler(ACCOUNTS_TAB)}
       >
         <ReactSVG
@@ -47,7 +51,9 @@ const Sidebar = (props) => {
       </div>
       <div
         role="presentation"
-        className="organization-sidebar__item"
+        className={cx('organization-sidebar__item', {
+          'organization-sidebar__item-active': activeMenuTab === SETTINGS_TAB,
+        })}
         onClick={() => setActiveMenuHandler(SETTINGS_TAB)}
       >
         <ReactSVG

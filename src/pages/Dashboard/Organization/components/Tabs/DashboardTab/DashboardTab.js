@@ -39,19 +39,15 @@ const DashboardTab = () => {
   const isAuth = useSelector((state) => state.auth.isAuth);
   let Dlabels = [];
   let Ddata = [];
-  const [timeSeries, setTimeSeries] = useState({
-    labels: [],
-    data: [],
-  });
 
   useEffect(() => {
     if (isAuth) {
-      generateDiagram();
+      generateDiagram(groupBy);
     }
-  }, [timeSeries]);
+  }, [groupBy, display, data]);
 
-  const formattingGroup = () => {
-    switch (groupBy) {
+  const formattingGroup = (type) => {
+    switch (type) {
       case '24h':
         return 'HH';
       case '7d':
@@ -64,8 +60,8 @@ const DashboardTab = () => {
         return 'Y-MM-DD-HH';
     }
   };
-  const getGroup = () => {
-    switch (groupBy) {
+  const getGroup = (type) => {
+    switch (type) {
       case '24h':
         return 'hour';
       case '12m':
@@ -74,11 +70,11 @@ const DashboardTab = () => {
         return 'day';
     }
   };
-  const getStartEnd = () => {
+  const getStartEnd = (type) => {
     let start = 0;
     let end = 0;
 
-    switch (groupBy) {
+    switch (type) {
       case '24h':
         start = getTimestampSubHours(24);
         break;
@@ -104,11 +100,12 @@ const DashboardTab = () => {
 
     return [start, end];
   };
-  const generateDiagram = async () => {
+  const generateDiagram = async (type) => {
+    console.log('generateDiagram render');
     Dlabels = [];
     Ddata = [];
     try {
-      const [start, end] = getStartEnd();
+      const [start, end] = getStartEnd(type);
       //TODO sessionStorage.getItem('GET_ACCOUNT')
       const kakoitoTimeSeries = await getTimeRangeCountAggregateForOrganization(
         9,
@@ -118,20 +115,18 @@ const DashboardTab = () => {
         getGroup,
       );
       kakoitoTimeSeries.count.map((stat) => {
-        Dlabels.push(moment(stat.timestamp * 1000).format(formattingGroup()));
+        Dlabels.push(
+          moment(stat.timestamp * 1000).format(formattingGroup(type)),
+        );
         Ddata.push(stat.count);
       });
-      setTimeSeries({
-        labels: Dlabels,
-        data: Ddata,
-      });
-      const canvasData = {
+      setData({
         data: {
-          labels: timeSeries.labels,
+          labels: Dlabels,
           datasets: [
             {
-              data: timeSeries.data,
-              backgroundColor: '#bed0ef',
+              data: Ddata,
+              backgroundColor: '#4A38AE',
               hoverBackgroundColor: '#bed0ef',
             },
           ],
@@ -144,7 +139,6 @@ const DashboardTab = () => {
             },
             title: {
               display: false,
-              text: 'Chart.js Bar Chart',
             },
             scales: {
               xAxes: [
@@ -168,12 +162,7 @@ const DashboardTab = () => {
             },
           },
         },
-      };
-      if (canvasData) {
-        setData(canvasData);
-        Dlabels = [];
-        Ddata = [];
-      }
+      });
     } catch (e) {
       alert('in generateDiagram error', e);
     }
