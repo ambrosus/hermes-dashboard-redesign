@@ -1,7 +1,7 @@
 import { SET_ETH_ADDRESS, SIGN_IN } from './constants';
 
 const defaultState = {
-  isAuth: !!sessionStorage.getItem('user_public_key'),
+  isAuth: !!sessionStorage.getItem('user_private_key'),
   etherAddress: {
     privateKey: '',
     publicKey: '',

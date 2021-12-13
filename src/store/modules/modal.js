@@ -3,7 +3,10 @@ const moduleName = 'modal';
 const OPEN_MODAL = `${moduleName}/OPEN_MODAL`;
 
 const defaultState = {
-  openedModal: '',
+  openedModal: {
+    name: '',
+    data: null,
+  },
 };
 
 export default (state = defaultState, { type, payload }) => {
@@ -15,7 +18,10 @@ export default (state = defaultState, { type, payload }) => {
   }
 };
 
-export const handleModal = (modalName) => ({
+export const handleModal = (modalData) => ({
   type: OPEN_MODAL,
-  payload: modalName,
+  payload: modalData || {
+    name: '',
+    data: null,
+  },
 });

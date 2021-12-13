@@ -2,13 +2,26 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
 
-const UiSelect = ({ label, selectedValue, options, placeholder, onChange }) => {
+const UiSelect = ({
+  label,
+  selectedValue,
+  options,
+  placeholder,
+  onChange,
+  name,
+}) => {
   const selectEl = useRef(null);
   const [isOptionsOpened, setIsOptionsOpened] = useDetectOutsideClick(
     selectEl,
     false,
   );
   const toggleOptionsVisibility = () => setIsOptionsOpened(!isOptionsOpened);
+
+  const handleChange = (value) => {
+    onChange(name ? { [name]: value } : value);
+    setIsOptionsOpened(false);
+  };
+
   return (
     <div className="ui-input ui-select" ref={selectEl}>
       {label && <label className="ui-input__label">{label}</label>}
@@ -18,7 +31,9 @@ const UiSelect = ({ label, selectedValue, options, placeholder, onChange }) => {
         onClick={toggleOptionsVisibility}
       >
         {selectedValue ? (
-          <span className="ui-select__value">{selectedValue}</span>
+          <span className="ui-select__value">
+            {options.find((el) => el.value === selectedValue).label}
+          </span>
         ) : (
           <span className="ui-select__placeholder">{placeholder}</span>
         )}
@@ -30,7 +45,7 @@ const UiSelect = ({ label, selectedValue, options, placeholder, onChange }) => {
               <button
                 className="ui-select__option"
                 type="button"
-                onClick={() => onChange(el.value)}
+                onClick={() => handleChange(el.value)}
               >
                 {el.label}
               </button>
@@ -47,6 +62,7 @@ UiSelect.propTypes = {
   selectedValue: PropTypes.string,
   options: PropTypes.array,
   placeholder: PropTypes.string,
+  name: PropTypes.string,
   onChange: PropTypes.func,
 };
 

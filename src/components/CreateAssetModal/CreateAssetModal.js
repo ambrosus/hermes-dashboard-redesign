@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { handleModal } from '../../store/modules/modal';
 import UiInput from '../UiInput';
 import UiSelect from '../UiSelect';
 import UiToggle from '../UiToggle';
 import visibilityIcon from '../../assets/svg/visibility.svg';
 import visibilityOffIcon from '../../assets/svg/visibility_off.svg';
-import UiTextaera from '../UiTextaera';
+import { ReactComponent as CheckmarkIcon } from '../../assets/svg/checkmark-transparent.svg';
+import { ReactComponent as CloseFilledIcon } from '../../assets/svg/close-filled.svg';
+import UiTextarea from '../UiTextaera';
 import addIcon from '../../assets/svg/add-icon.svg';
 import uploadIcon from '../../assets/svg/upload.svg';
 import infoIcon from '../../assets/svg/info-filled.svg';
 import UiButton from '../UiButton';
 import AddedField from './AddedField';
-import UiModal from '../UiModal';
 
 const privateToggleOptions = [
   {
@@ -35,43 +38,44 @@ const privateToggleOptions = [
   },
 ];
 
-const CreateAssetModal = () => {
+const CreateAssetModal = ({ isCreateEvent }) => {
   const dispatch = useDispatch();
 
-  const [images, setImages] = useState([]);
+  const [isJSONForm, setIsJSONForm] = useState(false);
   const [imgUrl, setImgUrl] = useState('');
   const [additionalFields, setAdditionalFields] = useState({
     propertiesItems: [0],
-    propertyGroupItems: [0],
     identifiersItems: [0],
   });
   const [groupFields, setGroupFields] = useState([]);
+  const [formData, setFormData] = useState({
+    name: '',
+    type: '',
+    description: '',
+    propertiesItems: {},
+    identifiersItems: {},
+    images: [],
+    coverImgUrl: '',
+  });
+
+  const setJSONForm = () => setIsJSONForm(true);
+  const setUsualForm = () => setIsJSONForm(false);
 
   const addImg = () => {
-    const xhr = new XMLHttpRequest();
-    xhr.open(
-      'HEAD',
-      'https://images.unsplash.com/photo-1474511320723-9a56873867b5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80',
-      true,
-    );
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          console.log(xhr);
-          alert(`Size in bytes: ${xhr.getResponseHeader('Content-Length')}`);
-        } else {
-          alert('ERROR');
-        }
-      }
-    };
-    xhr.send(null);
-    if (imgUrl) {
-      setImages([...images, imgUrl]);
+    const { images } = formData;
+
+    if (imgUrl && !images.find((el) => el === imgUrl)) {
+      handleSetFormData({ images: [...images, imgUrl] });
+      setImgUrl('');
     }
   };
 
-  const deleteImg = (idx) => {
-    console.log(idx);
+  const deleteImg = (url) => {
+    handleSetFormData({ images: formData.images.filter((el) => el !== url) });
+  };
+
+  const setCoverImg = (url) => {
+    handleSetFormData({ coverImgUrl: url });
   };
 
   const addAdditionalField = (itemName) => {
@@ -87,7 +91,6 @@ const CreateAssetModal = () => {
   };
 
   const addProperties = () => addAdditionalField('propertiesItems');
-  const addPropertyGroup = () => addAdditionalField('propertyGroupItems');
   const addIdentifier = () => addAdditionalField('identifiersItems');
 
   const deleteAdditionalField = (idx, itemName) => {
@@ -98,46 +101,149 @@ const CreateAssetModal = () => {
   };
 
   const addGroup = () => {
-    setGroupFields([...groupFields, groupFields.length + 1]);
+    const currentItemsName = `groupPropertyItems${groupFields.length}`;
+
+    setGroupFields([...groupFields, groupFields.length]);
+    setFormData({ ...formData, [currentItemsName]: {} });
+    setAdditionalFields({
+      ...additionalFields,
+      [currentItemsName]: [0],
+    });
   };
 
-  const closeModal = () => dispatch(handleModal(''));
+  const addGroupProperty = (el) => {
+    const currentItemsName = `groupPropertyItems${el}`;
+    const currentItems = additionalFields[currentItemsName];
+
+    setAdditionalFields({
+      ...additionalFields,
+      [currentItemsName]: [...currentItems, currentItems.length],
+    });
+  };
+
+  const setGroupName = (value, el) => {
+    const currentItemsName = `groupPropertyItems${el}`;
+
+    setFormData({
+      ...formData,
+      [currentItemsName]: {
+        ...formData[currentItemsName],
+        groupName: value,
+      },
+    });
+  };
+  const closeModal = () => dispatch(handleModal(null));
+
+  const handleSetFormData = (keyValue) => {
+    setFormData({
+      ...formData,
+      ...keyValue,
+    });
+  };
+
+  const showResultModal = () => {
+    dispatch(
+      handleModal({
+        name: 'createResult',
+        data: isCreateEvent ? { ...formData, isCreateEvent: true } : formData,
+      }),
+    );
+  };
+
+  const handleRaw = async (e) => {
+    const { files } = e.target;
+
+    const blob = files[0];
+
+    const reader = new FileReader();
+    await reader.readAsDataURL(blob);
+
+    reader.onloadend = () => {
+      if (!reader.result) {
+        return;
+      }
+
+      const nameExpansion = blob.name.match(/\w[^.]*$/)[0];
+      // eslint-disable-next-line no-nested-ternary
+      const type = blob.type.match(/^\w*/)
+        ? blob.type.match(/^\w*/)[0]
+        : nameExpansion === 'wbmp'
+        ? 'image'
+        : 'unknown';
+      const expansion = blob.type.match(/\w[^/]*$/)
+        ? blob.type.match(/\w[^/]*$/)[0]
+        : nameExpansion;
+
+      console.log({
+        name: blob.name,
+        data: reader.result,
+        expansion,
+        nameExpansion,
+        type,
+        background: '',
+      });
+    };
+  };
 
   return (
-    <UiModal modalName="createAsset">
-      <div className="create-asset">
-        <div className="create-asset-title">
-          <h3 className="create-asset-title__text">New Asset</h3>
-          <div>
-            <button
-              type="button"
-              className="create-asset-title__toggle-tab create-asset-title__toggle-tab--selected"
-            >
-              Form
-            </button>
-            <button type="button" className="create-asset-title__toggle-tab">
-              JSON
-            </button>
-          </div>
+    <div className="create-asset">
+      <div className="create-asset-title">
+        <h3 className="create-asset-title__text">New Asset</h3>
+        <div>
+          <button
+            onClick={setUsualForm}
+            type="button"
+            className="create-asset-title__toggle-tab create-asset-title__toggle-tab--selected"
+          >
+            Form
+          </button>
+          <button
+            onClick={setJSONForm}
+            type="button"
+            className="create-asset-title__toggle-tab"
+          >
+            JSON
+          </button>
         </div>
+      </div>
+      {isJSONForm ? (
+        <UiTextarea label="JSON*" rows="20" />
+      ) : (
         <form className="create-asset-form">
-          <UiInput label="Name*" placeholder="Asset name" />
+          <UiInput
+            label="Name*"
+            placeholder="Asset name"
+            name="name"
+            onChange={handleSetFormData}
+          />
           <div className="form-semicolon-wrapper">
             <UiSelect
               options={[
-                { value: 1, label: 'Box' },
-                { value: 2, label: 'Pallet' },
-                { value: 3, label: 'Container' },
+                { value: '1', label: 'Box' },
+                { value: '2', label: 'Pallet' },
+                { value: '3', label: 'Container' },
               ]}
               placeholder="Asset type"
               label="Asset type*"
+              name="type"
+              onChange={handleSetFormData}
+              selectedValue={formData.type}
             />
             <UiToggle label="Access level" options={privateToggleOptions} />
           </div>
-          <UiTextaera placeholder="Asset description" label="Description" />
+          <UiTextarea
+            placeholder="Asset description"
+            label="Description"
+            name="description"
+            onChange={handleSetFormData}
+          />
           <hr />
           <div className="create-asset-form__media-bundle">
-            Media bundle size <span>0 Mb</span> used from <span>16 Mb</span>
+            Media bundle size{' '}
+            <span>
+              {(JSON.stringify(formData).length / 1024 / 1024).toFixed(4)} Mb
+            </span>{' '}
+            from <span>16 Mb</span>
           </div>
           <UiInput
             placeholder="Enter an image url here"
@@ -145,30 +251,54 @@ const CreateAssetModal = () => {
             imgSrc={addIcon}
             onImageClick={addImg}
             onChange={setImgUrl}
+            value={imgUrl}
           />
-          {images.map((el) => (
-            <div className="create-asset-form__added-img">
-              <img src={el} alt="added" />
-              <button
-                type="button"
-                className="create-asset-form__delete-img"
-                onClick={deleteImg}
-              >
-                x
-              </button>
-            </div>
-          ))}
+          {!!formData.images.length && (
+            <>
+              <span className="create-asset-form__checkmark-label">
+                <CheckmarkIcon />
+                Chek for cover image
+              </span>
+              <div className="create-asset-form__added-img-wrapper">
+                {formData.images.map((el) => (
+                  <div key={el} className="create-asset-form__added-img">
+                    <button
+                      type="button"
+                      className={cx(
+                        'create-asset-form__set-cover-img',
+                        formData.coverImgUrl === el &&
+                          'create-asset-form__set-cover-img--selected',
+                      )}
+                      onClick={() => setCoverImg(el)}
+                    >
+                      <CheckmarkIcon />
+                    </button>
+                    <img src={el} alt="added" />
+                    <button
+                      type="button"
+                      className="create-asset-form__delete-img"
+                      onClick={() => deleteImg(el)}
+                    >
+                      <CloseFilledIcon />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
           <UiInput
             placeholder="Raws"
             label="Enter a raw file url"
             imgSrc={addIcon}
           />
-          <UiButton className="create-asset-form__upload-file">
-            <>
-              <img src={uploadIcon} alt="upload icon" />
-              Or upload raw file
-            </>
-          </UiButton>
+          <input type="file" id="file-upload" onChange={handleRaw} />
+          <label
+            htmlFor="file-upload"
+            className="btn create-asset-form__upload-file"
+          >
+            <img src={uploadIcon} alt="upload icon" />
+            Or upload raw file
+          </label>
           <hr />
           <div className="create-asset-title">
             <h3 className="create-asset-title__text">Properties</h3>
@@ -179,6 +309,8 @@ const CreateAssetModal = () => {
             deleteItem={deleteAdditionalField}
             placeholder="Property"
             items={additionalFields.propertiesItems}
+            onChange={handleSetFormData}
+            fieldsData={formData.propertiesItems}
           />
           <button
             onClick={addProperties}
@@ -190,17 +322,23 @@ const CreateAssetModal = () => {
           </button>
           {groupFields.map((el) => (
             <div key={el} className="create-asset-form__group">
-              <UiInput label="Group name" placeholder="Group name" />
+              <UiInput
+                label="Group name"
+                placeholder="Group name"
+                onChange={(value) => setGroupName(value, el)}
+              />
               <AddedField
-                items={additionalFields.propertyGroupItems}
+                items={additionalFields[`groupPropertyItems${el}`]}
                 deleteItem={deleteAdditionalField}
                 placeholder="Group property"
-                itemName="propertyGroupItems"
+                itemName={`groupPropertyItems${el}`}
+                fieldsData={formData[`groupPropertyItems${el}`]}
+                onChange={handleSetFormData}
               />
               <button
-                onClick={addPropertyGroup}
                 type="button"
                 className="create-asset-form__add-btn"
+                onClick={() => addGroupProperty(el)}
               >
                 <img src={addIcon} alt="add icon" />
                 Add properties
@@ -227,6 +365,8 @@ const CreateAssetModal = () => {
             deleteItem={deleteAdditionalField}
             placeholder="Identifier"
             items={additionalFields.identifiersItems}
+            onChange={handleSetFormData}
+            fieldsData={formData.identifiersItems}
           />
           <button
             onClick={addIdentifier}
@@ -237,6 +377,26 @@ const CreateAssetModal = () => {
             Add identifier
           </button>
           <hr />
+          {isCreateEvent && (
+            <>
+              <div className="create-asset-title">
+                <h3 className="create-asset-title__text">Identifiers</h3>
+              </div>
+              <div className="form-semicolon-wrapper">
+                <UiInput label="City" />
+                <UiInput label="Country" />
+              </div>
+              <div className="form-semicolon-wrapper">
+                <UiInput label="GLN" />
+                <UiInput label="Location ID" />
+              </div>
+              <div className="form-semicolon-wrapper">
+                <UiInput label="Latitude" />
+                <UiInput label="Longitude" />
+              </div>
+              <hr />
+            </>
+          )}
           <div className="form-semicolon-wrapper">
             <UiButton
               onclick={closeModal}
@@ -244,12 +404,18 @@ const CreateAssetModal = () => {
             >
               Cancel
             </UiButton>
-            <UiButton styles={{ padding: 12 }}>Create Asset</UiButton>
+            <UiButton styles={{ padding: 12 }} onclick={showResultModal}>
+              Create {isCreateEvent ? 'Event' : 'Asset'}
+            </UiButton>
           </div>
         </form>
-      </div>
-    </UiModal>
+      )}
+    </div>
   );
+};
+
+CreateAssetModal.propTypes = {
+  isCreateEvent: PropTypes.bool,
 };
 
 export default CreateAssetModal;

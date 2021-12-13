@@ -12,10 +12,10 @@ const Main = () => {
   const isAuth = useSelector((state) => state.auth.isAuth);
 
   useEffect(() => {
-    const publicKeyFromSession = sessionStorage.getItem('user_public_key');
+    const privateKeyFromSession = sessionStorage.getItem('user_private_key');
 
-    if (publicKeyFromSession) {
-      dispatch(signIn(publicKeyFromSession));
+    if (privateKeyFromSession) {
+      dispatch(signIn(privateKeyFromSession));
     }
   }, []);
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import cx from 'classnames';
 import EventTab from './EventTab';
 import PackageTab from './PackageTab';
@@ -6,12 +7,12 @@ import HistoryTab from './HistoryTab';
 
 const tabsBtns = ['events', 'packages', 'history'];
 
-const AssetPageTabs = () => {
+const AssetPageTabs = ({ assetId }) => {
   const [currentTab, setCurrentTab] = useState('events');
 
   const renderTab = () => {
     if (currentTab === 'events') {
-      return <EventTab />;
+      return <EventTab assetId={assetId} />;
     }
     if (currentTab === 'packages') {
       return <PackageTab />;
@@ -45,6 +46,10 @@ const AssetPageTabs = () => {
       </div>
     </div>
   );
+};
+
+AssetPageTabs.propTypes = {
+  assetId: PropTypes.string,
 };
 
 export default AssetPageTabs;

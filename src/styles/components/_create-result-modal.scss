@@ -1,0 +1,63 @@
+.create-result-modal {
+  text-align: center;
+  position: relative;
+
+  &__title {
+    font-size: 21px;
+    font-weight: 500;
+    padding-top: 30px;
+
+    svg {
+      margin-right: 20px;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+
+  &__actions {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 38px;
+
+    button {
+      width: 160px;
+      height: 48px;
+
+      &:first-child {
+        margin-right: 20px;
+      }
+    }
+  }
+
+  &__wait-block {
+    margin: 25px auto 40px;
+  }
+
+  &__progress {
+    height: 8px;
+    width: 100%;
+    background: $whiteToGray;
+  }
+
+  &__progress-bar {
+    background: $color-primary;
+    height: 8px;
+    transition: .3s;
+  }
+
+  &__detail-item {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    border: 1px solid $color-gray-light;
+    margin-bottom: 16px;
+    margin-top: 24px;
+  }
+}

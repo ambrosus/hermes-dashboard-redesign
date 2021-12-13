@@ -5,11 +5,16 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import borderOutlet from '../../../assets/svg/border_outer.svg';
 import datePickerIcon from '../../../assets/svg/date-picker.svg';
 import placePickerIcon from '../../../assets/svg/place-picker.svg';
-import { fetchAssets } from '../../../store/modules/assets/actions';
+import {
+  createAsset,
+  fetchAssets,
+} from '../../../store/modules/assets/actions';
 import CreateAssetModal from '../../../components/CreateAssetModal';
 import AssetItem from '../../../components/AssetItem';
 import UiButton from '../../../components/UiButton';
 import { handleModal } from '../../../store/modules/modal';
+import CreateResultModal from '../../../components/CreateResultModal';
+import UiModal from '../../../components/UiModal';
 
 const timeFilter = ['Day', 'Week', 'Month', 'Year'];
 
@@ -40,7 +45,7 @@ const Assets = () => {
     setFilteredList(newList);
   }, [currentTimeFilter, assetsList]);
 
-  const openCreateModal = () => dispatch(handleModal('createAsset'));
+  const openCreateModal = () => dispatch(handleModal({ name: 'createAsset' }));
 
   const showMore = () => dispatch(fetchAssets(paginationInfo.next));
 
@@ -92,7 +97,6 @@ const Assets = () => {
             <AssetItem assetData={el} key={el.content.idData.assetId} />
           ))}
       </div>
-      <CreateAssetModal />
       {paginationInfo.hasNext && !!assetsList.length && (
         <UiButton
           styles={{ margin: '64px auto 0' }}
@@ -102,6 +106,15 @@ const Assets = () => {
           Show more
         </UiButton>
       )}
+      <UiModal modalName="createAsset">
+        <CreateAssetModal />
+      </UiModal>
+      <UiModal
+        contentStyles={{ padding: 0, height: 'fit-content', marginTop: 250 }}
+        modalName="createResult"
+      >
+        <CreateResultModal confirmCallback={createAsset} />
+      </UiModal>
     </div>
   );
 };

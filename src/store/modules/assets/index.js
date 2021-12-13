@@ -1,6 +1,8 @@
 import {
   SET_ASSETS_LIST_DATA,
   SET_ASSETS_QUERY_DATA,
+  SET_CREATE_ASSET_RESULT,
+  SET_CREATE_EVENT_RESULT,
   SET_EVENTS_DATA,
 } from './constants';
 
@@ -10,7 +12,9 @@ const defaultState = {
     data: [],
     pagination: {},
   },
-  eventsList: [],
+  eventsList: {},
+  createAssetResult: null,
+  createEventResult: null,
 };
 
 export default (state = defaultState, { type, payload }) => {
@@ -27,6 +31,10 @@ export default (state = defaultState, { type, payload }) => {
       };
     case SET_EVENTS_DATA:
       return { ...state, eventsList: payload };
+    case SET_CREATE_ASSET_RESULT:
+      return { ...state, createAssetResult: payload };
+    case SET_CREATE_EVENT_RESULT:
+      return { ...state, createEventResult: payload };
     default:
       return state;
   }

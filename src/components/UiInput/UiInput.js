@@ -12,18 +12,23 @@ const UiInput = ({
   onChange,
   className,
   onImageClick,
+  name,
 }) => {
-  const handleInput = ({ target }) => onChange(target.value);
+  const handleInput = ({ target }) =>
+    onChange(name ? { [name]: target.value } : target.value);
 
   return (
     <div
-      className={cx('ui-input', className, label ? 'ui-input--with-label' : '')}
+      className={cx('ui-input', className)}
       onClick={onclick}
       role="presentation"
     >
       {label && <label className="ui-input__label">{label}</label>}
       <input
-        className="ui-input__input"
+        className={cx(
+          'ui-input__input',
+          imgSrc && 'ui-input__input--with-icon',
+        )}
         placeholder={placeholder}
         type={type}
         value={value}
@@ -52,6 +57,7 @@ UiInput.propTypes = {
   onImageClick: PropTypes.func,
   value: PropTypes.string,
   className: PropTypes.string,
+  name: PropTypes.string,
 };
 
 export default UiInput;
