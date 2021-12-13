@@ -1,3 +1,5 @@
+import { debugLog } from '../utils/debugLog';
+
 const base64url = require('base64url');
 const axios = require('axios').default;
 const Web3 = require('web3');
@@ -212,7 +214,7 @@ function start() {
       console.error('Required env: EXT_URI, MASTER_PRIVATE_KEY');
       return;
     }
-    console.log('START');
+    debugLog('START');
     const extendedApi = new HermesExtendedApi(EXT_URI, MASTER_PRIVATE_KEY);
 
     const producer = new LegacyLoadProducer(extendedApi);

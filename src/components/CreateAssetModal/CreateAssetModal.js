@@ -13,6 +13,7 @@ import infoIcon from '../../assets/svg/info-filled.svg';
 import UiButton from '../UiButton';
 import AddedField from './AddedField';
 import UiModal from '../UiModal';
+import { debugLog } from '../../utils/debugLog';
 
 const privateToggleOptions = [
   {
@@ -57,7 +58,7 @@ const CreateAssetModal = () => {
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
-          console.log(xhr);
+          debugLog(xhr);
           alert(`Size in bytes: ${xhr.getResponseHeader('Content-Length')}`);
         } else {
           alert('ERROR');
@@ -71,7 +72,7 @@ const CreateAssetModal = () => {
   };
 
   const deleteImg = (idx) => {
-    console.log(idx);
+    debugLog(idx);
   };
 
   const addAdditionalField = (itemName) => {

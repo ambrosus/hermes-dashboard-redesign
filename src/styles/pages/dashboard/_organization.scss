@@ -317,6 +317,117 @@
         }
       }
     }
+
+    .settings-tab {
+      display: flex;
+      flex-direction: column;
+      &__secondary {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 21px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: row;
+        gap: 15px;
+        color: #333333;
+      }
+
+      &__switch {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+
+        .timestamp {
+          font-style: normal;
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 14px;
+          display: flex;
+          align-items: center;
+
+          color: #BFC9E0;
+        }
+
+        .buttons {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 10px;
+
+          button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          button > p {
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 14px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding: 0 15px;
+            color: #FFFFFF;
+          }
+
+          .active {
+            width: 80px;
+            height: 24px;
+            background: #1ACD8C;
+            border-radius: 6px;
+          }
+
+          .disable {
+
+            width: 80px;
+            height: 24px;
+            background: #BFC9E0;
+            border-radius: 6px;
+          }
+
+        }
+      }
+
+      .bottom-label {
+        display: flex;
+        flex-direction: row;
+        position: relative;
+
+        .ui-input {
+          margin-bottom: 0;
+        }
+
+        div {
+          min-width: 49%;
+        }
+
+        .save-account {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 49%;
+          height: 48px;
+          background: #4A38AE;
+          border-radius: 12px;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 19px;
+          text-align: center;
+
+          color: #FFFFFF;
+        }
+      }
+    }
   }
 
 }

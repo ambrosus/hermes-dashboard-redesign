@@ -1,8 +1,9 @@
 import React from 'react';
 import UiButton from '../../../../components/UiButton';
+import { debugLog } from '../../../../utils/debugLog';
 
 const Event = () => {
-  console.log(1);
+  debugLog(1);
   return (
     <div className="event-page">
       <div className="container">

@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar';
 import { ACCOUNTS_TAB, DASHBOARD_TAB, SETTINGS_TAB } from '../../../config';
 
 const Organization = () => {
-  const [tab, setTab] = useState(() => <DashboardTab />);
+  const [tab, setTab] = useState(() => <SettingsTab />);
 
   const viewActiveTab = (tabType) => {
     switch (tabType) {

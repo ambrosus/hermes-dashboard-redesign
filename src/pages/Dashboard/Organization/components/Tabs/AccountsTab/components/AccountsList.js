@@ -1,29 +1,30 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import AccountsListItem from './AccountsListItem';
+import { debugLog } from '../../../../../../../utils/debugLog';
 
 const AccountsList = ({ accounts = [], displayAccounts }) => {
-  console.log('accounts', accounts);
+  debugLog('accounts', accounts);
 
   return (
     <div className="accounts-tab__list">
       <div />
       {accounts.map((account) => {
-        console.log(displayAccounts);
+        debugLog(displayAccounts);
         if (displayAccounts === 'all') {
-          console.log('all');
+          debugLog('all');
           return <AccountsListItem key={account.address} acc={account} />;
         }
         if (displayAccounts === 'active' && account.active) {
-          console.log('active');
+          debugLog('active');
           return <AccountsListItem key={account.address} acc={account} />;
         }
         if (displayAccounts === 'pending' && account.pending) {
-          console.log('pending');
+          debugLog('pending');
           return <AccountsListItem key={account.address} acc={account} />;
         }
         if (displayAccounts === 'disabled' && account.disabled) {
-          console.log('disabled');
+          debugLog('disabled');
           return <AccountsListItem key={account.address} acc={account} />;
         }
         return false;

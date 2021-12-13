@@ -21,7 +21,7 @@ import {
   getTimestampSubMonths,
 } from '../../../../../../utils/datetime';
 import { getTimeRangeCountAggregateForOrganization } from '../../../../../../utils/analytisService';
-import { useSelector } from 'react-redux';
+import { debugLog } from '../../../../../../utils/debugLog';
 
 ChartJS.register(
   CategoryScale,
@@ -36,15 +36,12 @@ const DashboardTab = () => {
   const [display, setDisplay] = useState('asset');
   const [groupBy, setGroupBy] = useState('24h');
   const [data, setData] = useState(null);
-  const isAuth = useSelector((state) => state.auth.isAuth);
   let Dlabels = [];
   let Ddata = [];
 
   useEffect(() => {
-    if (isAuth) {
-      generateDiagram(groupBy);
-    }
-  }, [groupBy, display, data]);
+    generateDiagram(groupBy);
+  }, [groupBy, display]);
 
   const formattingGroup = (type) => {
     switch (type) {
@@ -100,8 +97,9 @@ const DashboardTab = () => {
 
     return [start, end];
   };
+
   const generateDiagram = async (type) => {
-    console.log('generateDiagram render');
+    debugLog('generateDiagram render');
     Dlabels = [];
     Ddata = [];
     try {
