@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 import {
   SET_ASSETS_LIST_DATA,
   SET_ASSETS_QUERY_DATA,
@@ -113,18 +114,10 @@ export const createAsset = (formData) => (dispatch) => {
 
       if (data.meta && data.meta.code === 200) {
         dispatch(createEvent(asset.assetId, formData));
-        dispatch({
-          type: SET_CREATE_ASSET_RESULT,
-          payload: { data: response, isSuccess: true },
-        });
+        dispatch(setCreateAssetResult(data, true));
       }
     })
-    .catch((err) => {
-      dispatch({
-        type: SET_CREATE_ASSET_RESULT,
-        payload: { data: err, isSuccess: false },
-      });
-    });
+    .catch((err) => dispatch(setCreateAssetResult(err.response.data, false)));
 };
 
 export const createEvent = (assetId, formData) => (dispatch) => {
@@ -144,16 +137,26 @@ export const createEvent = (assetId, formData) => (dispatch) => {
       const { data } = response;
 
       if (data.meta && data.meta.code === 200) {
-        dispatch({
-          type: SET_CREATE_EVENT_RESULT,
-          payload: { data: response, isSuccess: true },
-        });
+        dispatch(setCreateEventResult(data, true));
       }
     })
-    .catch((err) => {
-      dispatch({
-        type: SET_CREATE_EVENT_RESULT,
-        payload: { data: err, isSuccess: false },
-      });
-    });
+    .catch((err) => dispatch(setCreateEventResult(err.response.data, false)));
 };
+
+const setCreateAssetResult = (data, isSuccess) => ({
+  type: SET_CREATE_ASSET_RESULT,
+  payload: {
+    data,
+    isSuccess,
+    fetchTime: moment().format('MMMM Do YYYY, h:mm:ss a'),
+  },
+});
+
+const setCreateEventResult = (data, isSuccess) => ({
+  type: SET_CREATE_EVENT_RESULT,
+  payload: {
+    data,
+    isSuccess,
+    fetchTime: moment().format('MMMM Do YYYY, h:mm:ss a'),
+  },
+});

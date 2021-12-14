@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 import UiButton from '../UiButton';
 import { ReactComponent as CloseIcon } from '../../assets/svg/cross.svg';
 import { ReactComponent as CheckedIcon } from '../../assets/svg/checkbox-green.svg';
-import { ReactComponent as ChevronIcon } from '../../assets/svg/chevron-simple.svg';
 import { ReactComponent as ErrorIcon } from '../../assets/svg/error.svg';
 import { handleModal } from '../../store/modules/modal';
 import {
   SET_CREATE_ASSET_RESULT,
   SET_CREATE_EVENT_RESULT,
 } from '../../store/modules/assets/constants';
+import DetailsItem from './DetailsItem';
 
 const CreateResultModal = ({ confirmCallback }) => {
   const dispatch = useDispatch();
@@ -42,9 +42,8 @@ const CreateResultModal = ({ confirmCallback }) => {
     }
   }, [createEventResult]);
 
-  useEffect(() => {
-    console.log('mounted');
-    return () => {
+  useEffect(
+    () => () => {
       dispatch({
         type: SET_CREATE_ASSET_RESULT,
         payload: null,
@@ -53,8 +52,9 @@ const CreateResultModal = ({ confirmCallback }) => {
         type: SET_CREATE_EVENT_RESULT,
         payload: null,
       });
-    };
-  }, []);
+    },
+    [],
+  );
 
   const handleApply = () => {
     setModalStep(2);
@@ -67,6 +67,11 @@ const CreateResultModal = ({ confirmCallback }) => {
 
   const closeModal = () => dispatch(handleModal(null));
   const showDetails = () => setModalStep(4);
+
+  const isAllSuccess =
+    createEventResult &&
+    createEventResult.isSuccess &&
+    (!createAssetResult || createAssetResult.isSuccess);
 
   return (
     <div className="create-result-modal">
@@ -104,11 +109,22 @@ const CreateResultModal = ({ confirmCallback }) => {
       )}
       {modalStep === 3 && (
         <>
-          <p className="create-result-modal__title">
-            <CheckedIcon />
-            Asset created successfully
-          </p>
-          <UiButton onclick={showDetails} type="pale">
+          {isAllSuccess ? (
+            <p className="create-result-modal__title">
+              <CheckedIcon />
+              Asset created successfully
+            </p>
+          ) : (
+            <p className="create-result-modal__title">
+              <ErrorIcon />
+              There were problems while creating the asset
+            </p>
+          )}
+          <UiButton
+            onclick={showDetails}
+            type="pale"
+            className="create-result-modal__wait-block"
+          >
             Details
           </UiButton>
           <div className="create-result-modal__progress">
@@ -124,18 +140,8 @@ const CreateResultModal = ({ confirmCallback }) => {
           <p className="create-result-modal__title">
             All responses for this session
           </p>
-          {createAssetResult && (
-            <div className="create-result-modal__detail-item">
-              {createAssetResult.isSuccess ? <CheckedIcon /> : <ErrorIcon />}
-              <span>asdfasdfasd</span>
-              <ChevronIcon />
-            </div>
-          )}
-          <div className="create-result-modal__detail-item">
-            {createEventResult.isSuccess ? <CheckedIcon /> : <ErrorIcon />}
-            <span>asdfasdfasd</span>
-            <ChevronIcon />
-          </div>
+          {createAssetResult && <DetailsItem itemData={createAssetResult} />}
+          <DetailsItem itemData={createEventResult} />
         </>
       )}
     </div>

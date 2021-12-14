@@ -10,6 +10,7 @@ const createAssetNormalizer = (formData) => {
     type,
     coverImgUrl,
     images,
+    rows,
     propertiesItems,
   } = formData;
 
@@ -20,11 +21,11 @@ const createAssetNormalizer = (formData) => {
       ];
     });
   }
-
   info = {
     name,
     description,
     assetType: type,
+    raws: rows,
   };
 
   Object.keys(formData).forEach((el) => {

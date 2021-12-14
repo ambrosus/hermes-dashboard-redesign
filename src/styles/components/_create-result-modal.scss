@@ -50,14 +50,24 @@
     transition: .3s;
   }
 
+  &__detail-item-wrapper {
+    border-radius: 8px;
+    border: 1px solid $color-gray-light;
+    margin: 24px 20px 16px;
+  }
+
   &__detail-item {
     padding: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: 8px;
-    border: 1px solid $color-gray-light;
-    margin-bottom: 16px;
-    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  &__detail-json {
+    border-top: 1px solid $color-gray-light;
+    text-align: left;
+    padding: 22px 40px;
+    overflow: auto;
   }
 }

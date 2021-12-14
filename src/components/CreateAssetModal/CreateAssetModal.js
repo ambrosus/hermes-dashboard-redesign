@@ -16,6 +16,7 @@ import uploadIcon from '../../assets/svg/upload.svg';
 import infoIcon from '../../assets/svg/info-filled.svg';
 import UiButton from '../UiButton';
 import AddedField from './AddedField';
+import createAssetNormalizer from '../../utils/createAssetNormalizer';
 
 const privateToggleOptions = [
   {
@@ -43,6 +44,7 @@ const CreateAssetModal = ({ isCreateEvent }) => {
 
   const [isJSONForm, setIsJSONForm] = useState(false);
   const [imgUrl, setImgUrl] = useState('');
+  const [rowUrl, setRowUrl] = useState('');
   const [additionalFields, setAdditionalFields] = useState({
     propertiesItems: [0],
     identifiersItems: [0],
@@ -56,6 +58,7 @@ const CreateAssetModal = ({ isCreateEvent }) => {
     identifiersItems: {},
     images: [],
     coverImgUrl: '',
+    rows: [],
   });
 
   const setJSONForm = () => setIsJSONForm(true);
@@ -151,38 +154,32 @@ const CreateAssetModal = ({ isCreateEvent }) => {
   };
 
   const handleRaw = async (e) => {
-    const { files } = e.target;
+    handleSetFormData({
+      rows: [...formData.rows, e.target.files[0]],
+    });
+  };
 
-    const blob = files[0];
+  const addRow = () => {
+    const value = rowUrl;
+    const nameExpansion = value.match(/\w[^.]*$/)[0];
 
-    const reader = new FileReader();
-    await reader.readAsDataURL(blob);
+    if (value) {
+      let name = value.split('/');
+      name = name[name.length - 1];
 
-    reader.onloadend = () => {
-      if (!reader.result) {
-        return;
-      }
-
-      const nameExpansion = blob.name.match(/\w[^.]*$/)[0];
-      // eslint-disable-next-line no-nested-ternary
-      const type = blob.type.match(/^\w*/)
-        ? blob.type.match(/^\w*/)[0]
-        : nameExpansion === 'wbmp'
-        ? 'image'
-        : 'unknown';
-      const expansion = blob.type.match(/\w[^/]*$/)
-        ? blob.type.match(/\w[^/]*$/)[0]
-        : nameExpansion;
-
-      console.log({
-        name: blob.name,
-        data: reader.result,
-        expansion,
-        nameExpansion,
-        type,
-        background: '',
+      handleSetFormData({
+        rows: [
+          ...formData.rows,
+          {
+            name,
+            data: value,
+            nameExpansion,
+            type: 'url',
+            background: '',
+          },
+        ],
       });
-    };
+    }
   };
 
   return (
@@ -241,7 +238,12 @@ const CreateAssetModal = ({ isCreateEvent }) => {
           <div className="create-asset-form__media-bundle">
             Media bundle size{' '}
             <span>
-              {(JSON.stringify(formData).length / 1024 / 1024).toFixed(4)} Mb
+              {(
+                JSON.stringify(createAssetNormalizer(formData)).length /
+                1024 /
+                1024
+              ).toFixed(4)}{' '}
+              Mb
             </span>{' '}
             from <span>16 Mb</span>
           </div>
@@ -290,6 +292,9 @@ const CreateAssetModal = ({ isCreateEvent }) => {
             placeholder="Raws"
             label="Enter a raw file url"
             imgSrc={addIcon}
+            onChange={setRowUrl}
+            onImageClick={addRow}
+            value={rowUrl}
           />
           <input type="file" id="file-upload" onChange={handleRaw} />
           <label
@@ -299,6 +304,20 @@ const CreateAssetModal = ({ isCreateEvent }) => {
             <img src={uploadIcon} alt="upload icon" />
             Or upload raw file
           </label>
+          <div className="create-asset-form__added-img-wrapper">
+            {formData.rows.map((el) => (
+              <div key={el} className="create-asset-form__added-img">
+                <img src={el} alt="row-file" />
+                <button
+                  type="button"
+                  className="create-asset-form__delete-img"
+                  onClick={() => deleteImg(el)}
+                >
+                  <CloseFilledIcon />
+                </button>
+              </div>
+            ))}
+          </div>
           <hr />
           <div className="create-asset-title">
             <h3 className="create-asset-title__text">Properties</h3>

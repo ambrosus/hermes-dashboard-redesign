@@ -8,23 +8,21 @@ const UiModal = ({ children, modalName, contentStyles }) => {
   const isOpen = modalName === openedModalName;
 
   return (
-    isOpen && (
-      <Modal
-        isOpen={isOpen}
-        style={{
-          content: {
-            maxWidth: 680,
-            margin: '0 auto',
-            boxShadow: '0px 4px 12px rgba(55, 29, 199, 0.15)',
-            border: 0,
-            padding: 40,
-            ...contentStyles,
-          },
-        }}
-      >
-        {children}
-      </Modal>
-    )
+    <Modal
+      isOpen={isOpen}
+      style={{
+        content: {
+          maxWidth: 680,
+          margin: '0 auto',
+          boxShadow: '0px 4px 12px rgba(55, 29, 199, 0.15)',
+          border: 0,
+          padding: 40,
+          ...contentStyles,
+        },
+      }}
+    >
+      {children}
+    </Modal>
   );
 };
 
