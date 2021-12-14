@@ -11,6 +11,7 @@
 @import "./components/ui-input";
 @import "./components/ui-button";
 @import "./components/create-asset-modal";
+@import "./components/packaging-header";
 @import "./components/ui-select";
 @import "./components/ui-toggle";
 @import "./components/ui-textarea";
@@ -32,6 +33,7 @@
 
 //pages
 @import "./pages/dashboard/assets";
+@import "./pages/dashboard/organization";
 @import "./pages/auth/login";
 @import "./pages/auth/sign-up";
 @import "./pages/auth/own-key";

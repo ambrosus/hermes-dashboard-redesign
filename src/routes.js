@@ -1,6 +1,8 @@
 import React from 'react';
 
 import Assets from './pages/Dashboard/Assets';
+import Package from './pages/Dashboard/Package';
+import Organization from './pages/Dashboard/Organization';
 import Asset from './pages/Dashboard/Assets/Asset';
 import Event from './pages/Dashboard/Assets/Event';
 import Login from './pages/Auth';
@@ -27,6 +29,18 @@ const routes = [
     key: 'ROOT',
     exact: true,
     component: () => <Event />,
+  },
+  {
+    path: '/dashboard/package',
+    key: 'ROOT',
+    exact: true,
+    component: () => <Package />,
+  },
+  {
+    path: '/dashboard/organization',
+    key: 'ROOT',
+    exact: true,
+    component: () => <Organization />,
   },
   {
     path: '/dashboard/login',

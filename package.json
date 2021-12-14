@@ -10,14 +10,18 @@
     "axios": "^0.24.0",
     "base64url": "^3.0.1",
     "bootstrap-daterangepicker": "^3.1.0",
+    "chart.js": "^3.6.2",
     "classnames": "^2.3.1",
     "ethereumjs-utils": "^5.2.5",
     "ethereumjs-wallet": "^1.0.2",
+    "faker": "^5.5.3",
     "jquery": "^3.6.0",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.34",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-bootstrap-daterangepicker": "^7.0.0",
+    "react-chartjs-2": "^4.0.0",
     "react-dom": "^17.0.2",
     "react-modal": "^3.14.4",
     "react-redux": "^7.2.6",
@@ -39,7 +43,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "lint": "eslint ./ --ignore-path .gitignore",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --write \"{,!(node_modules)/**/}*.js\""
   },
   "eslintConfig": {
     "extends": "@inc4/react"

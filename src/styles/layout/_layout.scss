@@ -42,9 +42,18 @@
       align-items: center;
       flex-direction: column;
       position: relative;
+
       p {
         font-size: 13px;
       }
     }
   }
+}
+
+.space-25 {
+  height: 25px;
+}
+
+.space-10 {
+  height: 10px;
 }
