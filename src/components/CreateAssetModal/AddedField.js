@@ -12,7 +12,6 @@ const AddedField = ({
   onChange,
 }) => {
   const handleChange = (el, value) => {
-    console.log(fieldsData);
     onChange({
       [itemName]: {
         ...fieldsData,

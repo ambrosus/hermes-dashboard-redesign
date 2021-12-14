@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import DateRangePicker from 'react-bootstrap-daterangepicker';
-import borderOutlet from '../../../assets/svg/border_outer.svg';
-import datePickerIcon from '../../../assets/svg/date-picker.svg';
-import placePickerIcon from '../../../assets/svg/place-picker.svg';
 import {
   createAsset,
   fetchAssets,
@@ -17,8 +12,6 @@ import { handleModal } from '../../../store/modules/modal';
 import Sorting from '../../../components/Sorting';
 import CreateResultModal from '../../../components/CreateResultModal';
 import UiModal from '../../../components/UiModal';
-
-const timeFilter = ['Day', 'Week', 'Month', 'Year'];
 
 const Assets = () => {
   const dispatch = useDispatch();
@@ -37,7 +30,7 @@ const Assets = () => {
     }
   }, []);
 
-  const openCreateModal = () => dispatch(handleModal('createAsset'));
+  const openCreateModal = () => dispatch(handleModal({ name: 'createAsset' }));
   const showMore = () => dispatch(fetchAssets(paginationInfo.next));
   const openPackagingHandler = () => history.push('/dashboard/package');
 

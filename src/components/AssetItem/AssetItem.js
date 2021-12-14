@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -9,6 +10,8 @@ import { ReactComponent as ChevronSvg } from '../../assets/svg/chevron.svg';
 import { copyToClipboard } from '../../utils/copyToClipboard';
 
 const AssetItem = ({ isOnAssetPage, assetData }) => {
+  const events = useSelector((state) => state.assets.eventsList);
+
   const { assetId, createdBy, timestamp, sequenceNumber } =
     assetData.content.idData;
 
@@ -59,7 +62,11 @@ const AssetItem = ({ isOnAssetPage, assetData }) => {
           {assetContentInfo.name.toString()}
         </Link>
         <div className="asset-item-info">
-          <div className="asset-item-info__events">1434 Events</div>
+          {events[assetId] && (
+            <div className="asset-item-info__events">
+              {Object.keys(events[assetId]).length} Events
+            </div>
+          )}
           <span className="asset-item-info__address-label">Asset address</span>
           <span className="asset-item-info__address">{assetId}</span>
           <button type="button" onClick={copyId}>

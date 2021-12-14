@@ -1,5 +1,5 @@
 import axios from 'axios';
-import generateToken from './generateToken';
+import { generateToken } from './generateToken';
 
 export const getOrganizationAccounts = async (organizationId = 9) => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/organization/${organizationId}/accounts`;

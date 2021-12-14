@@ -58,7 +58,9 @@ export const fetchAssetsInfo = (assetsIds) => (dispatch) => {
       if (data.data) {
         dispatch({
           type: SET_ASSETS_LIST_DATA,
-          payload: data.data,
+          payload: data.data.sort(
+            (a, b) => b.content.idData.timestamp - a.content.idData.timestamp,
+          ),
         });
       }
     });

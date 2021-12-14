@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import axios from 'axios';
-import generateToken from '../utils/generateToken';
+import { generateToken } from './generateToken';
 
 export const getTimeRangeCount = async (collection, start, end) => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${collection}/count/${start}/${end}/total`;
