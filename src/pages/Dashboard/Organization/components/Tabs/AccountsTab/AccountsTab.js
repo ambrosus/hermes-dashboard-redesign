@@ -5,6 +5,7 @@ import AccountsList from './components/AccountsList';
 import { getOrganizationAccounts } from '../../../../../../utils/organizationService';
 import { handleModal } from '../../../../../../store/modules/modal';
 import UiButton from '../../../../../../components/UiButton';
+import AccountInviteModal from './components/AccountInviteModal';
 
 const AccountsTab = () => {
   const [display, setDisplay] = useState('all');
@@ -12,7 +13,7 @@ const AccountsTab = () => {
   const dispatch = useDispatch();
 
   const openInviteAccountModal = () =>
-    dispatch(handleModal('inviteAccountModal'));
+    dispatch(handleModal({ name: 'inviteAccountModal' }));
 
   useEffect(() => {
     getOrganizationAccounts().then(({ data }) => setAccounts(data));
@@ -40,6 +41,7 @@ const AccountsTab = () => {
       </div>
       <StatusBar type={display} setType={setDisplay} />
       <AccountsList displayAccounts={display} accounts={accounts} />
+      <AccountInviteModal />
     </div>
   );
 };

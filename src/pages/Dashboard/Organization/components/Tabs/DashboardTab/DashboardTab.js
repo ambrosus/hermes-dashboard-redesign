@@ -101,7 +101,7 @@ const DashboardTab = () => {
     try {
       const [start, end] = getStartEnd(type);
       //TODO sessionStorage.getItem('GET_ACCOUNT')
-      const kakoitoTimeSeries = await getTimeRangeCountAggregateForOrganization(
+      const timeSeries = await getTimeRangeCountAggregateForOrganization(
         9,
         display,
         start,
@@ -109,13 +109,12 @@ const DashboardTab = () => {
         getGroup(type),
       );
       console.log(formattingGroup(type));
-      kakoitoTimeSeries.count.map((stat) => {
+      timeSeries.count.map((stat) => {
         Dlabels.push(
           moment(stat.timestamp * 1000).format(formattingGroup(type)),
         );
         Ddata.push(stat.count);
       });
-      console.log(kakoitoTimeSeries);
 
       setData({
         data: {
