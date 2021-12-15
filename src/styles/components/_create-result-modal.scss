@@ -67,6 +67,7 @@
   &__detail-json {
     border-top: 1px solid $color-gray-light;
     text-align: left;
+    max-height: 400px;
     padding: 22px 40px;
     overflow: auto;
   }

@@ -19,6 +19,7 @@
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",
     "prop-types": "^15.7.2",
+    "qrcode.react": "^1.0.1",
     "react": "^17.0.2",
     "react-bootstrap-daterangepicker": "^7.0.0",
     "react-chartjs-2": "^4.0.0",
