@@ -17,6 +17,10 @@
     font-weight: 400;
     align-items: center;
 
+    &--with-icon {
+      padding-right: 50px;
+    }
+
     &::placeholder {
       color: $color-blue;
     }

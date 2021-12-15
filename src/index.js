@@ -8,7 +8,7 @@ import Web3 from 'web3';
 import Modal from 'react-modal';
 import Main from './Main';
 import configureStore from './store';
-import generateToken from './utils/generateToken';
+import { generateToken } from './utils/generateToken';
 
 Modal.setAppElement('#root');
 

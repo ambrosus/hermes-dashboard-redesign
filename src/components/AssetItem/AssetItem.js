@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -9,6 +10,8 @@ import { ReactComponent as ChevronSvg } from '../../assets/svg/chevron.svg';
 import { copyToClipboard } from '../../utils/copyToClipboard';
 
 const AssetItem = ({ isOnAssetPage, assetData }) => {
+  const events = useSelector((state) => state.assets.eventsList);
+
   const { assetId, createdBy, timestamp, sequenceNumber } =
     assetData.content.idData;
 
@@ -30,9 +33,9 @@ const AssetItem = ({ isOnAssetPage, assetData }) => {
     { label: 'Bundle proof block', value: bundleProofBlock },
   ];
 
-  const assetName = assetData.content.data.find(
+  const assetContentInfo = assetData.content.data.find(
     (el) => el.type === 'ambrosus.asset.info',
-  ).name;
+  );
 
   const date = moment
     .unix(assetData.content.idData.timestamp)
@@ -46,10 +49,7 @@ const AssetItem = ({ isOnAssetPage, assetData }) => {
     >
       {!isOnAssetPage && (
         <div className="asset-item__img">
-          <img
-            src="https://external-preview.redd.it/8xLKpKY3n1bB6E7LhtuK6fw9ETa3bj5nZ0sdQF_ZsjA.jpg?width=640&crop=smart&auto=webp&s=ceafbfdc02ccaae9a416e24c4893bc560c89cca3"
-            alt=""
-          />
+          <img src={assetContentInfo.images?.default.url} alt="asset" />
         </div>
       )}
       <div
@@ -59,10 +59,14 @@ const AssetItem = ({ isOnAssetPage, assetData }) => {
         )}
       >
         <Link to={`/dashboard/assets/${assetId}`} className="asset-item__title">
-          {assetName.toString()}
+          {assetContentInfo.name.toString()}
         </Link>
         <div className="asset-item-info">
-          <div className="asset-item-info__events">1434 Events</div>
+          {events[assetId] && (
+            <div className="asset-item-info__events">
+              {Object.keys(events[assetId]).length} Events
+            </div>
+          )}
           <span className="asset-item-info__address-label">Asset address</span>
           <span className="asset-item-info__address">{assetId}</span>
           <button type="button" onClick={copyId}>

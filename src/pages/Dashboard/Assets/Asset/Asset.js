@@ -5,8 +5,14 @@ import { ReactComponent as VisibilitySvg } from '../../../../assets/svg/visibili
 import UiButton from '../../../../components/UiButton';
 import AssetItem from '../../../../components/AssetItem';
 import AssetPageTabs from '../../../../components/AssetPageTabs';
-import { fetchAssetsInfo } from '../../../../store/modules/assets/actions';
+import {
+  createEvent,
+  fetchAssetsInfo,
+} from '../../../../store/modules/assets/actions';
 import PageMainContent from '../../../../components/PageMainContent';
+import CreateAssetModal from '../../../../components/CreateAssetModal';
+import UiModal from '../../../../components/UiModal';
+import CreateResultModal from '../../../../components/CreateResultModal';
 
 const Asset = () => {
   const dispatch = useDispatch();
@@ -43,7 +49,16 @@ const Asset = () => {
         <AssetItem isOnAssetPage assetData={assetData} />
         {!!assetData && <PageMainContent data={assetData} />}
       </div>
-      <AssetPageTabs />
+      <AssetPageTabs assetId={assetId} />
+      <UiModal modalName="createEvent">
+        <CreateAssetModal isCreateEvent />
+      </UiModal>
+      <UiModal
+        contentStyles={{ padding: 0, height: 'fit-content', marginTop: 250 }}
+        modalName="createResult"
+      >
+        <CreateResultModal confirmCallback={createEvent} />
+      </UiModal>
     </>
   );
 };

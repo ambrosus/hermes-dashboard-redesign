@@ -2,33 +2,46 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ReactComponent as FileSvg } from '../../assets/svg/file.svg';
 
+const notPropertyOrGroupKey = [
+  'assetType',
+  'description',
+  'encryption',
+  'name',
+  'raws',
+  'type',
+  'images',
+];
+
 const PageMainContent = ({ data }) => {
   const [properties, setProperties] = useState([]);
+  const [groups, setGroups] = useState([]);
 
-  const info = data?.content.data.find(
-    (el) => el.type === 'ambrosus.asset.info',
-  );
+  const info =
+    data.content.data.find((el) => el.type === 'ambrosus.asset.info') ||
+    data.content.data[0];
 
   useEffect(() => {
     if (info) {
-      const arr = [];
+      const propers = [];
+      const groupsArr = [];
 
       Object.keys(info).forEach((el) => {
         if (
-          el !== 'assetType' &&
-          el !== 'description' &&
-          el !== 'encryption' &&
-          el !== 'group' &&
-          el !== 'name' &&
-          el !== 'raws' &&
-          el !== 'type' &&
-          el !== 'images'
+          !notPropertyOrGroupKey.includes(el) &&
+          typeof info[el] === 'object'
         ) {
-          arr.push({ name: el, descr: info[el] });
+          groupsArr.push(info[el]);
+        }
+        if (
+          !notPropertyOrGroupKey.includes(el) &&
+          typeof info[el] !== 'object'
+        ) {
+          propers.push({ name: el, descr: info[el] });
         }
       });
 
-      setProperties(arr);
+      setProperties(propers);
+      setGroups(groupsArr);
     }
   }, []);
 
@@ -36,8 +49,7 @@ const PageMainContent = ({ data }) => {
     (el) => el.type === 'ambrosus.asset.identifiers',
   );
 
-  const { description, group, images, raws } = info;
-
+  const { description, images, raws } = info;
   return (
     <>
       <div className="asset-page-main">
@@ -73,15 +85,17 @@ const PageMainContent = ({ data }) => {
               <hr />
             </>
           )}
-          {!!group && (
+          {!!groups && (
             <>
               <h4 style={{ marginTop: 55 }}>Properties groups</h4>
-              {Object.keys(group).map((el) => (
-                <div key={el}>
-                  <p className="page-main-subtitle">{el}</p>
-                  <p>{group[el]}</p>
-                </div>
-              ))}
+              {groups.map((el) =>
+                Object.keys(el).map((name) => (
+                  <div key={name}>
+                    <p className="page-main-subtitle">{name}</p>
+                    <p>{el[name]}</p>
+                  </div>
+                )),
+              )}
               <hr />
             </>
           )}

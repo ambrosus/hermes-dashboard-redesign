@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { SET_ETH_ADDRESS, SIGN_IN } from './constants';
-import generateToken from '../../../utils/generateToken';
+import { generateToken } from '../../../utils/generateToken';
 
 export const setEthAddress = () => {
   const address = window.web3.eth.accounts.create();
@@ -40,7 +40,7 @@ export const signIn = (privateKey) => (dispatch) => {
           type: SIGN_IN,
           payload: data.data,
         });
-        sessionStorage.setItem('user_public_key', privateKey);
+        sessionStorage.setItem('user_private_key', privateKey);
       }
     });
 };

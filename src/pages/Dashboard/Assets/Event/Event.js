@@ -1,9 +1,20 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
 import UiButton from '../../../../components/UiButton';
-import { debugLog } from '../../../../utils/debugLog';
+import PageMainContent from '../../../../components/PageMainContent';
+import { isEmptyObj } from '../../../../utils/isEmptyObj';
 
 const Event = () => {
-  debugLog(1);
+  const { assetId, eventId } = useParams();
+  const events = useSelector((state) => state.assets.eventsList);
+
+  if (isEmptyObj(events)) {
+    return null;
+  }
+
+  const currentEvent = events[assetId].find((el) => el.eventId === eventId);
+
   return (
     <div className="event-page">
       <div className="container">
@@ -15,7 +26,10 @@ const Event = () => {
         <UiButton className="event-page__similar-event">
           Add similar event
         </UiButton>
-        <UiButton className="event-page__back">Back to asset</UiButton>
+        <PageMainContent data={currentEvent} />
+        <Link to={`/dashboard/assets/${assetId}`}>
+          <UiButton className="event-page__back">Back to asset</UiButton>
+        </Link>
       </div>
     </div>
   );
