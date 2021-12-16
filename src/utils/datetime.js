@@ -11,8 +11,6 @@ export const getTimestampMonthStart = () => moment().startOf('M').unix();
 
 export const getTimestampDateStart = (date) => moment(date).startOf('d').unix();
 
-export const getTimestampDateEnd = (date) => moment(date).endOf('d').unix();
-
 export const getTimestampSubHours = (h) => moment().subtract(h, 'hours').unix();
 
 export const getTimestampSubDays = (d) => moment().subtract(d, 'days').unix();

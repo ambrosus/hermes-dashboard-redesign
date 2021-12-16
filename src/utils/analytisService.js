@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import axios from 'axios';
 import { generateToken } from './generateToken';
 

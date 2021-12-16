@@ -15,7 +15,6 @@ import moment from 'moment';
 import TabOptions from './components/TabOptions';
 import {
   getTimestamp,
-  getTimestampMonthStart,
   getTimestampSubDays,
   getTimestampSubHours,
   getTimestampSubMonths,
