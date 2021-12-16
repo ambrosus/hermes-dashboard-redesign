@@ -127,7 +127,7 @@ export const balance = async () => {
 };
 
 export const pushBundle = async () => {
-  const url = `https://vitalii427-hermes.ambrosus-test.io//bundle2/push`;
+  const url = `https://vitalii427-hermes.ambrosus-test.io/bundle2/push`;
   const key = sessionStorage.getItem('user_private_key');
   const token = generateToken(key);
   try {
