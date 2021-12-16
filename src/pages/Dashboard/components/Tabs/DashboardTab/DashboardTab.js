@@ -19,8 +19,14 @@ import {
   getTimestampSubHours,
   getTimestampSubMonths,
 } from '../../../../../utils/datetime';
-import { getTimeRangeCountAggregateForOrganization } from '../../../../../utils/analytisService';
+import {
+  getTimeRangeCountAggregateForOrganization,
+  getTimeRangeCountAggregate,
+  getTimeRangeCountForOrganization,
+  getTimeRangeCount,
+} from '../../../../../utils/analytisService';
 import { debugLog } from '../../../../../utils/debugLog';
+import { useLocation } from 'react-router-dom';
 
 ChartJS.register(
   CategoryScale,
@@ -32,6 +38,8 @@ ChartJS.register(
 );
 
 const DashboardTab = () => {
+  const { pathname } = useLocation();
+  const [total, setTotal] = useState(null);
   const [display, setDisplay] = useState('asset');
   const [groupBy, setGroupBy] = useState('7d');
   const [data, setData] = useState(null);
@@ -100,14 +108,34 @@ const DashboardTab = () => {
     try {
       const [start, end] = getStartEnd(type);
       //TODO sessionStorage.getItem('GET_ACCOUNT')
-      const timeSeries = await getTimeRangeCountAggregateForOrganization(
-        9,
-        display,
-        start,
-        end,
-        getGroup(type),
-      );
-      console.log(formattingGroup(type));
+      const totalCount =
+        pathname !== '/dashboard/node'
+          ? await getTimeRangeCountForOrganization(
+              9,
+              display,
+              start,
+              end,
+              getGroup(type),
+            )
+          : await getTimeRangeCount(display, start, end, getGroup(type));
+      console.log('totalCount', totalCount.count);
+      setTotal(totalCount.count);
+      const timeSeries =
+        pathname !== '/dashboard/node'
+          ? await getTimeRangeCountAggregateForOrganization(
+              9,
+              display,
+              start,
+              end,
+              getGroup(type),
+            )
+          : await getTimeRangeCountAggregate(
+              display,
+              start,
+              end,
+              getGroup(type),
+            );
+
       timeSeries.count.map((stat) => {
         Dlabels.push(
           moment(stat.timestamp * 1000).format(formattingGroup(type)),
@@ -164,6 +192,14 @@ const DashboardTab = () => {
         setPeriod={setGroupBy}
       />
       <div className="space-25" />
+      {total && (
+        <>
+          <div className="total-for-period">
+            Total for the selected period: {total}
+          </div>
+          <div className="space-10" />
+        </>
+      )}
       {data && (
         <Bar
           data={data.data}

@@ -44,7 +44,7 @@ export const getTimeRangeCountAggregate = async (
   end,
   group,
 ) => {
-  const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/9/${collection}/count/${start}/${end}/aggregate/${group}`;
+  const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${collection}/count/${start}/${end}/aggregate/${group}`;
   const key = sessionStorage.getItem('user_private_key');
   const token = generateToken(key);
   const result = await axios.get(url, {
@@ -53,9 +53,6 @@ export const getTimeRangeCountAggregate = async (
       'Content-Type': 'application/json',
     },
   });
-  if (result.status !== 200) {
-    throw new Error(`${result.status} ${result.statusText}`);
-  }
   return result.data.data;
 };
 
@@ -129,8 +126,27 @@ export const balance = async () => {
   return result;
 };
 
+export const pushBundle = async () => {
+  const url = `https://vitalii427-hermes.ambrosus-test.io//bundle2/push`;
+  const key = sessionStorage.getItem('user_private_key');
+  const token = generateToken(key);
+  try {
+    await axios.post(url, {
+      headers: {
+        Authorization: `AMB_TOKEN ${token}`,
+        Accept: 'application/json',
+      },
+    });
+  } catch (e) {
+    if (e) {
+      alert(e);
+    }
+  }
+};
+
 export default {
   balance,
+  pushBundle,
   getTimeRangeCount,
   getTimeRangeCountForOrganization,
   getTimeRangeCountAggregate,
