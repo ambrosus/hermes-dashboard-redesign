@@ -17,7 +17,7 @@ const store = configureStore();
 window.web3 = new Web3(
   Web3.givenProvider || 'ws://some.local-or-remote.node:8546',
 );
-const key = sessionStorage.getItem('user_public_key');
+const key = sessionStorage.getItem('user_private_key');
 if (key) {
   const token = generateToken(key);
   axios.defaults.headers.common = {

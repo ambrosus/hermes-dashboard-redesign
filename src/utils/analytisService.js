@@ -3,7 +3,7 @@ import { generateToken } from './generateToken';
 
 export const getTimeRangeCount = async (collection, start, end) => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${collection}/count/${start}/${end}/total`;
-  const key = sessionStorage.getItem('user_public_key');
+  const key = sessionStorage.getItem('user_private_key');
   const token = generateToken(key);
   const result = await axios.get(url, {
     headers: {
@@ -24,7 +24,7 @@ export const getTimeRangeCountForOrganization = async (
   end,
 ) => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${organizationId}/${collection}/count/${start}/${end}/total`;
-  const key = sessionStorage.getItem('user_public_key');
+  const key = sessionStorage.getItem('user_private_key');
   const token = generateToken(key);
   const result = await axios.get(url, {
     headers: {
@@ -45,7 +45,7 @@ export const getTimeRangeCountAggregate = async (
   group,
 ) => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/9/${collection}/count/${start}/${end}/aggregate/${group}`;
-  const key = sessionStorage.getItem('user_public_key');
+  const key = sessionStorage.getItem('user_private_key');
   const token = generateToken(key);
   const result = await axios.get(url, {
     headers: {
@@ -67,7 +67,7 @@ export const getTimeRangeCountAggregateForOrganization = async (
   group,
 ) => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${organizationId}/${collection}/count/${start}/${end}/aggregate/${group}`;
-  const key = sessionStorage.getItem('user_public_key');
+  const key = sessionStorage.getItem('user_private_key');
   const token = generateToken(key);
   const result = await axios.get(url, {
     headers: {
@@ -83,7 +83,7 @@ export const getTimeRangeCountAggregateForOrganization = async (
 
 export const amb = async () => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/metrics/amb`;
-  const key = sessionStorage.getItem('user_public_key');
+  const key = sessionStorage.getItem('user_private_key');
   const token = generateToken(key);
   const result = await axios.get(url, {
     headers: {
@@ -99,7 +99,7 @@ export const amb = async () => {
 
 export const bundle = async () => {
   const url = `$https://vitalii427-hermes.ambrosus-test.io/metrics/bundle`;
-  const key = sessionStorage.getItem('user_public_key');
+  const key = sessionStorage.getItem('user_private_key');
   const token = generateToken(key);
   const result = await axios.get(url, {
     headers: {
@@ -115,7 +115,7 @@ export const bundle = async () => {
 
 export const balance = async () => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/metrics/balance`;
-  const key = sessionStorage.getItem('user_public_key');
+  const key = sessionStorage.getItem('user_private_key');
   const token = generateToken(key);
   const result = await axios.get(url, {
     headers: {
