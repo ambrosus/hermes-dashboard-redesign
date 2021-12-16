@@ -156,7 +156,7 @@ const DashboardTab = () => {
   };
   return (
     <div className="dashboard-tab">
-      <div className="organization-container__heading">DashboardTab</div>
+      <div className="organization-container__heading">Dashboard</div>
       <TabOptions
         type={display}
         setType={setDisplay}
