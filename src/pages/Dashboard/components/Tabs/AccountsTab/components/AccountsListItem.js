@@ -1,7 +1,7 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { handleModal } from '../../../../../../../store/modules/modal';
+import { handleModal } from '../../../../../../store/modules/modal';
 import MemberDetailsModal from './MemberDetailsModal';
 
 const AccountsListItem = ({ acc }) => {

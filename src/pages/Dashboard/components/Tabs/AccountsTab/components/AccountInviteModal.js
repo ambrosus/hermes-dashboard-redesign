@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { handleModal } from '../../../../../../../store/modules/modal';
-import UiButton from '../../../../../../../components/UiButton';
-import UiModal from '../../../../../../../components/UiModal';
-import UiInput from '../../../../../../../components/UiInput';
-import addIcon from '../../../../../../../assets/svg/add-icon.svg';
+import { handleModal } from '../../../../../../store/modules/modal';
+import UiButton from '../../../../../../components/UiButton';
+import UiModal from '../../../../../../components/UiModal';
+import UiInput from '../../../../../../components/UiInput';
+import addIcon from '../../../../../../assets/svg/add-icon.svg';
 
 const AccountInviteModal = () => {
   const dispatch = useDispatch();

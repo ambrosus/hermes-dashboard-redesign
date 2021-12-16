@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { handleModal } from '../../../../../../../store/modules/modal';
-import UiButton from '../../../../../../../components/UiButton';
-import UiModal from '../../../../../../../components/UiModal';
-import UiInput from '../../../../../../../components/UiInput';
-import lockIcon from '../../../../../../../assets/svg/lock.svg';
-import UiSelect from '../../../../../../../components/UiSelect';
+import { handleModal } from '../../../../../../store/modules/modal';
+import UiButton from '../../../../../../components/UiButton';
+import UiModal from '../../../../../../components/UiModal';
+import UiInput from '../../../../../../components/UiInput';
+import lockIcon from '../../../../../../assets/svg/lock.svg';
+import UiSelect from '../../../../../../components/UiSelect';
 
 const MemberDetailsModal = ({ accountInfo }) => {
   const dispatch = useDispatch();

@@ -18,9 +18,9 @@ import {
   getTimestampSubDays,
   getTimestampSubHours,
   getTimestampSubMonths,
-} from '../../../../../../utils/datetime';
-import { getTimeRangeCountAggregateForOrganization } from '../../../../../../utils/analytisService';
-import { debugLog } from '../../../../../../utils/debugLog';
+} from '../../../../../utils/datetime';
+import { getTimeRangeCountAggregateForOrganization } from '../../../../../utils/analytisService';
+import { debugLog } from '../../../../../utils/debugLog';
 
 ChartJS.register(
   CategoryScale,

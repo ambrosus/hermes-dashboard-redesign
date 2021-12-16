@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import StatusBar from './components/StatusBar';
 import AccountsList from './components/AccountsList';
-import { getOrganizationAccounts } from '../../../../../../utils/organizationService';
-import { handleModal } from '../../../../../../store/modules/modal';
-import UiButton from '../../../../../../components/UiButton';
+import { getOrganizationAccounts } from '../../../../../utils/organizationService';
+import { handleModal } from '../../../../../store/modules/modal';
+import UiButton from '../../../../../components/UiButton';
 import AccountInviteModal from './components/AccountInviteModal';
 
-const AccountsTab = () => {
+const OrganizationTab = () => {
   const [display, setDisplay] = useState('all');
   const [accounts, setAccounts] = useState([]);
   const dispatch = useDispatch();
@@ -46,4 +46,4 @@ const AccountsTab = () => {
   );
 };
 
-export default AccountsTab;
+export default OrganizationTab;
