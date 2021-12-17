@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { handleModal } from '../../../../../../store/modules/modal';
+import { createInvites } from '../../../../../../utils/organizationService';
 import UiButton from '../../../../../../components/UiButton';
 import UiModal from '../../../../../../components/UiModal';
 import UiInput from '../../../../../../components/UiInput';
@@ -8,9 +9,14 @@ import addIcon from '../../../../../../assets/svg/add-icon.svg';
 
 const AccountInviteModal = () => {
   const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
 
   const closeModal = () => dispatch(handleModal({ name: null }));
 
+  const senInviteHandler = async () => {
+    console.log('email', email);
+    await createInvites({ email: [`${email}`] });
+  };
   return (
     <UiModal
       modalName="inviteAccountModal"
@@ -33,7 +39,7 @@ const AccountInviteModal = () => {
         <UiInput
           label="Email"
           placeholder="Asset name for example"
-          onChange={() => alert('search account??? ')}
+          onChange={(e) => setEmail(e)}
         />
         <div className="space-10" />
         <button
@@ -56,7 +62,7 @@ const AccountInviteModal = () => {
             Cancel
           </UiButton>
           <UiButton
-            onclick={() => alert('inviteHandler()')}
+            onclick={senInviteHandler}
             styles={{ background: '#4A38AE', padding: 12 }}
           >
             Invite

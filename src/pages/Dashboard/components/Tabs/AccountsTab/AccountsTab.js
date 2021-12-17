@@ -13,7 +13,12 @@ import AccountInviteModal from './components/AccountInviteModal';
 
 const AccountsTab = () => {
   const [display, setDisplay] = useState('all');
-  const [accounts, setAccounts] = useState([]);
+  const [accounts, setAccounts] = useState({
+    all: [],
+    active: [],
+    pending: [],
+    disabled: [],
+  });
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const isNodePage = pathname === '/dashboard/node';
@@ -24,15 +29,15 @@ const AccountsTab = () => {
   useEffect(
     () =>
       !isNodePage
-        ? getOrganizationAccounts().then(({ data }) => {
+        ? getOrganizationAccounts().then((data) => {
             if (data) {
-              console.log(data);
+              console.log('[ACCOUNT TAB] getOrganizationAccounts', data);
               setAccounts(data);
             }
           })
-        : getOrganizations().then(({ data }) => {
+        : getOrganizations().then((data) => {
             if (data) {
-              console.log(data);
+              console.log('[ACCOUNT TAB] getOrganizations', data);
               setAccounts(data);
             }
           }),
@@ -46,7 +51,7 @@ const AccountsTab = () => {
           className="organization-container__heading"
           style={{ paddingBottom: 0 }}
         >
-          Accounts
+          {!isNodePage ? 'Accounts' : 'Organizations'}
         </div>
         <UiButton
           styles={{
@@ -60,7 +65,8 @@ const AccountsTab = () => {
         </UiButton>
       </div>
       <StatusBar type={display} setType={setDisplay} />
-      <AccountsList isNodePage displayAccounts={display} accounts={accounts} />
+      <div className="space-25" />
+      <AccountsList displayAccounts={display} accounts={accounts && accounts} />
       <AccountInviteModal />
     </div>
   );
