@@ -11,21 +11,22 @@ const AccountsList = ({ accounts = [], displayAccounts }) => {
       <div />
       {accounts.map((account) => {
         debugLog(displayAccounts);
+        console.log('ITEM ==>', account);
         if (displayAccounts === 'all') {
           debugLog('all');
-          return <AccountsListItem key={account.address} acc={account} />;
+          return <AccountsListItem key={account.createdOn} acc={account} />;
         }
         if (displayAccounts === 'active' && account.active) {
           debugLog('active');
-          return <AccountsListItem key={account.address} acc={account} />;
+          return <AccountsListItem key={account.createdOn} acc={account} />;
         }
         if (displayAccounts === 'pending' && account.pending) {
           debugLog('pending');
-          return <AccountsListItem key={account.address} acc={account} />;
+          return null;
         }
         if (displayAccounts === 'disabled' && account.disabled) {
           debugLog('disabled');
-          return <AccountsListItem key={account.address} acc={account} />;
+          return null;
         }
         return false;
       })}
