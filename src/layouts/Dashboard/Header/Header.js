@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 
 import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick';
@@ -27,6 +27,7 @@ const headerConfig = [
 
 const Header = () => {
   const slideSearchRef = useRef(null);
+  const { pathname } = useLocation();
   const [isActiveSlideSearch, setIsActiveSlideSearch] = useDetectOutsideClick(
     slideSearchRef,
     false,
@@ -44,6 +45,7 @@ const Header = () => {
       <div className="header__menu">
         {headerConfig.map(({ link, text }) => (
           <div key={text} className="header__menu-link">
+            {pathname === link && <div className="header__menu-link--active" />}
             <Link to={link} className="test">
               {text}
             </Link>

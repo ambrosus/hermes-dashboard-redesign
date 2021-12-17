@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { DashboardTab, AccountsTab, SettingsTab } from '../components/Tabs';
+import { DashboardTab, AccountsTab } from '../components/Tabs';
 import Sidebar from '../components/Sidebar';
+import { ACCOUNTS_TAB, DASHBOARD_TAB } from '../../../config';
 import diagramIcon from '../../../assets/svg/leaderboard.svg';
 import accountIcon from '../../../assets/svg/people.svg';
-import settingsIcon from '../../../assets/svg/settings.svg';
-import { ACCOUNTS_TAB, DASHBOARD_TAB, SETTINGS_TAB } from '../../../config';
 
 const tabMenu = [
   { tabIdentifier: DASHBOARD_TAB, name: 'Dashboard', icon: diagramIcon },
   { tabIdentifier: ACCOUNTS_TAB, name: 'Accounts', icon: accountIcon },
-  { tabIdentifier: SETTINGS_TAB, name: 'Settings', icon: settingsIcon },
 ];
-const Organization = () => {
+
+const Node = () => {
   const [tab, setTab] = useState(() => <DashboardTab />);
 
   const viewActiveTab = (tabType) => {
@@ -20,8 +19,6 @@ const Organization = () => {
         return setTab(<DashboardTab />);
       case ACCOUNTS_TAB:
         return setTab(<AccountsTab />);
-      case SETTINGS_TAB:
-        return setTab(<SettingsTab />);
       default:
         return setTab(<DashboardTab />);
     }
@@ -37,4 +34,4 @@ const Organization = () => {
     </div>
   );
 };
-export default Organization;
+export default Node;

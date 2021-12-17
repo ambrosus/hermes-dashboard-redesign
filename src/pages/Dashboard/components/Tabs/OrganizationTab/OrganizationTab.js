@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import StatusBar from './components/StatusBar';
 import AccountsList from './components/AccountsList';
-import { getOrganizationAccounts } from '../../../../../../utils/organizationService';
+import { getOrganizationAccounts } from '../../../../../utils/organizationService';
+import { handleModal } from '../../../../../store/modules/modal';
+import UiButton from '../../../../../components/UiButton';
+import AccountInviteModal from './components/AccountInviteModal';
 
-const AccountsTab = () => {
+const OrganizationTab = () => {
   const [display, setDisplay] = useState('all');
   const [accounts, setAccounts] = useState([]);
+  const dispatch = useDispatch();
+
+  const openInviteAccountModal = () =>
+    dispatch(handleModal({ name: 'inviteAccountModal' }));
 
   useEffect(() => {
     getOrganizationAccounts().then(({ data }) => setAccounts(data));
@@ -20,12 +28,22 @@ const AccountsTab = () => {
         >
           Accounts
         </div>
-        <div className="invite-btn">Invite</div>
+        <UiButton
+          styles={{
+            width: 180,
+          }}
+          className="invite-btn"
+          type="primary"
+          onclick={openInviteAccountModal}
+        >
+          Invite
+        </UiButton>
       </div>
       <StatusBar type={display} setType={setDisplay} />
       <AccountsList displayAccounts={display} accounts={accounts} />
+      <AccountInviteModal />
     </div>
   );
 };
 
-export default AccountsTab;
+export default OrganizationTab;

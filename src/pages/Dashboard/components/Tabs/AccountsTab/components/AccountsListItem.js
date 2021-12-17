@@ -1,7 +1,12 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { handleModal } from '../../../../../../store/modules/modal';
+import MemberDetailsModal from './MemberDetailsModal';
 
 const AccountsListItem = ({ acc }) => {
+  const dispatch = useDispatch();
+
   const renderStatus = (type) => {
     switch (type) {
       case true:
@@ -28,8 +33,13 @@ const AccountsListItem = ({ acc }) => {
         );
     }
   };
+
+  const openMemberDetailsModal = () =>
+    dispatch(handleModal({ name: 'memberDetailsModal' }));
+
   return (
     <div className="accounts-tab__list--item">
+      <MemberDetailsModal accountInfo={acc} />
       <div className="top">
         {renderStatus(acc.active)}
         <div className="top__name">{acc.email}</div>
@@ -41,7 +51,7 @@ const AccountsListItem = ({ acc }) => {
           <span>{acc.address}</span>
         </p>
         <div className="options__buttons">
-          <button type="button">
+          <button type="button" onClick={openMemberDetailsModal}>
             <p>Edit</p>
           </button>
           <button type="button">

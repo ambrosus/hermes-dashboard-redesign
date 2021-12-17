@@ -1,10 +1,10 @@
 import React from 'react';
 import { ReactSVG } from 'react-svg';
 
-import UiInput from '../../../../../../components/UiInput';
-import UiSelect from '../../../../../../components/UiSelect';
-import lockIcon from '../../../../../../assets/svg/lock.svg';
-import personIcon from '../../../../../../assets/svg/person.svg';
+import UiInput from '../../../../../components/UiInput';
+import UiSelect from '../../../../../components/UiSelect';
+import lockIcon from '../../../../../assets/svg/lock.svg';
+import personIcon from '../../../../../assets/svg/person.svg';
 
 const SettingsTab = () => (
   <div className="settings-tab">

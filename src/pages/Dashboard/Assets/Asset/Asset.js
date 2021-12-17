@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import QRCode from 'qrcode.react';
 import { ReactComponent as VisibilitySvg } from '../../../../assets/svg/visibility.svg';
 import UiButton from '../../../../components/UiButton';
 import AssetItem from '../../../../components/AssetItem';
@@ -13,16 +14,18 @@ import PageMainContent from '../../../../components/PageMainContent';
 import CreateAssetModal from '../../../../components/CreateAssetModal';
 import UiModal from '../../../../components/UiModal';
 import CreateResultModal from '../../../../components/CreateResultModal';
+import useHover from '../../../../hooks/useHover';
 
 const Asset = () => {
   const dispatch = useDispatch();
   const { assetId } = useParams();
-
+  const [qrCodeHover, isQrCodeHover] = useHover();
+  const [viewJson, setViewJson] = useState(false);
   const assetsData = useSelector((state) => state.assets.assetsList);
   const assetData = assetsData.find(
     (el) => el.content.idData.assetId === assetId,
   );
-
+  const assetLink = `https://test.amb.to/${assetId}`;
   if (!assetData) {
     dispatch(fetchAssetsInfo([assetId]));
     return null;
@@ -41,12 +44,43 @@ const Asset = () => {
             <VisibilitySvg />
             Public
           </div>
-          <UiButton type="pale" styles={{ marginRight: 20 }}>
-            Chek on amb.to
+          <div ref={qrCodeHover} className="qr-code-container">
+            {isQrCodeHover && (
+              <div className="qr-code-container__qr-code">
+                <QRCode
+                  id="qr-gen"
+                  value={assetLink}
+                  size={160}
+                  level="H"
+                  includeMargin
+                />
+              </div>
+            )}
+            <UiButton
+              type="pale"
+              styles={{ marginRight: 20 }}
+              onclick={() => window.open(assetLink, '_blank')}
+            >
+              Chek on amb.to
+            </UiButton>
+          </div>
+
+          <UiButton onclick={() => setViewJson(!viewJson)} type="pale">
+            View JSON
           </UiButton>
-          <UiButton type="pale">View JSON</UiButton>
         </div>
-        <AssetItem isOnAssetPage assetData={assetData} />
+        <div className="space-25" />
+        {viewJson ? (
+          <pre
+            className="asset__detail-json"
+            style={{ borderBottom: '1px solid #BFC9E0', paddingBottom: 10 }}
+          >
+            {JSON.stringify(assetData, null, 4)}
+          </pre>
+        ) : (
+          <AssetItem isOnAssetPage assetData={assetData} />
+        )}
+
         {!!assetData && <PageMainContent data={assetData} />}
       </div>
       <AssetPageTabs assetId={assetId} />

@@ -1,7 +1,7 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import AccountsListItem from './AccountsListItem';
-import { debugLog } from '../../../../../../../utils/debugLog';
+import { debugLog } from '../../../../../../utils/debugLog';
 
 const AccountsList = ({ accounts = [], displayAccounts }) => {
   debugLog('accounts', accounts);

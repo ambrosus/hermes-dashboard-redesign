@@ -3,6 +3,7 @@ import React from 'react';
 import Assets from './pages/Dashboard/Assets';
 import Package from './pages/Dashboard/Package';
 import Organization from './pages/Dashboard/Organization';
+import Node from './pages/Dashboard/Node';
 import Asset from './pages/Dashboard/Assets/Asset';
 import Event from './pages/Dashboard/Assets/Event';
 import Login from './pages/Auth';
@@ -41,6 +42,12 @@ const routes = [
     key: 'ROOT',
     exact: true,
     component: () => <Organization />,
+  },
+  {
+    path: '/dashboard/node',
+    key: 'ROOT',
+    exact: true,
+    component: () => <Node />,
   },
   {
     path: '/dashboard/login',
