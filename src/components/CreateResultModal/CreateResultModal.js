@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import UiButton from '../UiButton';
 import { ReactComponent as CloseIcon } from '../../assets/svg/cross.svg';
 import { ReactComponent as CheckedIcon } from '../../assets/svg/checkbox-green.svg';
@@ -13,11 +11,10 @@ import {
 } from '../../store/modules/assets/constants';
 import DetailsItem from './DetailsItem';
 
-const CreateResultModal = ({ confirmCallback }) => {
+const CreateResultModal = () => {
   const dispatch = useDispatch();
-  const { assetId } = useParams();
 
-  const createFormData = useSelector((state) => state.modal.openedModal.data);
+  const applyFunc = useSelector((state) => state.modal.openedModal.data);
 
   const { createAssetResult, createEventResult } = useSelector(
     (state) => state.assets,
@@ -58,11 +55,7 @@ const CreateResultModal = ({ confirmCallback }) => {
 
   const handleApply = () => {
     setModalStep(2);
-    dispatch(
-      createFormData.isCreateEvent
-        ? confirmCallback(assetId, createFormData)
-        : confirmCallback(createFormData),
-    );
+    dispatch(applyFunc());
   };
 
   const closeModal = () => dispatch(handleModal(null));
@@ -146,10 +139,6 @@ const CreateResultModal = ({ confirmCallback }) => {
       )}
     </div>
   );
-};
-
-CreateResultModal.propTypes = {
-  confirmCallback: PropTypes.func,
 };
 
 export default CreateResultModal;

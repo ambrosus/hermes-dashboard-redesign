@@ -51,7 +51,7 @@ const Asset = () => {
       </div>
       <AssetPageTabs assetId={assetId} />
       <UiModal modalName="createEvent">
-        <CreateAssetModal isCreateEvent />
+        <CreateAssetModal isCreateEvent assetId={assetId} />
       </UiModal>
       <UiModal
         contentStyles={{ padding: 0, height: 'fit-content', marginTop: 250 }}

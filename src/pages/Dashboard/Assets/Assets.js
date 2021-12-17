@@ -5,6 +5,7 @@ import {
   createAsset,
   fetchAssets,
 } from '../../../store/modules/assets/actions';
+/* eslint-disable */
 import CreateAssetModal from '../../../components/CreateAssetModal';
 import AssetItem from '../../../components/AssetItem';
 import UiButton from '../../../components/UiButton';
@@ -12,12 +13,15 @@ import { handleModal } from '../../../store/modules/modal';
 import Sorting from '../../../components/Sorting';
 import CreateResultModal from '../../../components/CreateResultModal';
 import UiModal from '../../../components/UiModal';
+import BulkEvent from '../../../components/BulkEvent';
+import InfiniteScroll from '../../../components/InfiniteScroll';
 
 const Assets = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [filteredList, setFilteredList] = useState([]);
-
+  const [selectedAssets, setSelectedAssets] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { assetsList, assetsQueryData } = useSelector((state) => state.assets);
 
   const paginationInfo = useSelector(
@@ -26,14 +30,35 @@ const Assets = () => {
 
   useEffect(() => {
     if (!assetsQueryData.data.length) {
-      dispatch(fetchAssets());
+      getAssets();
     }
   }, []);
 
   const openCreateModal = () => dispatch(handleModal({ name: 'createAsset' }));
-  const showMore = () => dispatch(fetchAssets(paginationInfo.next));
+  const showMore = () => {
+    if (!isLoading) {
+      getAssets(paginationInfo.next);
+    }
+  };
+
+  const getAssets = (next) => {
+    setIsLoading(true)
+    dispatch(fetchAssets(next))
+      .finally(() => setIsLoading(false))
+  };
+
   const openPackagingHandler = () => history.push('/dashboard/package');
 
+  const handleSelectAsset = (assetId, select) => {
+    if (select) {
+      setSelectedAssets([...selectedAssets, assetId]);
+    } else {
+      setSelectedAssets(selectedAssets.filter((el) => el !== assetId));
+    }
+  };
+
+  const cancelSelected = () => setSelectedAssets([]);
+  const a = () => console.log(1)
   return (
     <div className="dashboard-container">
       <div className="assets-options">
@@ -49,10 +74,16 @@ const Assets = () => {
       </div>
       <Sorting filter={setFilteredList} />
       <div className="assets-list">
-        {!!assetsList &&
-          filteredList.map((el) => (
-            <AssetItem assetData={el} key={el.content.idData.assetId} />
+        <InfiniteScroll handleObserver={showMore} isLoading={isLoading}>
+          {filteredList.map((el) => (
+            <AssetItem
+              handleSelect={handleSelectAsset}
+              selected={selectedAssets.includes(el.content.idData.assetId)}
+              assetData={el}
+              key={el.content.idData.assetId}
+            />
           ))}
+        </InfiniteScroll>
       </div>
       {paginationInfo.hasNext && !!assetsList.length && (
         <UiButton
@@ -71,6 +102,19 @@ const Assets = () => {
         modalName="createResult"
       >
         <CreateResultModal confirmCallback={createAsset} />
+      </UiModal>
+      <UiModal modalName="bulkEvent">
+        <CreateAssetModal
+          bulkEventData={
+            selectedAssets.length ? { assetsIds: selectedAssets } : {}
+          }
+        />
+      </UiModal>
+      {!!selectedAssets.length && (
+        <BulkEvent assetsIds={selectedAssets} cancelSelected={cancelSelected} />
+      )}
+      <UiModal modalName="bulkResult">
+        <CreateResultModal />
       </UiModal>
     </div>
   );

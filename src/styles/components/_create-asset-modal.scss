@@ -1,7 +1,14 @@
 .create-asset-title {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 24px;
+
+  &__bulk {
+    margin-right: auto;
+    margin-left: 30px;
+    font-weight: 500;
+  }
 
   &__toggle-tab {
     font-size: 14px;

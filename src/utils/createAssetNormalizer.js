@@ -1,6 +1,6 @@
 import { isEmptyObj } from './isEmptyObj';
 
-const createAssetNormalizer = (formData) => {
+const createAssetNormalizer = (formData, isEvent) => {
   const identifiers = {};
   let info = {};
   const {
@@ -12,21 +12,29 @@ const createAssetNormalizer = (formData) => {
     images,
     rows,
     propertiesItems,
+    latitude,
+    longitude,
   } = formData;
 
   if (!isEmptyObj(identifiersItems)) {
     Object.keys(identifiersItems).forEach((el) => {
-      identifiers[[identifiersItems[el].name]] = [
-        identifiersItems[el].description,
-      ];
+      if (identifiersItems[el].name && identifiersItems[el].description) {
+        identifiers[[identifiersItems[el].name]] = [
+          identifiersItems[el].description,
+        ];
+      }
     });
   }
   info = {
     name,
     description,
-    assetType: type,
-    raws: rows,
   };
+
+  info[isEvent ? 'type' : 'assetType'] = type;
+
+  if (rows.length) {
+    info.raws = rows;
+  }
 
   Object.keys(formData).forEach((el) => {
     if (el.includes('groupPropertyItems')) {
@@ -35,7 +43,11 @@ const createAssetNormalizer = (formData) => {
       info[currentGroup.groupName] = {};
 
       Object.keys(currentGroup).forEach((groupEl) => {
-        if (groupEl !== 'groupName') {
+        if (
+          groupEl !== 'groupName' &&
+          currentGroup[groupEl].name &&
+          currentGroup[groupEl].description
+        ) {
           info[currentGroup.groupName][currentGroup[groupEl].name] =
             currentGroup[groupEl].description;
         }
@@ -58,8 +70,9 @@ const createAssetNormalizer = (formData) => {
   if (!isEmptyObj(propertiesItems)) {
     Object.keys(propertiesItems).forEach((el) => {
       const currentProp = propertiesItems[el];
-
-      info[currentProp.name] = currentProp.description;
+      if (currentProp.name && currentProp.description) {
+        info[currentProp.name] = currentProp.description;
+      }
     });
   }
 
@@ -67,13 +80,26 @@ const createAssetNormalizer = (formData) => {
 
   result.push({
     ...info,
-    type: 'ambrosus.asset.info',
+    ...(!isEvent && { type: 'ambrosus.asset.info' }),
   });
 
   if (!isEmptyObj(identifiers)) {
     result.push({
       identifiers,
       type: 'ambrosus.asset.identifiers',
+    });
+  }
+
+  if (latitude && longitude) {
+    result.push({
+      type: 'ambrosus.event.location',
+      location: {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [+latitude, +longitude],
+        },
+      },
     });
   }
 

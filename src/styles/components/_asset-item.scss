@@ -7,11 +7,42 @@
   display: flex;
   position: relative;
   margin-bottom: 20px;
+  cursor: pointer;
+
+  &--selected {
+    border: 2px solid $color-gray-light;
+    padding: 2px;
+  }
 
   &--asset-page {
     padding: 20px;
     margin: 20px auto 40px;
     flex-direction: column;
+  }
+
+  &:hover .asset-item__handle-select {
+    display: block;
+  }
+
+  &__handle-select {
+    display: none;
+    position: absolute;
+    top: 37px;
+    left: -40px;
+
+    path {
+      fill: #EBEBF8;
+    }
+
+    &--selected {
+      display: block!important;
+      top: 35px;
+      left: -42px;
+
+      path {
+        fill: $color-gray-light;
+      }
+    }
   }
 
   &__img {
@@ -40,6 +71,7 @@
   }
 
   &__title {
+    width: fit-content;
     font-weight: 500;
     color: #333333;
     font-size: 16px;
@@ -54,6 +86,11 @@
   &__show-details {
     position: absolute;
     right: 20px;
+    transform: rotate(180deg);
+
+    &--active {
+      transform: rotate(0deg);
+    }
   }
 }
 

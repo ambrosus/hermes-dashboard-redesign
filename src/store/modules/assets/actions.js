@@ -126,23 +126,37 @@ export const createEvent = (assetId, formData) => (dispatch) => {
   const privateKey = sessionStorage.getItem('user_private_key');
   const event = generateEvent(
     assetId,
-    createAssetNormalizer(formData),
+    createAssetNormalizer(formData, true),
     privateKey,
   );
 
-  axios
-    .post(
-      `https://vitalii427-hermes.ambrosus-test.io/event2/create/${event.eventId}`,
-      event,
-    )
-    .then((response) => {
-      const { data } = response;
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        `https://vitalii427-hermes.ambrosus-test.io/event2/create/${event.eventId}`,
+        event,
+      )
+      .then((response) => {
+        const { data } = response;
 
-      if (data.meta && data.meta.code === 200) {
-        dispatch(setCreateEventResult(data, true));
-      }
-    })
-    .catch((err) => dispatch(setCreateEventResult(err.response.data, false)));
+        if (data.meta && data.meta.code === 200) {
+          dispatch(setCreateEventResult(data, true));
+        }
+        resolve(data);
+      })
+      .catch((err) => {
+        dispatch(setCreateEventResult(err.response.data, false));
+        reject(err);
+      });
+  });
+};
+
+export const bulkEvents = (assetsIds, formData) => (dispatch) => {
+  Promise.allSettled(
+    assetsIds.map((el) => dispatch(createEvent(el, formData))),
+  ).then((response) => {
+    console.log(response);
+  });
 };
 
 const setCreateAssetResult = (data, isSuccess) => ({

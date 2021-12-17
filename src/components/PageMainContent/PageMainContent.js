@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ReactComponent as FileSvg } from '../../assets/svg/file.svg';
+import Maps from '../GoogleMap';
+import { isEmptyObj } from '../../utils/isEmptyObj';
 
 const notPropertyOrGroupKey = [
   'assetType',
@@ -12,7 +14,7 @@ const notPropertyOrGroupKey = [
   'images',
 ];
 
-const PageMainContent = ({ data }) => {
+const PageMainContent = ({ data, location = {} }) => {
   const [properties, setProperties] = useState([]);
   const [groups, setGroups] = useState([]);
 
@@ -50,6 +52,7 @@ const PageMainContent = ({ data }) => {
   );
 
   const { description, images, raws } = info;
+  console.log(location);
   return (
     <>
       <div className="asset-page-main">
@@ -85,7 +88,7 @@ const PageMainContent = ({ data }) => {
               <hr />
             </>
           )}
-          {!!groups && (
+          {!!groups.length && (
             <>
               <h4 style={{ marginTop: 55 }}>Properties groups</h4>
               {groups.map((el) =>
@@ -100,6 +103,18 @@ const PageMainContent = ({ data }) => {
             </>
           )}
         </div>
+        {!isEmptyObj(location) && (
+          <>
+            <h4 className="page-main-title">Location</h4>
+            <Maps
+              coordinates={{
+                lat: location.location.geometry.coordinates[0],
+                lng: location.location.geometry.coordinates[1],
+              }}
+            />
+            <hr />
+          </>
+        )}
         {!!images && (
           <>
             <h4 className="page-main-title">Photo</h4>
@@ -137,6 +152,7 @@ const PageMainContent = ({ data }) => {
 
 PageMainContent.propTypes = {
   data: PropTypes.object,
+  location: PropTypes.object,
 };
 
 export default PageMainContent;

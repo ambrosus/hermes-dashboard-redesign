@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -17,6 +17,12 @@ import infoIcon from '../../assets/svg/info-filled.svg';
 import UiButton from '../UiButton';
 import AddedField from './AddedField';
 import createAssetNormalizer from '../../utils/createAssetNormalizer';
+import { isEmptyObj } from '../../utils/isEmptyObj';
+import {
+  bulkEvents,
+  createAsset,
+  createEvent,
+} from '../../store/modules/assets/actions';
 
 const privateToggleOptions = [
   {
@@ -39,7 +45,7 @@ const privateToggleOptions = [
   },
 ];
 
-const CreateAssetModal = ({ isCreateEvent }) => {
+const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
   const dispatch = useDispatch();
 
   const [isJSONForm, setIsJSONForm] = useState(false);
@@ -59,7 +65,46 @@ const CreateAssetModal = ({ isCreateEvent }) => {
     images: [],
     coverImgUrl: '',
     rows: [],
+    latitude: '',
+    longitude: '',
   });
+
+  useEffect(() => {
+    const dataFromStorage = localStorage.getItem('createAssetData');
+    const data = dataFromStorage ? JSON.parse(dataFromStorage) : {};
+
+    if (data.additionalFields) {
+      setAdditionalFields(data.additionalFields);
+    }
+    if (data.groupFields) {
+      setGroupFields(data.groupFields);
+    }
+    if (data.formData) {
+      setFormData(data.formData);
+    }
+  }, []);
+
+  useEffect(() => {
+    setDataInLocalStorage({ additionalFields });
+  }, [additionalFields]);
+
+  useEffect(() => {
+    setDataInLocalStorage({ groupFields });
+  }, [groupFields]);
+
+  useEffect(() => {
+    setDataInLocalStorage({ formData });
+  }, [formData]);
+
+  const setDataInLocalStorage = (keyValue) => {
+    const dataFromStorage = localStorage.getItem('createAssetData');
+    const data = dataFromStorage ? JSON.parse(dataFromStorage) : {};
+
+    localStorage.setItem(
+      'createAssetData',
+      JSON.stringify({ ...data, ...keyValue }),
+    );
+  };
 
   const setJSONForm = () => setIsJSONForm(true);
   const setUsualForm = () => setIsJSONForm(false);
@@ -97,10 +142,13 @@ const CreateAssetModal = ({ isCreateEvent }) => {
   const addIdentifier = () => addAdditionalField('identifiersItems');
 
   const deleteAdditionalField = (idx, itemName) => {
-    const clone = [...additionalFields[itemName]];
-    clone.splice(idx, 1);
+    const fieldData = formData[itemName];
+    delete fieldData[idx];
+    handleSetFormData({ [itemName]: fieldData });
 
-    setAdditionalFields({ ...additionalFields, [itemName]: clone });
+    const clone = [...additionalFields[itemName]];
+    const filtered = clone.filter((el) => el !== idx);
+    setAdditionalFields({ ...additionalFields, [itemName]: filtered });
   };
 
   const addGroup = () => {
@@ -145,12 +193,23 @@ const CreateAssetModal = ({ isCreateEvent }) => {
   };
 
   const showResultModal = () => {
+    let submitFunc = () => createAsset(formData);
+
+    if (isCreateEvent) {
+      submitFunc = () => createEvent(assetId, formData);
+    }
+    if (!isEmptyObj(bulkEventData)) {
+      submitFunc = () => bulkEvents(bulkEventData.assetsIds, formData);
+    }
+
     dispatch(
       handleModal({
         name: 'createResult',
-        data: isCreateEvent ? { ...formData, isCreateEvent: true } : formData,
+        data: submitFunc,
       }),
     );
+
+    localStorage.setItem('createAssetData', '');
   };
 
   const handleRaw = async (e) => {
@@ -186,6 +245,11 @@ const CreateAssetModal = ({ isCreateEvent }) => {
     <div className="create-asset">
       <div className="create-asset-title">
         <h3 className="create-asset-title__text">New Asset</h3>
+        {!isEmptyObj(bulkEventData) && (
+          <span className="create-asset-title__bulk">
+            For {bulkEventData.assetsIds.length} assets
+          </span>
+        )}
         <div>
           <button
             onClick={setUsualForm}
@@ -212,6 +276,7 @@ const CreateAssetModal = ({ isCreateEvent }) => {
             placeholder="Asset name"
             name="name"
             onChange={handleSetFormData}
+            value={formData.name}
           />
           <div className="form-semicolon-wrapper">
             <UiSelect
@@ -232,6 +297,7 @@ const CreateAssetModal = ({ isCreateEvent }) => {
             placeholder="Asset description"
             label="Description"
             name="description"
+            value={formData.description}
             onChange={handleSetFormData}
           />
           <hr />
@@ -344,6 +410,7 @@ const CreateAssetModal = ({ isCreateEvent }) => {
               <UiInput
                 label="Group name"
                 placeholder="Group name"
+                value={formData[`groupPropertyItems${el}`].groupName}
                 onChange={(value) => setGroupName(value, el)}
               />
               <AddedField
@@ -399,19 +466,23 @@ const CreateAssetModal = ({ isCreateEvent }) => {
           {isCreateEvent && (
             <>
               <div className="create-asset-title">
-                <h3 className="create-asset-title__text">Identifiers</h3>
+                <h3 className="create-asset-title__text">Location</h3>
               </div>
               <div className="form-semicolon-wrapper">
-                <UiInput label="City" />
-                <UiInput label="Country" />
-              </div>
-              <div className="form-semicolon-wrapper">
-                <UiInput label="GLN" />
-                <UiInput label="Location ID" />
-              </div>
-              <div className="form-semicolon-wrapper">
-                <UiInput label="Latitude" />
-                <UiInput label="Longitude" />
+                <UiInput
+                  type="number"
+                  label="Latitude"
+                  name="latitude"
+                  onChange={handleSetFormData}
+                  value={formData.latitude}
+                />
+                <UiInput
+                  type="number"
+                  label="Longitude"
+                  name="longitude"
+                  onChange={handleSetFormData}
+                  value={formData.longitude}
+                />
               </div>
               <hr />
             </>
@@ -435,6 +506,8 @@ const CreateAssetModal = ({ isCreateEvent }) => {
 
 CreateAssetModal.propTypes = {
   isCreateEvent: PropTypes.bool,
+  bulkEventData: PropTypes.object,
+  assetId: PropTypes.string,
 };
 
 export default CreateAssetModal;

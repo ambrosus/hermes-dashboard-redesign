@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import UiButton from '../../../../components/UiButton';
 import PageMainContent from '../../../../components/PageMainContent';
 import { isEmptyObj } from '../../../../utils/isEmptyObj';
+import AssetItem from '../../../../components/AssetItem';
 
 const Event = () => {
   const { assetId, eventId } = useParams();
@@ -14,7 +15,9 @@ const Event = () => {
   }
 
   const currentEvent = events[assetId].find((el) => el.eventId === eventId);
-
+  const location = currentEvent.content.data.find(
+    (el) => el.type === 'ambrosus.event.location',
+  );
   return (
     <div className="event-page">
       <div className="container">
@@ -26,7 +29,8 @@ const Event = () => {
         <UiButton className="event-page__similar-event">
           Add similar event
         </UiButton>
-        <PageMainContent data={currentEvent} />
+        <AssetItem isOnAssetPage assetData={currentEvent} />
+        <PageMainContent data={currentEvent} location={location} />
         <Link to={`/dashboard/assets/${assetId}`}>
           <UiButton className="event-page__back">Back to asset</UiButton>
         </Link>

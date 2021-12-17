@@ -8,7 +8,7 @@ const UiInput = ({
   onclick,
   type = 'text',
   imgSrc,
-  value,
+  value = '',
   onChange,
   className,
   onImageClick,

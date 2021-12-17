@@ -29,12 +29,14 @@ const AddedField = ({
         items.map((el) => (
           <div key={el} className="form-semicolon-wrapper">
             <UiInput
+              value={fieldsData[el]?.name}
               label={el === 0 ? 'Name' : ''}
               placeholder={`${placeholder} name`}
               onChange={(value) => handleChange(el, value)}
               name="name"
             />
             <UiInput
+              value={fieldsData[el]?.description}
               label={el === 0 ? 'Description' : ''}
               placeholder={`${placeholder} description`}
               onChange={(value) => handleChange(el, value)}

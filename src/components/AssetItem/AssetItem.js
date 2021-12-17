@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -8,9 +8,12 @@ import copyIcon from '../../assets/svg/copy-icon.svg';
 import UiButton from '../UiButton';
 import { ReactComponent as ChevronSvg } from '../../assets/svg/chevron.svg';
 import { copyToClipboard } from '../../utils/copyToClipboard';
+import { ReactComponent as DeletePackageSvg } from '../../assets/svg/delete.svg';
+import { ReactComponent as AddPackageSvg } from '../../assets/svg/add-icon.svg';
 
-const AssetItem = ({ isOnAssetPage, assetData }) => {
+const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
   const events = useSelector((state) => state.assets.eventsList);
+  const [showDetails, setShowDetails] = useState(false);
 
   const { assetId, createdBy, timestamp, sequenceNumber } =
     assetData.content.idData;
@@ -33,9 +36,9 @@ const AssetItem = ({ isOnAssetPage, assetData }) => {
     { label: 'Bundle proof block', value: bundleProofBlock },
   ];
 
-  const assetContentInfo = assetData.content.data.find(
-    (el) => el.type === 'ambrosus.asset.info',
-  );
+  const assetContentInfo =
+    assetData.content.data.find((el) => el.type === 'ambrosus.asset.info') ||
+    assetData.content.data[0];
 
   const date = moment
     .unix(assetData.content.idData.timestamp)
@@ -43,10 +46,31 @@ const AssetItem = ({ isOnAssetPage, assetData }) => {
 
   const copyId = () => copyToClipboard(assetId);
 
+  const select = () => handleSelect(assetId, !selected);
+
+  const handleShowDetails = () => setShowDetails(!showDetails);
+
   return (
     <div
-      className={cx('asset-item', isOnAssetPage && 'asset-item--asset-page')}
+      role="presentation"
+      className={cx(
+        'asset-item',
+        isOnAssetPage && 'asset-item--asset-page',
+        selected && 'asset-item--selected',
+      )}
+      onClick={handleSelect ? select : null}
     >
+      {handleSelect && (
+        <button
+          type="button"
+          className={cx(
+            'asset-item__handle-select',
+            selected && 'asset-item__handle-select--selected',
+          )}
+        >
+          {selected ? <DeletePackageSvg /> : <AddPackageSvg />}
+        </button>
+      )}
       {!isOnAssetPage && (
         <div className="asset-item__img">
           <img src={assetContentInfo.images?.default.url} alt="asset" />
@@ -75,12 +99,19 @@ const AssetItem = ({ isOnAssetPage, assetData }) => {
           <span className="asset-item-info__date">{date}</span>
         </div>
         {isOnAssetPage && (
-          <UiButton className="asset-item__show-details" type="icon">
+          <UiButton
+            className={cx(
+              'asset-item__show-details',
+              showDetails && 'asset-item__show-details--active',
+            )}
+            type="icon"
+            onclick={handleShowDetails}
+          >
             <ChevronSvg />
           </UiButton>
         )}
       </div>
-      {isOnAssetPage && (
+      {isOnAssetPage && showDetails && (
         <div className="asset-item-details">
           {assetInfo.map((el) => (
             <div key={el.label} className="asset-item-details__item">
@@ -96,7 +127,9 @@ const AssetItem = ({ isOnAssetPage, assetData }) => {
 
 AssetItem.propTypes = {
   isOnAssetPage: PropTypes.bool,
+  selected: PropTypes.bool,
   assetData: PropTypes.object,
+  handleSelect: PropTypes.func,
 };
 
 export default AssetItem;
