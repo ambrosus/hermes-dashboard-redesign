@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import StatusBar from './components/StatusBar';
 import AccountsList from './components/AccountsList';
 import {
+  getFile,
   getOrganizationAccounts,
   getOrganizations,
 } from '../../../../../utils/organizationService';
@@ -29,7 +30,9 @@ const AccountsTab = () => {
   useEffect(
     () =>
       !isNodePage
-        ? getOrganizationAccounts().then((data) => {
+        ? getOrganizationAccounts(
+            JSON.parse(sessionStorage.getItem('user_account')).organization,
+          ).then((data) => {
             if (data) {
               console.log('[ACCOUNT TAB] getOrganizationAccounts', data);
               setAccounts(data);
@@ -44,6 +47,12 @@ const AccountsTab = () => {
     [display],
   );
 
+  function getFileHandler() {
+    const inputFile = document.getElementById('selectedFile');
+    inputFile.addEventListener('change', getFile);
+    inputFile.click();
+  }
+
   return (
     <div className="accounts-tab">
       <div className="accounts-tab__header" style={{ paddingBottom: 44 }}>
@@ -53,18 +62,29 @@ const AccountsTab = () => {
         >
           {!isNodePage ? 'Accounts' : 'Organizations'}
         </div>
-        <UiButton
-          styles={{
-            width: 180,
-          }}
-          className="invite-btn"
-          type="primary"
-          onclick={openInviteAccountModal}
-        >
-          Invite
-        </UiButton>
+        {!isNodePage && (
+          <UiButton
+            styles={{
+              width: 180,
+            }}
+            className="invite-btn"
+            type="primary"
+            onclick={openInviteAccountModal}
+          >
+            Invite
+          </UiButton>
+        )}
       </div>
-      <StatusBar type={display} setType={setDisplay} />
+      <div className="flex-row flex justify-content-space-between align-items-center">
+        <StatusBar type={display} setType={setDisplay} />
+        <div className="flex align-items-center">
+          <input type="file" id="selectedFile" />
+          {isNodePage && (
+            <UiButton onclick={() => getFileHandler()}>Restore</UiButton>
+          )}
+        </div>
+      </div>
+
       <div className="space-25" />
       <AccountsList displayAccounts={display} accounts={accounts && accounts} />
       <AccountInviteModal />

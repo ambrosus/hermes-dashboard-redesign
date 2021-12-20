@@ -13,8 +13,7 @@ const AccountInviteModal = () => {
 
   const closeModal = () => dispatch(handleModal({ name: null }));
 
-  const senInviteHandler = async () => {
-    console.log('email', email);
+  const sendInviteHandler = async () => {
     await createInvites({ email: [`${email}`] });
   };
   return (
@@ -62,7 +61,7 @@ const AccountInviteModal = () => {
             Cancel
           </UiButton>
           <UiButton
-            onclick={senInviteHandler}
+            onclick={sendInviteHandler}
             styles={{ background: '#4A38AE', padding: 12 }}
           >
             Invite

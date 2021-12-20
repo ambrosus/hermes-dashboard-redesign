@@ -111,7 +111,7 @@ const DashboardTab = () => {
       const totalCount =
         pathname !== '/dashboard/node'
           ? await getTimeRangeCountForOrganization(
-              9,
+              JSON.parse(sessionStorage.getItem('user_account')).organization,
               display,
               start,
               end,
@@ -123,7 +123,7 @@ const DashboardTab = () => {
       const timeSeries =
         pathname !== '/dashboard/node'
           ? await getTimeRangeCountAggregateForOrganization(
-              9,
+              JSON.parse(sessionStorage.getItem('user_account')).organization,
               display,
               start,
               end,
@@ -192,14 +192,10 @@ const DashboardTab = () => {
         setPeriod={setGroupBy}
       />
       <div className="space-25" />
-      {total && (
-        <>
-          <div className="total-for-period">
-            Total for the selected period: {total}
-          </div>
-          <div className="space-10" />
-        </>
-      )}
+      <div className="total-for-period">
+        Total for the selected period: {total}
+      </div>
+      <div className="space-10" />
       {data && (
         <Bar
           data={data.data}
