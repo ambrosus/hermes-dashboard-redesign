@@ -7,12 +7,24 @@ import UiModal from '../../../../../../components/UiModal';
 import UiInput from '../../../../../../components/UiInput';
 import lockIcon from '../../../../../../assets/svg/lock.svg';
 import UiSelect from '../../../../../../components/UiSelect';
-
+import AuthCheckbox from '../../../../../../components/auth/AuthCheckbox';
+/*eslint-disable*/
 const MemberDetailsModal = ({ accountInfo }) => {
   const dispatch = useDispatch();
+  const [permissions, setPermissions] = useState([
+    'manage_accounts',
+    'register_accounts',
+    'create_event',
+    'create_asset',
+  ]);
   const [formData, setFormData] = useState({
     type: '',
   });
+
+  const handleCheckbox = (option) => {
+    const newVal = permissions.filter((perm) => perm === option);
+    console.log(newVal);
+  };
   const closeModal = () => dispatch(handleModal({ name: null }));
 
   const handleSetFormData = (keyValue) => {
@@ -84,6 +96,44 @@ const MemberDetailsModal = ({ accountInfo }) => {
           />
         </div>
         <hr />
+        <div className="permissions-container">
+          <div className="checkboxes">
+            <AuthCheckbox
+              className="generate-key-form__checkbox"
+              label="Super account"
+              onChange={handleCheckbox}
+              checked={false}
+              disable
+            />
+            <AuthCheckbox
+              className="generate-key-form__checkbox"
+              label="Manage accounts"
+              onChange={() => handleCheckbox('manage_accounts')}
+              checked={permissions.includes('manage_accounts')}
+            />
+            <AuthCheckbox
+              className="generate-key-form__checkbox"
+              label="Register accounts"
+              onChange={() => handleCheckbox('register_accounts')}
+              checked={permissions.includes('register_accounts')}
+            />
+            <AuthCheckbox
+              className="generate-key-form__checkbox"
+              label="Create assets"
+              onChange={() => handleCheckbox('create_asset')}
+              checked={permissions.includes('create_asset')}
+            />
+            <AuthCheckbox
+              className="generate-key-form__checkbox"
+              label="Create events"
+              onChange={() => handleCheckbox('create_event')}
+              checked={permissions.includes('create_event')}
+            />
+          </div>
+          <div className="access-lvl">
+            <UiInput label="Access level" placeholder="" />
+          </div>
+        </div>
         <div className="btn-group">
           <UiButton
             onclick={closeModal}

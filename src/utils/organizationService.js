@@ -25,7 +25,6 @@ export const getOrganizationAccounts = async (
       'Content-Type': 'application/json',
     },
   });
-  console.log('pendingOrganization', pendingOrganization);
   const activeOrg = organizations.data.data.filter((organization) => {
     // todo this.account.timeZone ||
     const reassignOrganisation = organization;

@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-const AuthCheckbox = ({ label, onChange, checked, className }) => (
+const AuthCheckbox = ({ label, onChange, checked, className, disable }) => (
   <label className={cx('auth-checkbox', className)}>
     <input
       type="checkbox"
       checked={checked ? 'checked' : ''}
       onChange={onChange}
       className="auth-checkbox__input"
+      disabled={disable}
     />
     <span className="auth-checkbox__checkmark" />
     {label}
@@ -20,6 +21,7 @@ AuthCheckbox.propTypes = {
   onChange: PropTypes.func,
   checked: PropTypes.bool,
   className: PropTypes.string,
+  disable: PropTypes.bool,
 };
 
 export default AuthCheckbox;

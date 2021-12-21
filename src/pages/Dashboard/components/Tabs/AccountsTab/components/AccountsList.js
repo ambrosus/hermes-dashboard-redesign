@@ -3,7 +3,6 @@ import * as PropTypes from 'prop-types';
 import AccountsListItem from './AccountsListItem';
 /*eslint-disable*/
 const AccountsList = ({ accounts = [], displayAccounts }) => {
-  console.log('AccountsList ==>', accounts);
   return (
     <div className="accounts-tab__list">
       {displayAccounts === 'all' &&

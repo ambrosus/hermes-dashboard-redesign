@@ -118,7 +118,6 @@ const DashboardTab = () => {
               getGroup(type),
             )
           : await getTimeRangeCount(display, start, end, getGroup(type));
-      console.log('totalCount', totalCount.count);
       setTotal(totalCount.count);
       const timeSeries =
         pathname !== '/dashboard/node'
