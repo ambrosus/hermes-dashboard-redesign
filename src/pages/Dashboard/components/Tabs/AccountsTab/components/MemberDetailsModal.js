@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { handleModal } from '../../../../../../store/modules/modal';
 import UiButton from '../../../../../../components/UiButton';
 import UiModal from '../../../../../../components/UiModal';
@@ -8,9 +8,18 @@ import UiInput from '../../../../../../components/UiInput';
 import lockIcon from '../../../../../../assets/svg/lock.svg';
 import UiSelect from '../../../../../../components/UiSelect';
 import AuthCheckbox from '../../../../../../components/auth/AuthCheckbox';
+import {
+  backupJSON,
+  modifyAccount,
+  modifyOrganization,
+} from '../../../../../../utils/organizationService';
 /*eslint-disable*/
 
 const permissionsArray = [
+  {
+    label: 'Super account',
+    key: 'super_account',
+  },
   {
     label: 'Manage accounts',
     key: 'manage_accounts',
@@ -23,32 +32,84 @@ const permissionsArray = [
     label: 'Create assets',
     key: 'create_asset',
   },
+  {
+    label: 'Create events',
+    key: 'create_event',
+  },
 ];
 
-const MemberDetailsModal = ({ accountInfo }) => {
+const MemberDetailsModal = () => {
   const dispatch = useDispatch();
-  const test = ['create_asset', 'register_accounts'];
-
-  const [permissions, setPermissions] = useState(test);
+  const { pathname } = useLocation();
+  const isNodePage = pathname === '/dashboard/node';
+  const { accessLevel, permissions } = useSelector(
+    (state) => state.auth.userInfo,
+  );
+  const modalData = useSelector((state) => state.modal.openedModal.data);
+  const [userPermissions, setUserPermissions] = useState(permissions);
+  const [userAccessLevel, setUserAccessLevel] = useState(accessLevel);
   const [formData, setFormData] = useState({
     type: '',
   });
 
-  const handleCheckbox = (isChecked, permissionKey) => {
-    if (isChecked) {
-      setPermissions([...permissions, permissionKey])
-    } else {
-      setPermissions(permissions.filter((el) => el !== permissionKey))
-    }
-  };
-
-  const closeModal = () => dispatch(handleModal({ name: null }));
+  const handleCheckbox = useCallback(
+    (isChecked, permissionKey) => {
+      if (!isChecked) {
+        setUserPermissions(() =>
+          userPermissions.filter((el) => el !== permissionKey),
+        );
+      } else {
+        setUserPermissions(() => [...userPermissions, permissionKey]);
+      }
+    },
+    [userPermissions, setUserPermissions],
+  );
 
   const handleSetFormData = (keyValue) => {
     setFormData({
       ...formData,
       ...keyValue,
     });
+  };
+
+  const closeModal = () => dispatch(handleModal({ name: null }));
+
+  const organisationBackupHandler = async (...args) => {
+    const { id } = args[0][0];
+    try {
+      await backupJSON(id);
+    } catch (error) {
+      console.error('[BACKUP] Organization: ', error);
+    }
+  };
+  const modifyOrganizationHandler = async (...args) => {
+    const { id, data } = args[0];
+    try {
+      console.log('modify');
+      await modifyOrganization(id, data);
+      alert('Organization modified');
+    } catch (error) {
+      console.error('[MODIFY] Organization: ', error);
+      alert(error);
+    }
+  };
+
+  const modifyAccountHandler = async (...args) => {
+    const { address, data } = args[0];
+    try {
+      await modifyAccount(address, data);
+      console.log('Account modified');
+    } catch (error) {
+      console.error('[MODIFY] Account: ', error);
+    }
+  };
+
+  const saveHandler = async () => {
+    isNodePage
+      ? () => {}
+      : await modifyAccount(modalData?.address, {
+          permissions: userPermissions,
+        });
   };
 
   return (
@@ -58,36 +119,77 @@ const MemberDetailsModal = ({ accountInfo }) => {
     >
       <div className="member-details-modal">
         <div className="member-details-modal__header">
-          <h2 className="heading">Member details</h2>
+          <h2 className="heading">
+            {!isNodePage ? 'Member details' : 'Organization details'}
+          </h2>
         </div>
         <div className="space-25" />
         <div className="account-detail-header">
           <div className="top">
-            <div className="top__name">{accountInfo.email}</div>
+            <div className="top__name">
+              {!isNodePage ? modalData?.email : modalData?.title}
+            </div>
           </div>
           <div className="space-10" />
           <div className="options">
             <p className="options__text">
               {' '}
-              <span className="key">Key&nbsp; &nbsp; </span>
-              <span>{accountInfo.address}</span>
+              <span className="key">
+                {!isNodePage ? 'Key' : 'Owner'} &nbsp; &nbsp;
+              </span>
+              <span>{!isNodePage ? modalData?.address : modalData?.owner}</span>
             </p>
             <div className="createdAt">
-              <span className="created">Created</span> 11 Aug 2021
+              <span className="created">Created</span> {modalData?.createdOn}
             </div>
           </div>
           <div className="space-10" />
           <div className="buttons-options">
             <button
               type="button"
-              className="buttons-options--active"
-              onClick={() => alert('Activate????')}
+              onClick={() =>
+                organisationBackupHandler([
+                  { id: modalData?.organizationId, data: {} },
+                ])
+              }
             >
-              <p>Active</p>
+              <p>Backup</p>
             </button>
-            <button type="button" onClick={() => alert('Disabled???')}>
-              <p>Disable</p>
-            </button>
+            {modalData?.active ? (
+              <button
+                type="button"
+                onClick={() =>
+                  isNodePage
+                    ? modifyOrganizationHandler({
+                        id: modalData?.organizationId,
+                        data: { active: false },
+                      })
+                    : modifyAccountHandler({
+                        address: modalData?.address,
+                        data: { active: false },
+                      })
+                }
+              >
+                <p>Disable</p>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() =>
+                  isNodePage
+                    ? modifyOrganizationHandler({
+                        id: modalData?.organizationId,
+                        data: { active: true },
+                      })
+                    : modifyAccountHandler({
+                        address: modalData?.address,
+                        data: { active: false },
+                      })
+                }
+              >
+                <p>Activate</p>
+              </button>
+            )}
           </div>
         </div>
         <div className="space-25" />
@@ -98,7 +200,7 @@ const MemberDetailsModal = ({ accountInfo }) => {
         />
         <UiInput label="Name" placeholder="Michelle Antossuare" />
         <div className="form-semicolon-wrapper">
-          <UiInput label="Email" placeholder={accountInfo.email} />
+          <UiInput label="Email" placeholder={modalData?.email} />
 
           <UiSelect
             options={[
@@ -112,22 +214,34 @@ const MemberDetailsModal = ({ accountInfo }) => {
             selectedValue={formData.type}
           />
         </div>
-        <hr />
-        <div className="permissions-container">
-          <div className="checkboxes">
-            {permissionsArray.map((el) => (
-              <AuthCheckbox
-                className="generate-key-form__checkbox"
-                label={el.label}
-                onChange={(e) => handleCheckbox(e, el.key)}
-                checked={permissions.includes(el.key)}
-              />
-            ))}
-          </div>
-          <div className="access-lvl">
-            <UiInput label="Access level" placeholder="" />
-          </div>
-        </div>
+        {!isNodePage && (
+          <>
+            <hr />
+            <div className="permissions-container">
+              <div className="checkboxes">
+                {permissionsArray.map((el) => (
+                  <AuthCheckbox
+                    key={el.key}
+                    className="generate-key-form__checkbox"
+                    label={el.label}
+                    onChange={(e) => handleCheckbox(e, el.key)}
+                    checked={userPermissions.includes(el.key)}
+                  />
+                ))}
+              </div>
+              <div className="access-lvl">
+                <UiInput
+                  type="number"
+                  onChange={(value) => setUserAccessLevel(value)}
+                  value={userAccessLevel}
+                  label="Access level"
+                  name="AccessLevel"
+                  placeholder=""
+                />
+              </div>
+            </div>
+          </>
+        )}
         <div className="btn-group">
           <UiButton
             onclick={closeModal}
@@ -136,7 +250,7 @@ const MemberDetailsModal = ({ accountInfo }) => {
             Cancel
           </UiButton>
           <UiButton
-            onclick={() => alert('saveDatHandler(')}
+            onclick={saveHandler}
             styles={{ background: '#4A38AE', padding: 12 }}
           >
             Save
@@ -147,7 +261,4 @@ const MemberDetailsModal = ({ accountInfo }) => {
   );
 };
 
-MemberDetailsModal.propTypes = {
-  accountInfo: PropTypes.object,
-};
 export default MemberDetailsModal;

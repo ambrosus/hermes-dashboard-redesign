@@ -11,20 +11,8 @@ export const getOrganizationAccounts = async (
 ) => {
   const url = `${apiExtended}/organization/${organizationId}/accounts?next=${next}`;
   const pendingOrgUrl = `${apiExtended}/organization/invite?next=${next}`;
-  const key = sessionStorage.getItem('user_private_key');
-  const token = generateToken(key);
-  const organizations = await axios.get(url, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-  const pendingOrganization = await axios.get(pendingOrgUrl, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const organizations = await axios.get(url);
+  const pendingOrganization = await axios.get(pendingOrgUrl);
   const activeOrg = organizations.data.data.filter((organization) => {
     // todo this.account.timeZone ||
     const reassignOrganisation = organization;
@@ -51,27 +39,9 @@ export const getOrganizations = async (next = '') => {
   const url = `${apiExtended}/organization?next=${next}`;
   const pendingOrgUrl = `${apiExtended}/organization/request?next=${next}`;
   const declinedOrgUrl = `${apiExtended}/organization/request/refused?next=${next}`;
-
-  const key = sessionStorage.getItem('user_private_key');
-  const token = generateToken(key);
-  const organizations = await axios.get(url, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-  const pendingOrganization = await axios.get(pendingOrgUrl, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-  const declinedOrganisation = await axios.get(declinedOrgUrl, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const organizations = await axios.get(url);
+  const pendingOrganization = await axios.get(pendingOrgUrl);
+  const declinedOrganisation = await axios.get(declinedOrgUrl);
 
   const activeOrg = organizations.data.data.filter((organization) => {
     // todo this.account.timeZone ||
@@ -100,7 +70,6 @@ export const getOrganizations = async (next = '') => {
 // restoreOrg
 export const uploadJSON = async (jsonData) => {
   const url = `${apiExtended}/organization2/restore`;
-
   await axios.post(url, jsonData).then((response) => {
     if (response.meta.code === 200) document.location.reload();
     else
@@ -162,26 +131,19 @@ export const getFile = (event) => {
 
 // accountsInvites
 export const createInvites = async (email) => {
-  console.log('createInvites email', email);
   const url = `${apiExtended}/organization/invite`;
-
   const invites = await axios.post(url, email);
   if (invites.error) {
     throw invites.error;
   }
-
-  console.log('createInvites', invites);
-
   return invites.data;
 };
 export const resendInvites = async (email) => {
   const url = `${apiExtended}/organization/invite/resend`;
-
   const invites = await axios.post(url, email);
   if (invites.error) {
     throw invites.error;
   }
-  console.log('resendInvites', invites);
   return invites.data;
 };
 
@@ -201,12 +163,10 @@ export const handleOrganizationRequest = async (
   const pendingOrgUrl = `${apiExtended}/organization/request/${organizationRequestId}/${
     approved ? 'approve' : 'refuse'
   }`;
-
   const organizationRequest = await axios.get(pendingOrgUrl);
   if (organizationRequest.error) {
     throw organizationRequest.error;
   }
-
   return organizationRequest.data;
 };
 
@@ -214,23 +174,19 @@ export const handleOrganizationRequest = async (
 
 export const modifyOrganization = async (organizationId, body) => {
   const url = `${apiExtended}/organization/${organizationId}`;
-
   const organization = await axios.put(url, body);
   if (organization.error) {
     throw organization.error;
   }
-  alert('modifyOrganization', organization.data);
   return organization.data;
 };
 
 export const modifyAccount = async (address, body) => {
   const url = `${apiExtended}/account2/modify/${address}`;
-
   const account = await axios.post(url, body);
   if (account.error) {
     throw account.error;
   }
-
   return account.data;
 };
 export default {

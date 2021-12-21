@@ -607,6 +607,13 @@
   }
 
   .permissions-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 50px;
+
     .checkboxes {
       label {
         margin: 8px 0 8px !important;

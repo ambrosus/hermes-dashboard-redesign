@@ -13,7 +13,7 @@ import {
   resendInvites,
 } from '../../../../../../utils/organizationService';
 
-const AccountsListItem = ({ acc }) => {
+const AccountsListItem = ({ info }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const isNodePage = pathname === '/dashboard/node';
@@ -74,7 +74,7 @@ const AccountsListItem = ({ acc }) => {
   };
 
   const openMemberDetailsModal = () =>
-    dispatch(handleModal({ name: 'memberDetailsModal' }));
+    dispatch(handleModal({ name: 'memberDetailsModal', data: info }));
 
   const modifyOrganizationHandler = async (...args) => {
     const { id, data } = args[0];
@@ -87,6 +87,7 @@ const AccountsListItem = ({ acc }) => {
       alert(error);
     }
   };
+
   const modifyAccountHandler = async (...args) => {
     const { address, data } = args[0];
     try {
@@ -108,15 +109,16 @@ const AccountsListItem = ({ acc }) => {
       console.error('[MODIFY] Account: ', error);
     }
   };
+
   const nodePageButtons = (
     <div className="options__buttons">
       <>
-        {!acc.active && !acc.owner && !acc.organizationId && !acc.refused && (
+        {!info.active && !info.owner && !info.organizationId && !info.refused && (
           <>
             <button
               type="button"
               onClick={() =>
-                organizationRequest({ id: acc.address, approved: true })
+                organizationRequest({ id: info.address, approved: true })
               }
             >
               <p>Approve</p>
@@ -124,14 +126,14 @@ const AccountsListItem = ({ acc }) => {
             <button
               type="button"
               onClick={() =>
-                organizationRequest({ id: acc.address, approved: true })
+                organizationRequest({ id: info.address, approved: true })
               }
             >
               <p>Decline</p>
             </button>
           </>
         )}
-        {isNodePage && acc.owner === null && (
+        {isNodePage && info.owner === null && (
           <>
             <button type="button" onClick={openMemberDetailsModal}>
               <p>Edit</p>
@@ -140,23 +142,23 @@ const AccountsListItem = ({ acc }) => {
               type="button"
               onClick={() =>
                 organisationBackupHandler([
-                  { id: acc.organizationId, data: {} },
+                  { id: info.organizationId, data: {} },
                 ])
               }
             >
               <p>Backup</p>
             </button>
-            {acc.active ? (
+            {info.active ? (
               <button
                 type="button"
                 onClick={() =>
                   isNodePage
                     ? modifyOrganizationHandler({
-                        id: acc.organizationId,
+                        id: info.organizationId,
                         data: { active: false },
                       })
                     : modifyAccountHandler({
-                        address: acc.address,
+                        address: info.address,
                         data: { active: false },
                       })
                 }
@@ -169,11 +171,11 @@ const AccountsListItem = ({ acc }) => {
                 onClick={() =>
                   isNodePage
                     ? modifyOrganizationHandler({
-                        id: acc.organizationId,
+                        id: info.organizationId,
                         data: { active: true },
                       })
                     : modifyAccountHandler({
-                        address: acc.address,
+                        address: info.address,
                         data: { active: false },
                       })
                 }
@@ -183,7 +185,7 @@ const AccountsListItem = ({ acc }) => {
             )}
           </>
         )}
-        {isNodePage && !!acc.owner && acc.organizationId && (
+        {isNodePage && !!info.owner && info.organizationId && (
           <>
             <button type="button" onClick={openMemberDetailsModal}>
               <p>Edit</p>
@@ -192,23 +194,23 @@ const AccountsListItem = ({ acc }) => {
               type="button"
               onClick={() =>
                 organisationBackupHandler([
-                  { id: acc.organizationId, data: {} },
+                  { id: info.organizationId, data: {} },
                 ])
               }
             >
               <p>Backup</p>
             </button>
-            {acc.active ? (
+            {info.active ? (
               <button
                 type="button"
                 onClick={() =>
                   isNodePage
                     ? modifyOrganizationHandler({
-                        id: acc.organizationId,
+                        id: info.organizationId,
                         data: { active: false },
                       })
                     : modifyAccountHandler({
-                        address: acc.address,
+                        address: info.address,
                         data: { active: false },
                       })
                 }
@@ -221,11 +223,11 @@ const AccountsListItem = ({ acc }) => {
                 onClick={() =>
                   isNodePage
                     ? modifyOrganizationHandler({
-                        id: acc.organizationId,
+                        id: info.organizationId,
                         data: { active: true },
                       })
                     : modifyAccountHandler({
-                        address: acc.address,
+                        address: info.address,
                         data: { active: false },
                       })
                 }
@@ -242,39 +244,39 @@ const AccountsListItem = ({ acc }) => {
   const notNodePageButtons = (
     <div className="options__buttons">
       <>
-        {acc.validUntil && (
+        {info.validUntil && (
           <>
             <button
               type="button"
-              onClick={() => revokeInviteHandler(acc.inviteId)}
+              onClick={() => revokeInviteHandler(info.inviteId)}
             >
               <p>Revoke</p>
             </button>
             <button
               type="button"
-              onClick={() => resendInviteHandler(acc.email)}
+              onClick={() => resendInviteHandler(info.email)}
               style={{ backgroundColor: '#4A38AE' }}
             >
               <p>Resend</p>
             </button>
           </>
         )}
-        {!acc.validUntil && (
+        {!info.validUntil && (
           <>
             <button type="button" onClick={openMemberDetailsModal}>
               <p>Edit</p>
             </button>
-            {acc.active ? (
+            {info.active ? (
               <button
                 type="button"
                 onClick={() =>
                   isNodePage
                     ? modifyOrganizationHandler({
-                        id: acc.organizationId,
+                        id: info.organizationId,
                         data: { active: false },
                       })
                     : modifyAccountHandler({
-                        address: acc.address,
+                        address: info.address,
                         data: { active: false },
                       })
                 }
@@ -287,11 +289,11 @@ const AccountsListItem = ({ acc }) => {
                 onClick={() =>
                   isNodePage
                     ? modifyOrganizationHandler({
-                        id: acc.organizationId,
+                        id: info.organizationId,
                         data: { active: true },
                       })
                     : modifyAccountHandler({
-                        address: acc.address,
+                        address: info.address,
                         data: { active: false },
                       })
                 }
@@ -304,32 +306,33 @@ const AccountsListItem = ({ acc }) => {
       </>
     </div>
   );
+
   return (
     <div className="accounts-tab__list--item">
-      <MemberDetailsModal accountInfo={acc} />
+      <MemberDetailsModal />
       <div className="top">
-        {renderStatus(acc)}
-        <div className="top__name">{isNodePage ? acc.title : acc.email}</div>
+        {renderStatus(info)}
+        <div className="top__name">{isNodePage ? info.title : info.email}</div>
       </div>
       <div className="options">
         {isNodePage ? (
           <p className="options__text">
             {' '}
             <span className="key">Owner&nbsp; &nbsp; </span>
-            <span>{acc.owner ? acc.owner : 'none'}</span>
+            <span>{info.owner ? info.owner : 'none'}</span>
           </p>
         ) : (
           <p className="options__text">
             {' '}
-            {acc && !acc.active ? (
+            {info && !info.active ? (
               <>
                 <span className="key">InviteId&nbsp; &nbsp; </span>
-                <span>{acc.inviteId}</span>
+                <span>{info.inviteId}</span>
               </>
             ) : (
               <>
                 <span className="key">Key&nbsp; &nbsp; </span>
-                <span>{acc.address}</span>
+                <span>{info.address}</span>
               </>
             )}
           </p>
@@ -342,7 +345,7 @@ const AccountsListItem = ({ acc }) => {
 };
 
 AccountsListItem.propTypes = {
-  acc: PropTypes.object,
+  info: PropTypes.object,
 };
 
 export default AccountsListItem;

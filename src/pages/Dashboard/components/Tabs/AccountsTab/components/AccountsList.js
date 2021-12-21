@@ -8,27 +8,27 @@ const AccountsList = ({ accounts = [], displayAccounts }) => {
       {displayAccounts === 'all' &&
         accounts.all &&
         accounts.all.map((item) => (
-          <AccountsListItem type={displayAccounts} key={item._id} acc={item} />
+          <AccountsListItem type={displayAccounts} key={item._id} info={item} />
         ))}
       {displayAccounts === 'active' &&
         accounts.active &&
         accounts.active.map((item) => (
-          <AccountsListItem type={displayAccounts} key={item._id} acc={item} />
+          <AccountsListItem type={displayAccounts} key={item._id} info={item} />
         ))}
       {displayAccounts === 'pending' &&
         accounts.pending &&
         accounts.pending.map((item) => (
-          <AccountsListItem type={displayAccounts} key={item._id} acc={item} />
+          <AccountsListItem type={displayAccounts} key={item._id} info={item} />
         ))}
       {displayAccounts === 'disabled' &&
         accounts.disabled &&
         accounts.disabled.map((item) => (
-          <AccountsListItem type={displayAccounts} key={item._id} acc={item} />
+          <AccountsListItem type={displayAccounts} key={item._id} info={item} />
         ))}
       {displayAccounts === 'declined' &&
         accounts.declined &&
         accounts.declined.map((item) => (
-          <AccountsListItem type={displayAccounts} key={item._id} acc={item} />
+          <AccountsListItem type={displayAccounts} key={item._id} info={item} />
         ))}
     </div>
   );

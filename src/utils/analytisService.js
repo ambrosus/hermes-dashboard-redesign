@@ -1,16 +1,7 @@
 import axios from 'axios';
-import { generateToken } from './generateToken';
-
 export const getTimeRangeCount = async (collection, start, end) => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${collection}/count/${start}/${end}/total`;
-  const key = sessionStorage.getItem('user_private_key');
-  const token = generateToken(key);
-  const result = await axios.get(url, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
   }
@@ -24,14 +15,7 @@ export const getTimeRangeCountForOrganization = async (
   end,
 ) => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${organizationId}/${collection}/count/${start}/${end}/total`;
-  const key = sessionStorage.getItem('user_private_key');
-  const token = generateToken(key);
-  const result = await axios.get(url, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
   }
@@ -45,14 +29,7 @@ export const getTimeRangeCountAggregate = async (
   group,
 ) => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${collection}/count/${start}/${end}/aggregate/${group}`;
-  const key = sessionStorage.getItem('user_private_key');
-  const token = generateToken(key);
-  const result = await axios.get(url, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const result = await axios.get(url);
   return result.data.data;
 };
 
@@ -64,14 +41,7 @@ export const getTimeRangeCountAggregateForOrganization = async (
   group,
 ) => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${organizationId}/${collection}/count/${start}/${end}/aggregate/${group}`;
-  const key = sessionStorage.getItem('user_private_key');
-  const token = generateToken(key);
-  const result = await axios.get(url, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
   }
@@ -80,14 +50,7 @@ export const getTimeRangeCountAggregateForOrganization = async (
 
 export const amb = async () => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/metrics/amb`;
-  const key = sessionStorage.getItem('user_private_key');
-  const token = generateToken(key);
-  const result = await axios.get(url, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
   }
@@ -96,14 +59,7 @@ export const amb = async () => {
 
 export const bundle = async () => {
   const url = `$https://vitalii427-hermes.ambrosus-test.io/metrics/bundle`;
-  const key = sessionStorage.getItem('user_private_key');
-  const token = generateToken(key);
-  const result = await axios.get(url, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
   }
@@ -112,14 +68,7 @@ export const bundle = async () => {
 
 export const balance = async () => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/metrics/balance`;
-  const key = sessionStorage.getItem('user_private_key');
-  const token = generateToken(key);
-  const result = await axios.get(url, {
-    headers: {
-      Authorization: `AMB_TOKEN ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
   }
@@ -128,15 +77,8 @@ export const balance = async () => {
 
 export const pushBundle = async () => {
   const url = `https://vitalii427-hermes.ambrosus-test.io/bundle2/push`;
-  const key = sessionStorage.getItem('user_private_key');
-  const token = generateToken(key);
   try {
-    await axios.post(url, {
-      headers: {
-        Authorization: `AMB_TOKEN ${token}`,
-        Accept: 'application/json',
-      },
-    });
+    await axios.post(url);
   } catch (e) {
     if (e) {
       alert(e);
