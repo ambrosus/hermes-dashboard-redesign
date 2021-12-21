@@ -58,7 +58,7 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
   const [groupFields, setGroupFields] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
-    type: '',
+    customType: '',
     description: '',
     propertiesItems: {},
     identifiersItems: {},
@@ -287,9 +287,9 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
               ]}
               placeholder="Asset type"
               label="Asset type*"
-              name="type"
+              name="customType"
               onChange={handleSetFormData}
-              selectedValue={formData.type}
+              selectedValue={formData.customType}
             />
             <UiToggle label="Access level" options={privateToggleOptions} />
           </div>
@@ -400,7 +400,7 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
           <button
             onClick={addProperties}
             type="button"
-            className="create-asset-form__add-btn"
+            className="add-form-item-btn"
           >
             <img src={addIcon} alt="add icon" />
             Add properties
@@ -423,7 +423,7 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
               />
               <button
                 type="button"
-                className="create-asset-form__add-btn"
+                className="add-form-item-btn"
                 onClick={() => addGroupProperty(el)}
               >
                 <img src={addIcon} alt="add icon" />
@@ -457,7 +457,7 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
           <button
             onClick={addIdentifier}
             type="button"
-            className="create-asset-form__add-btn"
+            className="add-form-item-btn"
           >
             <img src={addIcon} alt="add icon" />
             Add identifier

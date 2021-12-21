@@ -1,22 +1,22 @@
 import { isEmptyObj } from './isEmptyObj';
 
-const createAssetNormalizer = (formData, isEvent) => {
+const createAssetNormalizer = (formData, isAssetCreating) => {
   const identifiers = {};
   let info = {};
   const {
     identifiersItems,
     name,
     description,
-    type,
     coverImgUrl,
     images,
     rows,
     propertiesItems,
     latitude,
     longitude,
+    customType,
   } = formData;
 
-  if (!isEmptyObj(identifiersItems)) {
+  if (identifiersItems && !isEmptyObj(identifiersItems)) {
     Object.keys(identifiersItems).forEach((el) => {
       if (identifiersItems[el].name && identifiersItems[el].description) {
         identifiers[[identifiersItems[el].name]] = [
@@ -25,14 +25,21 @@ const createAssetNormalizer = (formData, isEvent) => {
       }
     });
   }
-  info = {
-    name,
-    description,
-  };
 
-  info[isEvent ? 'type' : 'assetType'] = type;
+  info = { name };
 
-  if (rows.length) {
+  if (description) {
+    info.description = description;
+  }
+
+  if (isAssetCreating) {
+    info.type = 'ambrosus.asset.info';
+    info.assetType = customType;
+  } else {
+    info.type = customType;
+  }
+
+  if (rows && rows.length) {
     info.raws = rows;
   }
 
@@ -55,7 +62,7 @@ const createAssetNormalizer = (formData, isEvent) => {
     }
   });
 
-  if (images.length) {
+  if (images && images.length) {
     info.images = {};
 
     images.forEach((el) => {
@@ -67,7 +74,7 @@ const createAssetNormalizer = (formData, isEvent) => {
     });
   }
 
-  if (!isEmptyObj(propertiesItems)) {
+  if (propertiesItems && !isEmptyObj(propertiesItems)) {
     Object.keys(propertiesItems).forEach((el) => {
       const currentProp = propertiesItems[el];
       if (currentProp.name && currentProp.description) {
@@ -76,12 +83,7 @@ const createAssetNormalizer = (formData, isEvent) => {
     });
   }
 
-  const result = [];
-
-  result.push({
-    ...info,
-    ...(!isEvent && { type: 'ambrosus.asset.info' }),
-  });
+  const result = [{ ...info }];
 
   if (!isEmptyObj(identifiers)) {
     result.push({
@@ -102,7 +104,7 @@ const createAssetNormalizer = (formData, isEvent) => {
       },
     });
   }
-
+  console.log(result);
   return result;
 };
 

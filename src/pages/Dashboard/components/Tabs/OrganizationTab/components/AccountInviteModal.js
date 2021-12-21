@@ -39,7 +39,7 @@ const AccountInviteModal = () => {
         <button
           onClick={() => alert('addPropertiesHandler()')}
           type="button"
-          className="create-asset-form__add-btn"
+          className="add-form-item-btn"
         >
           <img src={addIcon} alt="add icon" />
           Add properties

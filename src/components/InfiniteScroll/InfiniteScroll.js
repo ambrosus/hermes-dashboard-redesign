@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 const InfiniteScroll = ({ children, handleObserver, isLoading }) => {
   const observerRef = useRef(null);
+
   const handler = useRef(handleObserver);
 
   useEffect(() => {
@@ -27,9 +28,7 @@ const InfiniteScroll = ({ children, handleObserver, isLoading }) => {
   return (
     <div className="infinite-scroll">
       {children}
-      <div className="observer" ref={observerRef}>
-        ю
-      </div>
+      <div className="observer" ref={observerRef} />
       {isLoading && <div className="infinite-scroll__loader">loading...</div>}
     </div>
   );

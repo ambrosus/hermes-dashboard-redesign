@@ -11,6 +11,7 @@ import SignUp from './pages/SignUp';
 import OwnKey from './pages/SignUp/OwnKey';
 import Request from './pages/SignUp/Request';
 import GeneratedKey from './pages/SignUp/GeneratedKey';
+import Search from './pages/Dashboard/Assets/Search';
 
 const routes = [
   {
@@ -18,6 +19,12 @@ const routes = [
     key: 'ROOT',
     exact: true,
     component: () => <Assets />,
+  },
+  {
+    path: '/dashboard/assets/search',
+    key: 'ROOT',
+    exact: true,
+    component: () => <Search />,
   },
   {
     path: '/dashboard/assets/:assetId',

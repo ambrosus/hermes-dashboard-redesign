@@ -132,3 +132,23 @@ h4 {
 .ReactModal__Overlay {
   z-index: 1;
 }
+
+.plain-selected {
+  background: $color-primary!important;
+
+  path {
+    fill: white;
+  }
+}
+
+.add-form-item-btn {
+  font-size: 14px;
+  font-weight: 500;
+  color: $color-gray;
+  display: flex;
+  align-items: center;
+
+  img {
+    margin-right: 5px;
+  }
+}

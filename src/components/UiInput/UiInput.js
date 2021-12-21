@@ -12,6 +12,7 @@ const UiInput = ({
   onChange,
   className,
   onImageClick,
+  disabled,
   name,
 }) => {
   const handleInput = ({ target }) =>
@@ -33,6 +34,7 @@ const UiInput = ({
         type={type}
         value={value}
         onChange={handleInput}
+        disabled={disabled}
       />
       {imgSrc && (
         <img
@@ -58,6 +60,7 @@ UiInput.propTypes = {
   value: PropTypes.string,
   className: PropTypes.string,
   name: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 export default UiInput;

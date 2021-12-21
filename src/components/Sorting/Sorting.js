@@ -1,53 +1,64 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import cx from 'classnames';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import UiButton from '../UiButton';
 import borderOutlet from '../../assets/svg/border_outer.svg';
 import { ReactComponent as DatePickerIcon } from '../../assets/svg/date-picker.svg';
 import placePickerIcon from '../../assets/svg/place-picker.svg';
+import { handleAssetsListSearch } from '../../store/modules/assets/actions';
 
 const timeFilter = ['Day', 'Week', 'Month', 'Year'];
 
-const Sorting = ({ filter }) => {
-  const [currentTimeFilter, setCurrentTimeFilter] = useState('Year');
-  const [dateRangeFilterValue, setDateRangeFilterValue] = useState(null);
+const Sorting = () => {
+  const dispatch = useDispatch();
 
-  const { assetsList } = useSelector((state) => state.assets);
+  const [currentTimeFilter, setCurrentTimeFilter] = useState('');
+  const [isDateRangeSelected, setIsDateRangeSelected] = useState(false);
 
-  useEffect(() => {
-    const newList = assetsList.filter((el) =>
-      moment(moment.unix(el.content.idData.timestamp)).isAfter(
-        moment().subtract(1, currentTimeFilter.toLowerCase()),
-      ),
-    );
-    filter(newList);
-  }, [currentTimeFilter, assetsList]);
+  const handleCurrentTimeFilter = (time) => {
+    const filterTime = time === currentTimeFilter ? '' : time;
 
-  useEffect(() => {
-    if (dateRangeFilterValue) {
-      const { dateFrom, dateTo } = dateRangeFilterValue;
-
-      const newList = assetsList.filter((el) =>
-        moment(moment.unix(el.content.idData.timestamp)).isBetween(
-          dateFrom,
-          dateTo,
-        ),
+    setCurrentTimeFilter(filterTime);
+    if (filterTime) {
+      const timestamp = moment().subtract(1, time.toLowerCase()).unix();
+      dispatch(
+        handleAssetsListSearch([
+          {
+            operator: 'greater-than-equal',
+            field: 'content.idData.timestamp',
+            value: timestamp,
+          },
+        ]),
       );
-      filter(newList);
     } else {
-      filter(assetsList);
+      dispatch(handleAssetsListSearch([]));
     }
-  }, [dateRangeFilterValue, assetsList]);
-
-  const handleDateRange = (event, picker) => {
-    const { startDate, endDate } = picker;
-    setDateRangeFilterValue({ dateFrom: startDate, dateTo: endDate });
   };
 
-  const cancelDateRangeFilter = () => setDateRangeFilterValue(null);
+  const handleDateRange = (event, picker) => {
+    setIsDateRangeSelected(true);
+
+    const { startDate, endDate } = picker;
+    dispatch(
+      handleAssetsListSearch([
+        {
+          operator: 'inrange',
+          field: 'content.idData.timestamp',
+          value: {
+            'greater-than-equal': startDate.unix(),
+            'less-than-equal': endDate.unix(),
+          },
+        },
+      ]),
+    );
+  };
+
+  const cancelDateRangeFilter = () => {
+    setIsDateRangeSelected(false);
+    dispatch(handleAssetsListSearch([]));
+  };
 
   return (
     <div className="assets-sorting">
@@ -61,7 +72,7 @@ const Sorting = ({ filter }) => {
             key={el}
             type="plain"
             selected={el === currentTimeFilter}
-            onclick={() => setCurrentTimeFilter(el)}
+            onclick={() => handleCurrentTimeFilter(el)}
           >
             {el}
           </UiButton>
@@ -77,10 +88,7 @@ const Sorting = ({ filter }) => {
         >
           <button
             type="button"
-            className={cx(
-              'btn plain',
-              dateRangeFilterValue && 'plain-selected',
-            )}
+            className={cx('btn plain', isDateRangeSelected && 'plain-selected')}
           >
             <DatePickerIcon />
           </button>
@@ -93,7 +101,4 @@ const Sorting = ({ filter }) => {
   );
 };
 
-Sorting.propTypes = {
-  filter: PropTypes.func,
-};
 export default Sorting;

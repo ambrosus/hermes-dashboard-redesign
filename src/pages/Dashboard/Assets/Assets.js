@@ -5,7 +5,6 @@ import {
   createAsset,
   fetchAssets,
 } from '../../../store/modules/assets/actions';
-/* eslint-disable */
 import CreateAssetModal from '../../../components/CreateAssetModal';
 import AssetItem from '../../../components/AssetItem';
 import UiButton from '../../../components/UiButton';
@@ -19,10 +18,10 @@ import InfiniteScroll from '../../../components/InfiniteScroll';
 const Assets = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [filteredList, setFilteredList] = useState([]);
   const [selectedAssets, setSelectedAssets] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const { assetsList, assetsQueryData } = useSelector((state) => state.assets);
+  const { assetsList, assetsQueryData, isAssetsLoading } = useSelector(
+    (state) => state.assets,
+  );
 
   const paginationInfo = useSelector(
     (state) => state.assets.assetsQueryData.pagination,
@@ -30,21 +29,15 @@ const Assets = () => {
 
   useEffect(() => {
     if (!assetsQueryData.data.length) {
-      getAssets();
+      dispatch(fetchAssets());
     }
   }, []);
 
   const openCreateModal = () => dispatch(handleModal({ name: 'createAsset' }));
   const showMore = () => {
-    if (!isLoading) {
-      getAssets(paginationInfo.next);
+    if (paginationInfo.hasNext && !isAssetsLoading) {
+      dispatch(fetchAssets(paginationInfo.next));
     }
-  };
-
-  const getAssets = (next) => {
-    setIsLoading(true)
-    dispatch(fetchAssets(next))
-      .finally(() => setIsLoading(false))
   };
 
   const openPackagingHandler = () => history.push('/dashboard/package');
@@ -58,7 +51,7 @@ const Assets = () => {
   };
 
   const cancelSelected = () => setSelectedAssets([]);
-  const a = () => console.log(1)
+
   return (
     <div className="dashboard-container">
       <div className="assets-options">
@@ -72,10 +65,10 @@ const Assets = () => {
           </UiButton>
         </div>
       </div>
-      <Sorting filter={setFilteredList} />
+      <Sorting />
       <div className="assets-list">
-        <InfiniteScroll handleObserver={showMore} isLoading={isLoading}>
-          {filteredList.map((el) => (
+        <InfiniteScroll handleObserver={showMore}>
+          {assetsList.map((el) => (
             <AssetItem
               handleSelect={handleSelectAsset}
               selected={selectedAssets.includes(el.content.idData.assetId)}

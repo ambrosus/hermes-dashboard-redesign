@@ -48,18 +48,6 @@
     background: $color-gray;
   }
 
-  &__add-btn {
-    font-size: 14px;
-    font-weight: 500;
-    color: $color-gray;
-    display: flex;
-    align-items: center;
-
-    img {
-      margin-right: 5px;
-    }
-  }
-
   &__added-img-wrapper {
     display: flex;
     flex-wrap: wrap;

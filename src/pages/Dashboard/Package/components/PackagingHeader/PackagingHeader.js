@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ReactSVG } from 'react-svg';
 import UiToggle from '../../../../../components/UiToggle';
 import visibilityIcon from '../../../../../assets/svg/visibility.svg';
@@ -26,7 +27,7 @@ const privateToggleOptions = [
     ),
   },
 ];
-const PackagingHeader = () => (
+const PackagingHeader = ({ handleFormData, formData }) => (
   <div className="packaging-header">
     <div className="packaging-header__privacy">
       <div className="primary">
@@ -40,10 +41,16 @@ const PackagingHeader = () => (
     <UiInput
       className="packaging-header__privacy--input"
       placeholder="Asset name / ID"
+      name="assetId"
+      value={formData.assetId}
+      onChange={handleFormData}
     />
     <UiInput
       className="packaging-header__privacy--input"
       placeholder="Event name"
+      name="eventName"
+      value={formData.eventName}
+      onChange={handleFormData}
     />
     <p className="packaging-header__description">
       By clicking on the account icon in the top right corner, you can navigate
@@ -53,4 +60,10 @@ const PackagingHeader = () => (
     </p>
   </div>
 );
+
+PackagingHeader.propTypes = {
+  handleFormData: PropTypes.func,
+  formData: PropTypes.object,
+};
+
 export default PackagingHeader;

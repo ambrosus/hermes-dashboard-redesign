@@ -1,0 +1,25 @@
+.search-page {
+  max-width: 600px;
+  margin: 50px auto 100px;
+
+  &__title {
+    font-size: 31px;
+    font-weight: 500;
+    margin-bottom: 27px;
+  }
+
+  &__section-title {
+    font-size: 21px;
+    font-weight: 500;
+    margin-bottom: 25px;
+  }
+
+  &__datepicker {
+    margin-bottom: 0;
+
+    .ui-input__icon {
+      padding: 4px;
+      right: 10px;
+    }
+  }
+}
