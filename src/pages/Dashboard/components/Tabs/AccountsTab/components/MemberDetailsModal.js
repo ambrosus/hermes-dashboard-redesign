@@ -9,22 +9,39 @@ import lockIcon from '../../../../../../assets/svg/lock.svg';
 import UiSelect from '../../../../../../components/UiSelect';
 import AuthCheckbox from '../../../../../../components/auth/AuthCheckbox';
 /*eslint-disable*/
+
+const permissionsArray = [
+  {
+    label: 'Manage accounts',
+    key: 'manage_accounts',
+  },
+  {
+    label: 'Register accounts',
+    key: 'register_accounts',
+  },
+  {
+    label: 'Create assets',
+    key: 'create_asset',
+  },
+];
+
 const MemberDetailsModal = ({ accountInfo }) => {
   const dispatch = useDispatch();
-  const [permissions, setPermissions] = useState([
-    'manage_accounts',
-    'register_accounts',
-    'create_event',
-    'create_asset',
-  ]);
+  const test = ['create_asset', 'register_accounts'];
+
+  const [permissions, setPermissions] = useState(test);
   const [formData, setFormData] = useState({
     type: '',
   });
 
-  const handleCheckbox = (option) => {
-    const newVal = permissions.filter((perm) => perm === option);
-    console.log(newVal);
+  const handleCheckbox = (isChecked, permissionKey) => {
+    if (isChecked) {
+      setPermissions([...permissions, permissionKey])
+    } else {
+      setPermissions(permissions.filter((el) => el !== permissionKey))
+    }
   };
+
   const closeModal = () => dispatch(handleModal({ name: null }));
 
   const handleSetFormData = (keyValue) => {
@@ -98,37 +115,14 @@ const MemberDetailsModal = ({ accountInfo }) => {
         <hr />
         <div className="permissions-container">
           <div className="checkboxes">
-            <AuthCheckbox
-              className="generate-key-form__checkbox"
-              label="Super account"
-              onChange={handleCheckbox}
-              checked={false}
-              disable
-            />
-            <AuthCheckbox
-              className="generate-key-form__checkbox"
-              label="Manage accounts"
-              onChange={() => handleCheckbox('manage_accounts')}
-              checked={permissions.includes('manage_accounts')}
-            />
-            <AuthCheckbox
-              className="generate-key-form__checkbox"
-              label="Register accounts"
-              onChange={() => handleCheckbox('register_accounts')}
-              checked={permissions.includes('register_accounts')}
-            />
-            <AuthCheckbox
-              className="generate-key-form__checkbox"
-              label="Create assets"
-              onChange={() => handleCheckbox('create_asset')}
-              checked={permissions.includes('create_asset')}
-            />
-            <AuthCheckbox
-              className="generate-key-form__checkbox"
-              label="Create events"
-              onChange={() => handleCheckbox('create_event')}
-              checked={permissions.includes('create_event')}
-            />
+            {permissionsArray.map((el) => (
+              <AuthCheckbox
+                className="generate-key-form__checkbox"
+                label={el.label}
+                onChange={(e) => handleCheckbox(e, el.key)}
+                checked={permissions.includes(el.key)}
+              />
+            ))}
           </div>
           <div className="access-lvl">
             <UiInput label="Access level" placeholder="" />
