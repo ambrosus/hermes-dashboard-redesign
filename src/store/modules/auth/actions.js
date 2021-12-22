@@ -40,6 +40,7 @@ export const signIn = (privateKey) => (dispatch) => {
           type: SIGN_IN,
           payload: data.data,
         });
+        sessionStorage.setItem('user_account', JSON.stringify(data.data));
         sessionStorage.setItem('user_private_key', privateKey);
       }
     });

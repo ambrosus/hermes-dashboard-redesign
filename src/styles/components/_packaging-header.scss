@@ -64,5 +64,14 @@
     }
   }
 
-
+  .bottom-fixed-pad {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 0;
+    width: 100%;
+    height: 120px;
+    background: #F7F7FD;
+  }
 }

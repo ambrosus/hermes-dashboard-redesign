@@ -15,13 +15,18 @@ import moment from 'moment';
 import TabOptions from './components/TabOptions';
 import {
   getTimestamp,
-  getTimestampMonthStart,
   getTimestampSubDays,
   getTimestampSubHours,
   getTimestampSubMonths,
-} from '../../../../../../utils/datetime';
-import { getTimeRangeCountAggregateForOrganization } from '../../../../../../utils/analytisService';
-import { debugLog } from '../../../../../../utils/debugLog';
+} from '../../../../../utils/datetime';
+import {
+  getTimeRangeCountAggregateForOrganization,
+  getTimeRangeCountAggregate,
+  getTimeRangeCountForOrganization,
+  getTimeRangeCount,
+} from '../../../../../utils/analytisService';
+import { debugLog } from '../../../../../utils/debugLog';
+import { useLocation } from 'react-router-dom';
 
 ChartJS.register(
   CategoryScale,
@@ -33,6 +38,8 @@ ChartJS.register(
 );
 
 const DashboardTab = () => {
+  const { pathname } = useLocation();
+  const [total, setTotal] = useState(null);
   const [display, setDisplay] = useState('asset');
   const [groupBy, setGroupBy] = useState('7d');
   const [data, setData] = useState(null);
@@ -101,21 +108,39 @@ const DashboardTab = () => {
     try {
       const [start, end] = getStartEnd(type);
       //TODO sessionStorage.getItem('GET_ACCOUNT')
-      const kakoitoTimeSeries = await getTimeRangeCountAggregateForOrganization(
-        9,
-        display,
-        start,
-        end,
-        getGroup(type),
-      );
-      console.log(formattingGroup(type));
-      kakoitoTimeSeries.count.map((stat) => {
+      const totalCount =
+        pathname !== '/dashboard/node'
+          ? await getTimeRangeCountForOrganization(
+              JSON.parse(sessionStorage.getItem('user_account')).organization,
+              display,
+              start,
+              end,
+              getGroup(type),
+            )
+          : await getTimeRangeCount(display, start, end, getGroup(type));
+      setTotal(totalCount.count);
+      const timeSeries =
+        pathname !== '/dashboard/node'
+          ? await getTimeRangeCountAggregateForOrganization(
+              JSON.parse(sessionStorage.getItem('user_account')).organization,
+              display,
+              start,
+              end,
+              getGroup(type),
+            )
+          : await getTimeRangeCountAggregate(
+              display,
+              start,
+              end,
+              getGroup(type),
+            );
+
+      timeSeries.count.map((stat) => {
         Dlabels.push(
           moment(stat.timestamp * 1000).format(formattingGroup(type)),
         );
         Ddata.push(stat.count);
       });
-      console.log(kakoitoTimeSeries);
 
       setData({
         data: {
@@ -158,7 +183,7 @@ const DashboardTab = () => {
   };
   return (
     <div className="dashboard-tab">
-      <div className="organization-container__heading">DashboardTab</div>
+      <div className="organization-container__heading">Dashboard</div>
       <TabOptions
         type={display}
         setType={setDisplay}
@@ -166,6 +191,10 @@ const DashboardTab = () => {
         setPeriod={setGroupBy}
       />
       <div className="space-25" />
+      <div className="total-for-period">
+        Total for the selected period: {total}
+      </div>
+      <div className="space-10" />
       {data && (
         <Bar
           data={data.data}

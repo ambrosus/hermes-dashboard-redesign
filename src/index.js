@@ -20,7 +20,6 @@ window.web3 = new Web3(
 const key = sessionStorage.getItem('user_private_key');
 if (key) {
   const token = generateToken(key);
-
   axios.defaults.headers.common = {
     Authorization: `AMB_TOKEN ${token}`,
     'Content-Type': 'application/json',
