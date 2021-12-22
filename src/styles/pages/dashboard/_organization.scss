@@ -576,33 +576,41 @@
 
     .buttons-options {
       display: flex;
-      justify-content: flex-start;
-      gap: 10px;
-
-      &--active {
-        background-color: #1ACD8C !important;
-      }
-
-      button {
-        min-width: 80px;
-        height: 24px;
-        background: #BFC9E0;
-        border-radius: 6px;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+      .buttons {
         display: flex;
-        align-items: center;
-        justify-content: center;
+        gap: 10px;
+        &--active {
+          background-color: #1ACD8C !important;
+        }
 
-        p {
-          font-style: normal;
-          font-weight: 500;
-          font-size: 12px;
-          line-height: 14px;
+        button {
+          min-width: 80px;
+          height: 24px;
+          background: #BFC9E0;
+          border-radius: 6px;
           display: flex;
           align-items: center;
-          text-align: center;
-          color: #FFFFFF;
+          justify-content: center;
+
+          p {
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 14px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #FFFFFF;
+          }
         }
       }
+      .options{
+        margin-left: auto;
+      }
+
     }
   }
 

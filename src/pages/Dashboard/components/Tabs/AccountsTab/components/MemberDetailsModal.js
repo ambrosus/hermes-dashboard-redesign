@@ -48,6 +48,7 @@ const MemberDetailsModal = () => {
   const modalData = useSelector((state) => state.modal.openedModal.data);
   const [userPermissions, setUserPermissions] = useState(permissions);
   const [userAccessLevel, setUserAccessLevel] = useState(accessLevel);
+  const [modifyOrg, setModifyOrg] = useState({});
   const [formData, setFormData] = useState({
     type: '',
   });
@@ -106,10 +107,14 @@ const MemberDetailsModal = () => {
 
   const saveHandler = async () => {
     isNodePage
-      ? () => {}
+      ? await modifyOrganization(modalData.organizationId, modifyOrg)
       : await modifyAccount(modalData?.address, {
           permissions: userPermissions,
         });
+  };
+
+  const handleModifyOrg = (keyValue) => {
+    setModifyOrg({ ...modifyOrg, ...keyValue });
   };
 
   return (
@@ -139,69 +144,117 @@ const MemberDetailsModal = () => {
               </span>
               <span>{!isNodePage ? modalData?.address : modalData?.owner}</span>
             </p>
-            <div className="createdAt">
-              <span className="created">Created</span> {modalData?.createdOn}
-            </div>
+            {!isNodePage && (
+              <div className="createdAt">
+                <span className="created">Created</span> {modalData?.createdOn}
+              </div>
+            )}
           </div>
           <div className="space-10" />
           <div className="buttons-options">
-            <button
-              type="button"
-              onClick={() =>
-                organisationBackupHandler([
-                  { id: modalData?.organizationId, data: {} },
-                ])
-              }
-            >
-              <p>Backup</p>
-            </button>
-            {modalData?.active ? (
+            <div className="buttons">
               <button
                 type="button"
                 onClick={() =>
-                  isNodePage
-                    ? modifyOrganizationHandler({
-                        id: modalData?.organizationId,
-                        data: { active: false },
-                      })
-                    : modifyAccountHandler({
-                        address: modalData?.address,
-                        data: { active: false },
-                      })
+                  organisationBackupHandler([
+                    { id: modalData?.organizationId, data: {} },
+                  ])
                 }
               >
-                <p>Disable</p>
+                <p>Backup</p>
               </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() =>
-                  isNodePage
-                    ? modifyOrganizationHandler({
-                        id: modalData?.organizationId,
-                        data: { active: true },
-                      })
-                    : modifyAccountHandler({
-                        address: modalData?.address,
-                        data: { active: false },
-                      })
-                }
-              >
-                <p>Activate</p>
-              </button>
+              {modalData?.active ? (
+                <button
+                  type="button"
+                  onClick={() =>
+                    isNodePage
+                      ? modifyOrganizationHandler({
+                          id: modalData?.organizationId,
+                          data: { active: false },
+                        })
+                      : modifyAccountHandler({
+                          address: modalData?.address,
+                          data: { active: false },
+                        })
+                  }
+                >
+                  <p>Disable</p>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() =>
+                    isNodePage
+                      ? modifyOrganizationHandler({
+                          id: modalData?.organizationId,
+                          data: { active: true },
+                        })
+                      : modifyAccountHandler({
+                          address: modalData?.address,
+                          data: { active: false },
+                        })
+                  }
+                >
+                  <p>Activate</p>
+                </button>
+              )}
+            </div>
+            {isNodePage && (
+              <div className="options">
+                <div className="createdAt">
+                  <span className="created">Created</span>{' '}
+                  {modalData?.createdOn}
+                </div>
+                &nbsp;&nbsp;&nbsp;
+                <div className="createdAt">
+                  <span className="created">Modified</span>{' '}
+                  {modalData?.modifiedOn}
+                </div>
+              </div>
             )}
           </div>
         </div>
         <div className="space-25" />
-        <UiInput
-          imgSrc={lockIcon}
-          label="Public key"
-          placeholder="0x9B8c4E354aE59699246864aCbe1e4963C5d9A26B"
-        />
-        <UiInput label="Name" placeholder="Michelle Antossuare" />
+        {!isNodePage ? (
+          <>
+            {' '}
+            <UiInput
+              imgSrc={lockIcon}
+              label="Public key"
+              placeholder="0x9B8c4E354aE59699246864aCbe1e4963C5d9A26B"
+            />
+            <UiInput label="Name" placeholder="Michelle Antossuare" />
+          </>
+        ) : (
+          <>
+            <UiInput
+              imgSrc={lockIcon}
+              label="Owner"
+              disabled
+              placeholder={modalData?.owner}
+            />
+            <UiInput
+              label="Title"
+              placeholder={modalData?.title}
+              onChange={handleModifyOrg}
+              name="title"
+              value={modifyOrg?.title || ''}
+            />
+            <UiInput
+              label="Legal address"
+              placeholder={modalData?.legalAddress}
+              onChange={handleModifyOrg}
+              name="legalAddress"
+              value={modifyOrg?.legalAddress || ''}
+            />
+          </>
+        )}
         <div className="form-semicolon-wrapper">
-          <UiInput label="Email" placeholder={modalData?.email} />
-
+          {/*todo modifyOrg?.email ==> modifyAcc.email*/}
+          <UiInput
+            label="Email"
+            placeholder={isNodePage ? modifyOrg?.email : modifyOrg?.email}
+          />
           <UiSelect
             options={[
               { value: '1', label: 'GTM' },
@@ -261,4 +314,4 @@ const MemberDetailsModal = () => {
   );
 };
 
-export default MemberDetailsModal;
+export default React.memo(MemberDetailsModal);

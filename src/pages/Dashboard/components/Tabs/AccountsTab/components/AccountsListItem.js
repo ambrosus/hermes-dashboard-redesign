@@ -3,7 +3,6 @@ import * as PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { handleModal } from '../../../../../../store/modules/modal';
-import MemberDetailsModal from './MemberDetailsModal';
 import {
   backupJSON,
   deleteInvite,
@@ -63,7 +62,6 @@ const AccountsListItem = ({ info }) => {
   const revokeInviteHandler = async (inviteId) => {
     await deleteInvite(inviteId);
   };
-
   const organisationBackupHandler = async (...args) => {
     const { id } = args[0][0];
     try {
@@ -72,10 +70,8 @@ const AccountsListItem = ({ info }) => {
       console.error('[BACKUP] Organization: ', error);
     }
   };
-
   const openMemberDetailsModal = () =>
     dispatch(handleModal({ name: 'memberDetailsModal', data: info }));
-
   const modifyOrganizationHandler = async (...args) => {
     const { id, data } = args[0];
     try {
@@ -87,7 +83,6 @@ const AccountsListItem = ({ info }) => {
       alert(error);
     }
   };
-
   const modifyAccountHandler = async (...args) => {
     const { address, data } = args[0];
     try {
@@ -97,7 +92,6 @@ const AccountsListItem = ({ info }) => {
       console.error('[MODIFY] Account: ', error);
     }
   };
-
   const organizationRequest = async (...args) => {
     const { id, approved } = args[0];
     console.log(id);
@@ -109,7 +103,6 @@ const AccountsListItem = ({ info }) => {
       console.error('[MODIFY] Account: ', error);
     }
   };
-
   const nodePageButtons = (
     <div className="options__buttons">
       <>
@@ -240,7 +233,6 @@ const AccountsListItem = ({ info }) => {
       </>
     </div>
   );
-
   const notNodePageButtons = (
     <div className="options__buttons">
       <>
@@ -306,10 +298,8 @@ const AccountsListItem = ({ info }) => {
       </>
     </div>
   );
-
   return (
     <div className="accounts-tab__list--item">
-      <MemberDetailsModal />
       <div className="top">
         {renderStatus(info)}
         <div className="top__name">{isNodePage ? info.title : info.email}</div>
