@@ -35,7 +35,6 @@ const UiInput = ({
         value={value}
         disabled={disabled}
         onChange={handleInput}
-        disabled={disabled}
       />
       {imgSrc && (
         <img

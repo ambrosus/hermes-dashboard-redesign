@@ -1,13 +1,9 @@
-import React, { useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
-
-import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick';
-
 import logoIcon from '../../../assets/svg/logo.svg';
 import searchIcon from '../../../assets/svg/search.svg';
 import personIcon from '../../../assets/svg/person.svg';
-import SearchInput from '../../../components/SearchInput';
 import UiButton from '../../../components/UiButton';
 
 const headerConfig = [
@@ -26,14 +22,10 @@ const headerConfig = [
 ];
 
 const Header = () => {
-  const slideSearchRef = useRef(null);
+  const history = useHistory();
   const { pathname } = useLocation();
-  const [isActiveSlideSearch, setIsActiveSlideSearch] = useDetectOutsideClick(
-    slideSearchRef,
-    false,
-  );
 
-  const showSearchBar = () => setIsActiveSlideSearch(true);
+  const showSearchBar = () => history.push('/dashboard/assets/search');
 
   return (
     <header className="header">
@@ -53,13 +45,9 @@ const Header = () => {
         ))}
       </div>
       <div className="header__setting">
-        {!isActiveSlideSearch ? (
-          <UiButton type="icon" onClick={showSearchBar}>
-            <img src={searchIcon} alt="search-icon" />
-          </UiButton>
-        ) : (
-          <SearchInput className="header__search-input" />
-        )}
+        <UiButton type="icon" onclick={showSearchBar}>
+          <img src={searchIcon} alt="search-icon" />
+        </UiButton>
         <UiButton type="icon">
           <img src={personIcon} alt="user-icon" />
         </UiButton>
