@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import StatusBar from './components/StatusBar';
 import AccountsList from './components/AccountsList';
 import {
+  getFile,
   getOrganizationAccounts,
   getOrganizations,
 } from '../../../../../utils/organizationService';
@@ -13,7 +14,12 @@ import AccountInviteModal from './components/AccountInviteModal';
 
 const AccountsTab = () => {
   const [display, setDisplay] = useState('all');
-  const [accounts, setAccounts] = useState([]);
+  const [accounts, setAccounts] = useState({
+    all: [],
+    active: [],
+    pending: [],
+    disabled: [],
+  });
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const isNodePage = pathname === '/dashboard/node';
@@ -24,20 +30,28 @@ const AccountsTab = () => {
   useEffect(
     () =>
       !isNodePage
-        ? getOrganizationAccounts().then(({ data }) => {
+        ? getOrganizationAccounts(
+            JSON.parse(sessionStorage.getItem('user_account')).organization,
+          ).then((data) => {
             if (data) {
-              console.log(data);
+              console.log('[ACCOUNT TAB] getOrganizationAccounts', data);
               setAccounts(data);
             }
           })
-        : getOrganizations().then(({ data }) => {
+        : getOrganizations().then((data) => {
             if (data) {
-              console.log(data);
+              console.log('[ACCOUNT TAB] getOrganizations', data);
               setAccounts(data);
             }
           }),
     [display],
   );
+
+  function getFileHandler() {
+    const inputFile = document.getElementById('selectedFile');
+    inputFile.addEventListener('change', getFile);
+    inputFile.click();
+  }
 
   return (
     <div className="accounts-tab">
@@ -46,21 +60,33 @@ const AccountsTab = () => {
           className="organization-container__heading"
           style={{ paddingBottom: 0 }}
         >
-          Accounts
+          {!isNodePage ? 'Accounts' : 'Organizations'}
         </div>
-        <UiButton
-          styles={{
-            width: 180,
-          }}
-          className="invite-btn"
-          type="primary"
-          onclick={openInviteAccountModal}
-        >
-          Invite
-        </UiButton>
+        {!isNodePage && (
+          <UiButton
+            styles={{
+              width: 180,
+            }}
+            className="invite-btn"
+            type="primary"
+            onclick={openInviteAccountModal}
+          >
+            Invite
+          </UiButton>
+        )}
       </div>
-      <StatusBar type={display} setType={setDisplay} />
-      <AccountsList isNodePage displayAccounts={display} accounts={accounts} />
+      <div className="flex-row flex justify-content-space-between align-items-center">
+        <StatusBar type={display} setType={setDisplay} />
+        <div className="flex align-items-center">
+          <input type="file" id="selectedFile" />
+          {isNodePage && (
+            <UiButton onclick={() => getFileHandler()}>Restore</UiButton>
+          )}
+        </div>
+      </div>
+
+      <div className="space-25" />
+      <AccountsList displayAccounts={display} accounts={accounts && accounts} />
       <AccountInviteModal />
     </div>
   );

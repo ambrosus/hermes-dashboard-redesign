@@ -1,42 +1,42 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import AccountsListItem from './AccountsListItem';
-import { debugLog } from '../../../../../../utils/debugLog';
-
+/*eslint-disable*/
 const AccountsList = ({ accounts = [], displayAccounts }) => {
-  debugLog('accounts', accounts);
-
   return (
     <div className="accounts-tab__list">
-      <div />
-      {accounts.map((account) => {
-        debugLog(displayAccounts);
-        console.log('ITEM ==>', account);
-        if (displayAccounts === 'all') {
-          debugLog('all');
-          return <AccountsListItem key={account.createdOn} acc={account} />;
-        }
-        if (displayAccounts === 'active' && account.active) {
-          debugLog('active');
-          return <AccountsListItem key={account.createdOn} acc={account} />;
-        }
-        if (displayAccounts === 'pending' && account.pending) {
-          debugLog('pending');
-          return null;
-        }
-        if (displayAccounts === 'disabled' && account.disabled) {
-          debugLog('disabled');
-          return null;
-        }
-        return false;
-      })}
+      {displayAccounts === 'all' &&
+        accounts.all &&
+        accounts.all.map((item) => (
+          <AccountsListItem type={displayAccounts} key={item._id} info={item} />
+        ))}
+      {displayAccounts === 'active' &&
+        accounts.active &&
+        accounts.active.map((item) => (
+          <AccountsListItem type={displayAccounts} key={item._id} info={item} />
+        ))}
+      {displayAccounts === 'pending' &&
+        accounts.pending &&
+        accounts.pending.map((item) => (
+          <AccountsListItem type={displayAccounts} key={item._id} info={item} />
+        ))}
+      {displayAccounts === 'disabled' &&
+        accounts.disabled &&
+        accounts.disabled.map((item) => (
+          <AccountsListItem type={displayAccounts} key={item._id} info={item} />
+        ))}
+      {displayAccounts === 'declined' &&
+        accounts.declined &&
+        accounts.declined.map((item) => (
+          <AccountsListItem type={displayAccounts} key={item._id} info={item} />
+        ))}
     </div>
   );
 };
 
 AccountsList.propTypes = {
   displayAccounts: PropTypes.string,
-  accounts: PropTypes.array,
+  accounts: PropTypes.object,
 };
 
 export default React.memo(AccountsList);

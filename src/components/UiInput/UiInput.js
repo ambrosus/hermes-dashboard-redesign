@@ -33,6 +33,7 @@ const UiInput = ({
         placeholder={placeholder}
         type={type}
         value={value}
+        disabled={disabled}
         onChange={handleInput}
         disabled={disabled}
       />

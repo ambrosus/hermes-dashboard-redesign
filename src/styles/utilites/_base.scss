@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
 }
-  
+
 html {
     font-size: 14px;
 }
@@ -16,26 +16,26 @@ h2 {
      font-size: 28px;
      line-height: 1.2;
 }
-  
+
 a {
-  
+
     &:hover {
       text-decoration: none;
     }
-  
+
     &:visited {
       text-decoration: none;
     }
-  
+
     &:link {
       text-decoration: none;
     }
-  
+
     &:active {
       text-decoration: none;
     }
 }
-  
+
 p {
     margin: 0;
 }
@@ -127,6 +127,18 @@ h4 {
 
 .page-file-name {
   font-size: 12px;
+}
+.flex-row{
+  flex-direction: row;
+}
+.flex{
+  display: flex;
+}
+.justify-content-space-between{
+  justify-content: space-between;
+}
+.align-items-center{
+  align-items: center;
 }
 
 .ReactModal__Overlay {
