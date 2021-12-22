@@ -10,9 +10,7 @@ import UiSelect from '../../../../../../components/UiSelect';
 
 const MemberDetailsModal = ({ accountInfo }) => {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
-    type: '',
-  });
+  const [formData, setFormData] = useState({ type: '' });
   const closeModal = () => dispatch(handleModal({ name: null }));
 
   const handleSetFormData = (keyValue) => {

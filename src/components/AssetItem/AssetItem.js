@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -10,9 +9,12 @@ import { ReactComponent as ChevronSvg } from '../../assets/svg/chevron.svg';
 import { copyToClipboard } from '../../utils/copyToClipboard';
 import { ReactComponent as DeletePackageSvg } from '../../assets/svg/delete.svg';
 import { ReactComponent as AddPackageSvg } from '../../assets/svg/add-icon.svg';
+import assetPlaceholderImage from '../../assets/raster/aset-image-placeholder.png';
+import boxImage from '../../assets/svg/delivery-box.svg';
+import containerImage from '../../assets/svg/container.svg';
+import palleteImage from '../../assets/svg/pallet.svg';
 
 const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
-  const events = useSelector((state) => state.assets.eventsList);
   const [showDetails, setShowDetails] = useState(false);
 
   const { assetId, createdBy, timestamp, sequenceNumber } =
@@ -50,15 +52,27 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
 
   const handleShowDetails = () => setShowDetails(!showDetails);
 
+  let img;
+
+  if (assetContentInfo.images && assetContentInfo.images.default.url) {
+    img = assetContentInfo.images.default.url;
+  } else if (assetContentInfo.assetType === 'box') {
+    img = boxImage;
+  } else if (assetContentInfo.assetType === 'pallet') {
+    img = palleteImage;
+  } else if (assetContentInfo.assetType === 'container') {
+    img = containerImage;
+  } else {
+    img = assetPlaceholderImage;
+  }
+
   return (
     <div
-      role="presentation"
       className={cx(
         'asset-item',
         isOnAssetPage && 'asset-item--asset-page',
         selected && 'asset-item--selected',
       )}
-      onClick={handleSelect ? select : null}
     >
       {handleSelect && (
         <button
@@ -72,8 +86,19 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
         </button>
       )}
       {!isOnAssetPage && (
-        <div className="asset-item__img">
-          <img src={assetContentInfo.images?.default.url} alt="asset" />
+        <div
+          role="presentation"
+          onClick={handleSelect ? select : null}
+          className={cx(
+            'asset-item__img',
+            ['box', 'pallet', 'container'].includes(
+              assetContentInfo.assetType,
+            ) &&
+              !assetContentInfo.images?.default.url &&
+              'asset-item__img--svg',
+          )}
+        >
+          <img src={img} alt="asset" />
         </div>
       )}
       <div
@@ -86,11 +111,6 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
           {assetContentInfo.name.toString()}
         </Link>
         <div className="asset-item-info">
-          {events[assetId] && (
-            <div className="asset-item-info__events">
-              {Object.keys(events[assetId]).length} Events
-            </div>
-          )}
           <span className="asset-item-info__address-label">Asset address</span>
           <span className="asset-item-info__address">{assetId}</span>
           <button type="button" onClick={copyId}>

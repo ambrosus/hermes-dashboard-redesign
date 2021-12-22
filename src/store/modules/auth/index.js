@@ -6,6 +6,7 @@ const defaultState = {
     privateKey: '',
     publicKey: '',
   },
+  userInfo: {},
 };
 
 export default (state = defaultState, { type, payload }) => {
@@ -13,7 +14,7 @@ export default (state = defaultState, { type, payload }) => {
     case SET_ETH_ADDRESS:
       return { ...state, etherAddress: payload };
     case SIGN_IN:
-      return { ...state, isAuth: true };
+      return { ...state, isAuth: true, userInfo: payload };
     default:
       return state;
   }

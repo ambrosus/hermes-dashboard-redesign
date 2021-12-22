@@ -29,6 +29,10 @@
 
 .create-asset-form {
   &__media-bundle {
+    position: sticky;
+    top: 0;
+    z-index: 111;
+    background: white;
     box-shadow: 0 6px 12px rgba(74, 56, 174, 0.15);
     padding: 12px 24px;
     font-size: 14px;

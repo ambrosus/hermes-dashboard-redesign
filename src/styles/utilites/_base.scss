@@ -131,6 +131,9 @@ h4 {
 
 .ReactModal__Overlay {
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .plain-selected {
@@ -151,4 +154,18 @@ h4 {
   img {
     margin-right: 5px;
   }
+}
+
+.select-all-btn {
+  font-weight: 500;
+  font-size: 12px;
+  color: $color-gray;
+}
+
+.error-message {
+  font-size: 12px;
+  font-weight: 500;
+  color: red;
+  margin-top: -5px;
+  margin-bottom: 10px;
 }

@@ -23,3 +23,19 @@
     }
   }
 }
+
+.search-result-page {
+  max-width: 680px;
+  margin: 50px auto 100px;
+
+  &__count {
+    font-size: 12px;
+    font-weight: 400;
+    color: $color-gray-light;
+    margin-bottom: 15px;
+  }
+
+  &__input {
+    margin-bottom: 15px!important;
+  }
+}

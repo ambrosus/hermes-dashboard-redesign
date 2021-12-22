@@ -8,9 +8,12 @@
   }
 
   &__option {
-    background: white;
     border-radius: 90px;
     width: 49%;
+
+    &--selected {
+      background: white;
+    }
   }
 
   &__options-wrapper {

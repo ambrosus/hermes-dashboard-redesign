@@ -15,17 +15,24 @@ const Event = () => {
   }
 
   const currentEvent = events[assetId].find((el) => el.eventId === eventId);
+
+  const assetInfo =
+    currentEvent.content.data.find((el) => el.type === 'ambrosus.asset.info') ||
+    currentEvent.content.data[0];
+
   const location = currentEvent.content.data.find(
     (el) => el.type === 'ambrosus.event.location',
   );
   return (
     <div className="event-page">
       <div className="container">
-        <img
-          className="page-top-img"
-          src="https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300"
-          alt="asset"
-        />
+        {assetInfo.images && assetInfo.images.default && (
+          <img
+            className="page-top-img"
+            src={assetInfo.images.default.url}
+            alt="asset"
+          />
+        )}
         <UiButton className="event-page__similar-event">
           Add similar event
         </UiButton>

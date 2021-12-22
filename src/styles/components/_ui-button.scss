@@ -101,8 +101,7 @@
 button[disabled=disabled], button:disabled {
   background: $color-blue !important;
   opacity: 0.8;
-  pointer-events: none;
-  cursor: not-allowed;
+  cursor: no-drop;
 }
 
 

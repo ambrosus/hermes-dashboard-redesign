@@ -52,7 +52,7 @@ const PageMainContent = ({ data, location = {} }) => {
   );
 
   const { description, images, raws } = info;
-  console.log(location);
+
   return (
     <>
       <div className="asset-page-main">

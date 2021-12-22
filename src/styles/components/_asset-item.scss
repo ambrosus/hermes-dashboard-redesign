@@ -7,7 +7,6 @@
   display: flex;
   position: relative;
   margin-bottom: 20px;
-  cursor: pointer;
 
   &--selected {
     border: 2px solid $color-gray-light;
@@ -49,12 +48,17 @@
     height: 86px;
     width: 86px;
     margin-right: 12px;
+    cursor: pointer;
 
     img {
       border-radius: 8px;
       height: 100%;
       width: 100%;
       object-fit: cover;
+    }
+
+    &--svg {
+      padding: 12px;
     }
   }
 

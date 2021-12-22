@@ -104,7 +104,6 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
       },
     });
   }
-  console.log(result);
   return result;
 };
 

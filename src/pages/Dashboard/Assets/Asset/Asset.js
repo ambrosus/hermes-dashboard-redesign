@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ReactComponent as VisibilitySvg } from '../../../../assets/svg/visibility.svg';
+import { ReactComponent as VisibilityOffSvg } from '../../../../assets/svg/visibility_off.svg';
 import UiButton from '../../../../components/UiButton';
 import AssetItem from '../../../../components/AssetItem';
 import AssetPageTabs from '../../../../components/AssetPageTabs';
 import {
-  createEvent,
   fetchAssetsInfo,
+  fetchEventsInfo,
 } from '../../../../store/modules/assets/actions';
 import PageMainContent from '../../../../components/PageMainContent';
 import CreateAssetModal from '../../../../components/CreateAssetModal';
 import UiModal from '../../../../components/UiModal';
-import CreateResultModal from '../../../../components/CreateResultModal';
 
 const Asset = () => {
   const dispatch = useDispatch();
@@ -22,23 +22,43 @@ const Asset = () => {
   const assetData = assetsData.find(
     (el) => el.content.idData.assetId === assetId,
   );
+
+  useEffect(() => {
+    dispatch(fetchEventsInfo(assetId));
+  }, []);
+
   if (!assetData) {
     dispatch(fetchAssetsInfo([assetId]));
     return null;
   }
 
+  const assetInfo = assetData.content.data.find(
+    (el) => el.type === 'ambrosus.asset.info',
+  );
+
   return (
     <>
       <div className="asset-page container">
-        <img
-          className="page-top-img"
-          src="https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300"
-          alt="asset"
-        />
+        {assetInfo.images && assetInfo.images.default && (
+          <img
+            className="page-top-img"
+            src={assetInfo.images.default.url}
+            alt="asset"
+          />
+        )}
         <div className="asset-page__top-info">
           <div className="asset-page__type">
-            <VisibilitySvg />
-            Public
+            {assetData.content.idData.accessLevel === 0 ? (
+              <>
+                <VisibilityOffSvg />
+                Private
+              </>
+            ) : (
+              <>
+                <VisibilitySvg />
+                Public
+              </>
+            )}
           </div>
           <UiButton onclick={() => setViewJson(!viewJson)} type="pale">
             View JSON
@@ -60,13 +80,11 @@ const Asset = () => {
       </div>
       <AssetPageTabs assetId={assetId} />
       <UiModal modalName="createEvent">
-        <CreateAssetModal isCreateEvent assetId={assetId} />
-      </UiModal>
-      <UiModal
-        contentStyles={{ padding: 0, height: 'fit-content', marginTop: 250 }}
-        modalName="createResult"
-      >
-        <CreateResultModal confirmCallback={createEvent} />
+        <CreateAssetModal
+          isCreateEvent
+          modalType="createEvent"
+          assetId={assetId}
+        />
       </UiModal>
     </>
   );

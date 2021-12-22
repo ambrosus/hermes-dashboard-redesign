@@ -5,8 +5,7 @@ import {
   SET_ASSETS_LOADING,
   SET_ASSETS_QUERY_DATA,
   SET_ASSETS_SEARCH_PARAMS,
-  SET_CREATE_ASSET_RESULT,
-  SET_CREATE_EVENT_RESULT,
+  SET_CREATE_RESULT,
   SET_EVENTS_DATA,
 } from './constants';
 import { generateAsset, generateEvent } from '../../../utils/generateToken';
@@ -16,6 +15,7 @@ export const fetchAssets =
   (next = '') =>
   (dispatch, state) => {
     const searchParams = state().assets.assetsSearchParams;
+    const { organization } = state().auth.userInfo;
 
     const params = {
       limit: 15,
@@ -24,7 +24,7 @@ export const fetchAssets =
         {
           field: 'organizationId',
           operator: 'equal',
-          value: 54,
+          value: organization,
         },
         ...(searchParams && searchParams),
       ],
@@ -92,14 +92,14 @@ export const setAssetsListData = (list) => ({
   payload: list,
 });
 
-export const fetchEventsInfo = () => (dispatch) => {
+export const fetchEventsInfo = (eventId) => (dispatch) => {
   const params = {
     next: '',
     query: [
       {
-        field: 'organizationId',
+        field: 'content.idData.assetId',
         operator: 'equal',
-        value: 9,
+        value: eventId,
       },
     ],
   };
@@ -128,9 +128,9 @@ export const fetchEventsInfo = () => (dispatch) => {
     });
 };
 
-export const createAsset = (formData) => (dispatch) => {
+export const createAsset = (formData, isJSONForm) => (dispatch) => {
   const privateKey = sessionStorage.getItem('user_private_key');
-  const asset = generateAsset(privateKey);
+  const asset = isJSONForm ? formData : generateAsset(privateKey);
 
   axios
     .post(
@@ -151,19 +151,32 @@ export const createAsset = (formData) => (dispatch) => {
             true,
           ),
         );
-        dispatch(setCreateAssetResult(data, true));
+        dispatch(
+          setCreateResult({
+            resultData: { ...data, isSuccess: true },
+            percentsComplete: 50,
+          }),
+        );
       }
     })
-    .catch((err) => dispatch(setCreateAssetResult(err.response.data, false)));
+    .catch((err) => {
+      dispatch(
+        setCreateResult({
+          resultData: { data: err.response.data, isSuccess: false },
+          percentsComplete: 100,
+        }),
+      );
+    });
 };
 
 export const createEvent =
-  (assetId, formData, isAssetCreating) => (dispatch) => {
+  (assetId, formData, isAssetCreating, isBulk) => (dispatch) => {
     const privateKey = sessionStorage.getItem('user_private_key');
     const event = generateEvent(
       assetId,
       createAssetNormalizer(formData, isAssetCreating),
       privateKey,
+      formData.accessLevel,
     );
 
     return new Promise((resolve, reject) => {
@@ -175,41 +188,68 @@ export const createEvent =
         .then((response) => {
           const { data } = response;
 
-          if (data.meta && data.meta.code === 200) {
-            dispatch(setCreateEventResult(data, true));
+          if (data.meta && data.meta.code === 200 && !isBulk) {
+            dispatch(
+              setCreateResult({
+                resultData: { ...data, isSuccess: true },
+                percentsComplete: 100,
+              }),
+            );
           }
           resolve(data);
         })
         .catch((err) => {
-          dispatch(setCreateEventResult(err.response.data, false));
+          if (!isBulk) {
+            dispatch(
+              setCreateResult({
+                resultData: { data: err.response.data, isSuccess: false },
+                percentsComplete: 100,
+              }),
+            );
+          }
           reject(err);
         });
     });
   };
 
 export const bulkEvents = (assetsIds, formData) => (dispatch) => {
-  Promise.allSettled(
-    assetsIds.map((el) => dispatch(createEvent(el, formData))),
-  ).then((response) => {
-    console.log(response);
-  });
+  let fetchesComplete = 0;
+
+  assetsIds.forEach((el) =>
+    dispatch(createEvent(el, formData, false, true))
+      .then((response) => {
+        fetchesComplete += 1;
+        dispatch(
+          setCreateResult({
+            resultData: { ...response, isSuccess: true },
+            percentsComplete: Math.ceil(
+              (100 * fetchesComplete) / assetsIds.length,
+            ),
+          }),
+        );
+      })
+      .catch((err) => {
+        fetchesComplete += 1;
+        dispatch(
+          setCreateResult({
+            resultData: { data: err.response.data, isSuccess: false },
+            percentsComplete: Math.ceil(
+              (100 * fetchesComplete) / assetsIds.length,
+            ),
+          }),
+        );
+      }),
+  );
 };
 
-const setCreateAssetResult = (data, isSuccess) => ({
-  type: SET_CREATE_ASSET_RESULT,
+const setCreateResult = ({ resultData, percentsComplete }) => ({
+  type: SET_CREATE_RESULT,
   payload: {
-    data,
-    isSuccess,
-    fetchTime: moment().format('MMMM Do YYYY, h:mm:ss a'),
-  },
-});
-
-const setCreateEventResult = (data, isSuccess) => ({
-  type: SET_CREATE_EVENT_RESULT,
-  payload: {
-    data,
-    isSuccess,
-    fetchTime: moment().format('MMMM Do YYYY, h:mm:ss a'),
+    resultData: {
+      ...resultData,
+      fetchTime: moment().format('MMMM Do YYYY, h:mm:ss a'),
+    },
+    percentsComplete,
   },
 });
 
@@ -217,3 +257,37 @@ export const setAssetsSearchParams = (params) => ({
   type: SET_ASSETS_SEARCH_PARAMS,
   payload: params,
 });
+
+export const searchAssets = (searchQueries) => (dispatch, getState) => {
+  const params = {
+    query: [
+      {
+        field: 'content.idData.createdBy',
+        operator: 'equal',
+        value: getState().auth.userInfo.publicKey,
+      },
+      ...searchQueries,
+    ],
+  };
+
+  return new Promise((resolve, reject) => {
+    axios
+      .post('https://vitalii427-hermes.ambrosus-test.io/event2/query', params)
+      .then(({ data }) => {
+        if (data.meta && data.meta.code === 200) {
+          const assetsIds = data.data.map((el) => el.content.idData.assetId);
+          axios
+            .post(
+              'https://vitalii427-hermes.ambrosus-test.io/event2/latest/type',
+              { assets: assetsIds, type: 'ambrosus.asset.info' },
+            )
+            .then((res) => {
+              if (data.meta && data.meta.code === 200) {
+                resolve(res.data.data);
+              }
+            })
+            .catch((err) => reject(err));
+        }
+      });
+  });
+};

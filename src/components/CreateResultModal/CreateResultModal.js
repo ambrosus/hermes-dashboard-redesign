@@ -5,10 +5,7 @@ import { ReactComponent as CloseIcon } from '../../assets/svg/cross.svg';
 import { ReactComponent as CheckedIcon } from '../../assets/svg/checkbox-green.svg';
 import { ReactComponent as ErrorIcon } from '../../assets/svg/error.svg';
 import { handleModal } from '../../store/modules/modal';
-import {
-  SET_CREATE_ASSET_RESULT,
-  SET_CREATE_EVENT_RESULT,
-} from '../../store/modules/assets/constants';
+import { SET_CREATE_RESULT } from '../../store/modules/assets/constants';
 import DetailsItem from './DetailsItem';
 
 const CreateResultModal = () => {
@@ -16,38 +13,31 @@ const CreateResultModal = () => {
 
   const applyFunc = useSelector((state) => state.modal.openedModal.data);
 
-  const { createAssetResult, createEventResult } = useSelector(
-    (state) => state.assets,
+  const { percentsComplete, resultData } = useSelector(
+    (state) => state.assets.createResult,
   );
 
   const [modalStep, setModalStep] = useState(1);
   const [progressPercent, setProgressPercent] = useState(0);
 
   useEffect(() => {
-    if (createAssetResult) {
-      setProgressPercent(60);
-    }
-  }, [createAssetResult]);
+    setProgressPercent(percentsComplete);
 
-  useEffect(() => {
-    if (createEventResult) {
-      setProgressPercent(100);
-
+    if (percentsComplete === 100) {
       setTimeout(() => {
         setModalStep(3);
       }, 500);
     }
-  }, [createEventResult]);
+  }, [percentsComplete]);
 
   useEffect(
     () => () => {
       dispatch({
-        type: SET_CREATE_ASSET_RESULT,
-        payload: null,
-      });
-      dispatch({
-        type: SET_CREATE_EVENT_RESULT,
-        payload: null,
+        type: SET_CREATE_RESULT,
+        payload: {
+          resultData: [],
+          percentsComplete: 0,
+        },
       });
     },
     [],
@@ -61,10 +51,7 @@ const CreateResultModal = () => {
   const closeModal = () => dispatch(handleModal(null));
   const showDetails = () => setModalStep(4);
 
-  const isAllSuccess =
-    createEventResult &&
-    createEventResult.isSuccess &&
-    (!createAssetResult || createAssetResult.isSuccess);
+  const isAllSuccess = resultData.every((el) => el.isSuccess);
 
   return (
     <div className="create-result-modal">
@@ -81,7 +68,9 @@ const CreateResultModal = () => {
             You want proceed editing this asset?
           </p>
           <div className="create-result-modal__actions">
-            <UiButton type="pale">Cancel</UiButton>
+            <UiButton type="pale" onclick={closeModal}>
+              Cancel
+            </UiButton>
             <UiButton onclick={handleApply}>Proceed</UiButton>
           </div>
         </>
@@ -133,8 +122,9 @@ const CreateResultModal = () => {
           <p className="create-result-modal__title">
             All responses for this session
           </p>
-          {createAssetResult && <DetailsItem itemData={createAssetResult} />}
-          <DetailsItem itemData={createEventResult} />
+          {resultData.map((el) => (
+            <DetailsItem itemData={el} />
+          ))}
         </>
       )}
     </div>

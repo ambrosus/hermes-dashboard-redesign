@@ -7,11 +7,20 @@ import Sorting from '../../../components/Sorting';
 import UiButton from '../../../components/UiButton';
 import { bulkEvents, fetchAssets } from '../../../store/modules/assets/actions';
 import InfiniteScroll from '../../../components/InfiniteScroll';
+import { handleModal } from '../../../store/modules/modal';
 
 const Assets = () => {
   const dispatch = useDispatch();
-  const [selectedPackages, setSelectedPackages] = useState({});
-  const [formData, setFormData] = useState({ assetId: '', eventName: '' });
+  const [selectedPackages, setSelectedPackages] = useState([]);
+  const [formData, setFormData] = useState({
+    assetId: '',
+    eventName: '',
+    accessLevel: 0,
+  });
+  const [errorFields, setErrorFields] = useState({
+    assetName: false,
+    eventName: false,
+  });
 
   const { assetsQueryData, assetsList, isAssetsLoading } = useSelector(
     (state) => state.assets,
@@ -27,18 +36,29 @@ const Assets = () => {
     }
   }, []);
 
-  const handleSetFormData = (keyValue) =>
+  const handleSetFormData = (keyValue) => {
     setFormData({ ...formData, ...keyValue });
+    setErrorFields({
+      assetName: false,
+      eventName: false,
+    });
+  };
+  const handlePackageSelect = (assetId) => {
+    const select = !selectedPackages.includes(assetId);
 
-  const handlePackageSelect = (id) => {
-    const clone = { ...selectedPackages };
-
-    if (clone[id]) {
-      delete clone[id];
+    if (select) {
+      setSelectedPackages([...selectedPackages, assetId]);
     } else {
-      clone[id] = true;
+      setSelectedPackages(selectedPackages.filter((el) => el !== assetId));
     }
-    setSelectedPackages(clone);
+  };
+
+  const selectAll = () => {
+    setSelectedPackages(assetsList.map((el) => el.content.idData.assetId));
+  };
+
+  const unselectAll = () => {
+    setSelectedPackages([]);
   };
 
   const showMore = () => {
@@ -48,13 +68,25 @@ const Assets = () => {
   };
 
   const createPackage = () => {
-    const packageData = {
-      name: formData.eventName,
-      propertiesItems: { 0: { name: 'target', description: formData.assetId } },
-      customType: 'ambrosus.event.pack',
-    };
+    const { eventName, assetId, accessLevel } = formData;
 
-    dispatch(bulkEvents(Object.keys(selectedPackages), packageData));
+    setErrorFields({ assetName: !assetId, eventName: !eventName });
+
+    if (assetId && eventName) {
+      const packageData = {
+        name: eventName,
+        propertiesItems: { 0: { name: 'target', description: assetId } },
+        customType: 'ambrosus.event.pack',
+        accessLevel,
+      };
+
+      dispatch(
+        handleModal({
+          name: 'createResult',
+          data: () => bulkEvents(selectedPackages, packageData),
+        }),
+      );
+    }
   };
 
   return (
@@ -63,11 +95,12 @@ const Assets = () => {
         <PackagingHeader
           handleFormData={handleSetFormData}
           formData={formData}
+          errorFields={errorFields}
         />
         <div className="space-25" />
         <h1 className="packaging-title">What to pack</h1>
         <div className="space-25" />
-        <Sorting />
+        <Sorting selectAll={selectAll} unselectAll={unselectAll} />
         <div className="assets-list">
           <InfiniteScroll handleObserver={showMore}>
             {assetsList.map((el) => (
@@ -75,7 +108,7 @@ const Assets = () => {
                 assetData={el}
                 key={el.eventId}
                 onclick={() => handlePackageSelect(el.content.idData.assetId)}
-                selected={selectedPackages[el.content.idData.assetId]}
+                selected={selectedPackages.includes(el.content.idData.assetId)}
               />
             ))}
           </InfiniteScroll>

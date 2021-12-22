@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import cx from 'classnames';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
@@ -11,7 +12,7 @@ import { handleAssetsListSearch } from '../../store/modules/assets/actions';
 
 const timeFilter = ['Day', 'Week', 'Month', 'Year'];
 
-const Sorting = () => {
+const Sorting = ({ selectAll, unselectAll }) => {
   const dispatch = useDispatch();
 
   const [currentTimeFilter, setCurrentTimeFilter] = useState('');
@@ -63,8 +64,12 @@ const Sorting = () => {
   return (
     <div className="assets-sorting">
       <div className="assets-sorting__selects">
-        <div>Select all</div>
-        <div>Unselect all</div>
+        <button type="button" onClick={selectAll} className="select-all-btn">
+          Select all
+        </button>
+        <button type="button" onClick={unselectAll} className="select-all-btn">
+          Unselect all
+        </button>
       </div>
       <div className="assets-sorting__period-pick">
         {timeFilter.map((el) => (
@@ -99,6 +104,11 @@ const Sorting = () => {
       </div>
     </div>
   );
+};
+
+Sorting.propTypes = {
+  selectAll: PropTypes.func,
+  unselectAll: PropTypes.func,
 };
 
 export default Sorting;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import UiInput from '../../../../components/UiInput';
 import searchIcon from '../../../../assets/svg/search.svg';
@@ -7,8 +7,16 @@ import AddedField from '../../../../components/CreateAssetModal/AddedField';
 import calendarIcon from '../../../../assets/svg/date-picker.svg';
 import addIcon from '../../../../assets/svg/add-icon.svg';
 import UiButton from '../../../../components/UiButton';
+import { isEmptyObj } from '../../../../utils/isEmptyObj';
+import AssetItem from '../../../../components/AssetItem';
+import { searchAssets } from '../../../../store/modules/assets/actions';
+import { useDebouncedEffect } from '../../../../utils/useDebounce';
 
 const Search = () => {
+  const dispatch = useDispatch();
+
+  const [isListPage, setIsListPage] = useState(false);
+  const [searchedAssets, setSearchedAssets] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     dateFrom: '',
@@ -45,21 +53,12 @@ const Search = () => {
   };
 
   const submitSearch = () => {
-    const params = {
-      next: '',
-      query: [
-        {
-          field: 'organizationId',
-          operator: 'equal',
-          value: 9,
-        },
-      ],
-    };
+    const query = [];
 
-    const { name, dateTo, dateFrom } = formData;
+    const { name, dateTo, dateFrom, identifiers } = formData;
 
     if (name) {
-      params.query.push({
+      query.push({
         field: 'content.data.name',
         operator: 'contains',
         value: name,
@@ -67,19 +66,19 @@ const Search = () => {
     }
 
     if (dateTo && !dateFrom) {
-      params.query.push({
+      query.push({
         field: 'content.idData.timestamp',
         operator: 'less-than-equal',
         value: dateTo.unix(),
       });
     } else if (!dateTo && dateFrom) {
-      params.query.push({
+      query.push({
         field: 'content.idData.timestamp',
         operator: 'greater-than-equal',
         value: dateFrom.unix(),
       });
     } else if (dateTo && dateFrom) {
-      params.query.push({
+      query.push({
         field: 'content.idData.timestamp',
         operator: 'inrange',
         value: {
@@ -89,14 +88,72 @@ const Search = () => {
       });
     }
 
-    axios
-      .post('https://vitalii427-hermes.ambrosus-test.io/event2/query', params)
-      .then((response) => {
-        console.log(response);
+    if (!isEmptyObj(identifiers)) {
+      Object.keys(identifiers).forEach((el) => {
+        query.push({
+          field: `content.data.identifiers.${el.name}`,
+          operator: 'inrange',
+          value: el.description,
+        });
       });
+    }
+
+    dispatch(searchAssets(query)).then((res) => {
+      if (!searchedAssets.length) {
+        setFormData({
+          name: '',
+          dateFrom: '',
+          dateTo: '',
+          identifiers: {},
+        });
+      }
+      setSearchedAssets(res);
+      setIsListPage(true);
+    });
   };
 
-  return (
+  useDebouncedEffect(
+    () => {
+      if (formData.name && isListPage) {
+        dispatch(
+          searchAssets([
+            {
+              field: 'content.data.name',
+              operator: 'contains',
+              value: formData.name,
+            },
+          ]),
+        ).then((res) => setSearchedAssets(res));
+      }
+    },
+    [formData.name],
+    500,
+  );
+
+  const setName = (value) => {
+    setFormData({ ...formData, name: value });
+  };
+
+  return isListPage ? (
+    <div className="search-result-page search-page">
+      <h1 className="search-page__title">Search Results</h1>
+      <UiInput
+        placeholder="Name"
+        className="search-result-page__input"
+        imgSrc={searchIcon}
+        onChange={setName}
+        value={formData.name}
+      />
+      <p className="search-result-page__count">
+        Found {searchedAssets.length} results
+      </p>
+      <div>
+        {searchedAssets.map((el) => (
+          <AssetItem assetData={el} key={el.content.idData.assetId} />
+        ))}
+      </div>
+    </div>
+  ) : (
     <div className="search-page">
       <h1 className="search-page__title">Search</h1>
       <UiInput

@@ -29,28 +29,49 @@ const privateToggleOptions = [
     value: 1,
     label: (
       <span>
-        <img src={visibilityIcon} alt="public-img" />
+        <img style={{ marginRight: 5 }} src={visibilityIcon} alt="public-img" />
         Public
       </span>
     ),
   },
   {
-    value: 2,
+    value: 0,
     label: (
       <span>
-        <img src={visibilityOffIcon} alt="private-img" />
-        Public
+        <img
+          style={{ marginRight: 5 }}
+          src={visibilityOffIcon}
+          alt="private-img"
+        />
+        Private
       </span>
     ),
   },
 ];
 
-const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
+const assetTypes = [
+  { value: 'box', label: 'Box' },
+  { value: 'pallet', label: 'Pallet' },
+  { value: 'container', label: 'Container' },
+];
+
+const eventTypes = [
+  { value: 'transfer', label: 'Transfer' },
+  { value: 'location', label: 'Location' },
+  { value: 'media', label: 'Media' },
+];
+
+const CreateAssetModal = ({
+  isCreateEvent,
+  bulkEventData = {},
+  assetId,
+  modalType,
+}) => {
   const dispatch = useDispatch();
 
   const [isJSONForm, setIsJSONForm] = useState(false);
   const [imgUrl, setImgUrl] = useState('');
-  const [rowUrl, setRowUrl] = useState('');
+  // const [rowUrl, setRowUrl] = useState('');
   const [additionalFields, setAdditionalFields] = useState({
     propertiesItems: [0],
     identifiersItems: [0],
@@ -67,11 +88,15 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
     rows: [],
     latitude: '',
     longitude: '',
+    accessLevel: 0,
   });
+  const [jsonData, setJsonData] = useState('');
 
   useEffect(() => {
     const dataFromStorage = localStorage.getItem('createAssetData');
-    const data = dataFromStorage ? JSON.parse(dataFromStorage) : {};
+    let data = dataFromStorage ? JSON.parse(dataFromStorage) : {};
+
+    data = data[modalType] || {};
 
     if (data.additionalFields) {
       setAdditionalFields(data.additionalFields);
@@ -102,7 +127,10 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
 
     localStorage.setItem(
       'createAssetData',
-      JSON.stringify({ ...data, ...keyValue }),
+      JSON.stringify({
+        ...data,
+        [modalType]: { ...data[modalType], ...keyValue },
+      }),
     );
   };
 
@@ -193,7 +221,9 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
   };
 
   const showResultModal = () => {
-    let submitFunc = () => createAsset(formData);
+    const data = isJSONForm ? JSON.parse(jsonData) : formData;
+
+    let submitFunc = () => createAsset(data, isJSONForm);
 
     if (isCreateEvent) {
       submitFunc = () => createEvent(assetId, formData);
@@ -209,42 +239,45 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
       }),
     );
 
-    localStorage.setItem('createAssetData', '');
+    localStorage.removeItem('createAssetData');
   };
+  //
+  // const handleRaw = async (e) => {
+  //   handleSetFormData({
+  //     rows: [...formData.rows, e.target.files[0]],
+  //   });
+  // };
 
-  const handleRaw = async (e) => {
-    handleSetFormData({
-      rows: [...formData.rows, e.target.files[0]],
-    });
-  };
+  // const addRow = () => {
+  //   const value = rowUrl;
+  //   const nameExpansion = value.match(/\w[^.]*$/)[0];
+  //
+  //   if (value) {
+  //     let name = value.split('/');
+  //     name = name[name.length - 1];
+  //
+  //     handleSetFormData({
+  //       rows: [
+  //         ...formData.rows,
+  //         {
+  //           name,
+  //           data: value,
+  //           nameExpansion,
+  //           type: 'url',
+  //           background: '',
+  //         },
+  //       ],
+  //     });
+  //   }
+  // };
 
-  const addRow = () => {
-    const value = rowUrl;
-    const nameExpansion = value.match(/\w[^.]*$/)[0];
-
-    if (value) {
-      let name = value.split('/');
-      name = name[name.length - 1];
-
-      handleSetFormData({
-        rows: [
-          ...formData.rows,
-          {
-            name,
-            data: value,
-            nameExpansion,
-            type: 'url',
-            background: '',
-          },
-        ],
-      });
-    }
-  };
+  const entityName =
+    isCreateEvent || !isEmptyObj(bulkEventData) ? 'Event' : 'Asset';
 
   return (
     <div className="create-asset">
       <div className="create-asset-title">
-        <h3 className="create-asset-title__text">New Asset</h3>
+        <h3 className="create-asset-title__text">New {entityName}</h3>
         {!isEmptyObj(bulkEventData) && (
           <span className="create-asset-title__bulk">
             For {bulkEventData.assetsIds.length} assets
@@ -268,33 +301,57 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
         </div>
       </div>
       {isJSONForm ? (
-        <UiTextarea label="JSON*" rows="20" />
+        <>
+          <UiTextarea
+            label="JSON*"
+            rows="20"
+            value={jsonData}
+            onChange={setJsonData}
+          />
+          <div className="form-semicolon-wrapper">
+            <UiButton
+              onclick={closeModal}
+              styles={{ background: '#9198BB', padding: 12 }}
+            >
+              Cancel
+            </UiButton>
+            <UiButton styles={{ padding: 12 }} onclick={showResultModal}>
+              Create {entityName}
+            </UiButton>
+          </div>
+        </>
       ) : (
         <form className="create-asset-form">
           <UiInput
             label="Name*"
-            placeholder="Asset name"
+            placeholder={`${entityName} name`}
             name="name"
             onChange={handleSetFormData}
             value={formData.name}
           />
           <div className="form-semicolon-wrapper">
             <UiSelect
-              options={[
-                { value: '1', label: 'Box' },
-                { value: '2', label: 'Pallet' },
-                { value: '3', label: 'Container' },
-              ]}
-              placeholder="Asset type"
-              label="Asset type*"
+              options={
+                isCreateEvent || !isEmptyObj(bulkEventData)
+                  ? eventTypes
+                  : assetTypes
+              }
+              placeholder={`${entityName} type`}
+              label={`${entityName} type*`}
               name="customType"
               onChange={handleSetFormData}
               selectedValue={formData.customType}
             />
-            <UiToggle label="Access level" options={privateToggleOptions} />
+            <UiToggle
+              label="Access level"
+              options={privateToggleOptions}
+              selectedValue={formData.accessLevel}
+              onChange={handleSetFormData}
+              name="accessLevel"
+            />
           </div>
           <UiTextarea
-            placeholder="Asset description"
+            placeholder={`${entityName} description`}
             label="Description"
             name="description"
             value={formData.description}
@@ -315,7 +372,7 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
           </div>
           <UiInput
             placeholder="Enter an image url here"
-            label="Asset images"
+            label={`${entityName} images`}
             imgSrc={addIcon}
             onImageClick={addImg}
             onChange={setImgUrl}
@@ -354,15 +411,15 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
               </div>
             </>
           )}
-          <UiInput
-            placeholder="Raws"
-            label="Enter a raw file url"
-            imgSrc={addIcon}
-            onChange={setRowUrl}
-            onImageClick={addRow}
-            value={rowUrl}
-          />
-          <input type="file" id="file-upload" onChange={handleRaw} />
+          {/* <UiInput */}
+          {/*  placeholder="Raws" */}
+          {/*  label="Enter a raw file url" */}
+          {/*  imgSrc={addIcon} */}
+          {/*  onChange={setRowUrl} */}
+          {/*  onImageClick={addRow} */}
+          {/*  value={rowUrl} */}
+          {/* /> */}
+          {/* <input type="file" id="file-upload" onChange={handleRaw} /> */}
           <label
             htmlFor="file-upload"
             className="btn create-asset-form__upload-file"
@@ -494,7 +551,11 @@ const CreateAssetModal = ({ isCreateEvent, bulkEventData = {}, assetId }) => {
             >
               Cancel
             </UiButton>
-            <UiButton styles={{ padding: 12 }} onclick={showResultModal}>
+            <UiButton
+              styles={{ padding: 12 }}
+              onclick={showResultModal}
+              disabled={!formData.name || !formData.customType}
+            >
               Create {isCreateEvent ? 'Event' : 'Asset'}
             </UiButton>
           </div>
@@ -508,6 +569,7 @@ CreateAssetModal.propTypes = {
   isCreateEvent: PropTypes.bool,
   bulkEventData: PropTypes.object,
   assetId: PropTypes.string,
+  modalType: PropTypes.string,
 };
 
 export default CreateAssetModal;

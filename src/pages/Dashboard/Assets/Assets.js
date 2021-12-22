@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  createAsset,
-  fetchAssets,
-} from '../../../store/modules/assets/actions';
+import { fetchAssets } from '../../../store/modules/assets/actions';
 import CreateAssetModal from '../../../components/CreateAssetModal';
 import AssetItem from '../../../components/AssetItem';
 import UiButton from '../../../components/UiButton';
 import { handleModal } from '../../../store/modules/modal';
 import Sorting from '../../../components/Sorting';
-import CreateResultModal from '../../../components/CreateResultModal';
 import UiModal from '../../../components/UiModal';
 import BulkEvent from '../../../components/BulkEvent';
 import InfiniteScroll from '../../../components/InfiniteScroll';
+import { isEmptyObj } from '../../../utils/isEmptyObj';
 
 const Assets = () => {
   const dispatch = useDispatch();
@@ -27,11 +24,13 @@ const Assets = () => {
     (state) => state.assets.assetsQueryData.pagination,
   );
 
+  const { userInfo } = useSelector((state) => state.auth);
+
   useEffect(() => {
-    if (!assetsQueryData.data.length) {
+    if (!assetsQueryData.data.length && !isEmptyObj(userInfo)) {
       dispatch(fetchAssets());
     }
-  }, []);
+  }, [userInfo]);
 
   const openCreateModal = () => dispatch(handleModal({ name: 'createAsset' }));
   const showMore = () => {
@@ -50,6 +49,14 @@ const Assets = () => {
     }
   };
 
+  const selectAll = () => {
+    setSelectedAssets(assetsList.map((el) => el.content.idData.assetId));
+  };
+
+  const unselectAll = () => {
+    setSelectedAssets([]);
+  };
+
   const cancelSelected = () => setSelectedAssets([]);
 
   return (
@@ -65,7 +72,7 @@ const Assets = () => {
           </UiButton>
         </div>
       </div>
-      <Sorting />
+      <Sorting selectAll={selectAll} unselectAll={unselectAll} />
       <div className="assets-list">
         <InfiniteScroll handleObserver={showMore}>
           {assetsList.map((el) => (
@@ -88,16 +95,11 @@ const Assets = () => {
         </UiButton>
       )}
       <UiModal modalName="createAsset">
-        <CreateAssetModal />
-      </UiModal>
-      <UiModal
-        contentStyles={{ padding: 0, height: 'fit-content', marginTop: 250 }}
-        modalName="createResult"
-      >
-        <CreateResultModal confirmCallback={createAsset} />
+        <CreateAssetModal modalType="createAsset" />
       </UiModal>
       <UiModal modalName="bulkEvent">
         <CreateAssetModal
+          modalType="bulkEvent"
           bulkEventData={
             selectedAssets.length ? { assetsIds: selectedAssets } : {}
           }
@@ -106,9 +108,6 @@ const Assets = () => {
       {!!selectedAssets.length && (
         <BulkEvent assetsIds={selectedAssets} cancelSelected={cancelSelected} />
       )}
-      <UiModal modalName="bulkResult">
-        <CreateResultModal />
-      </UiModal>
     </div>
   );
 };

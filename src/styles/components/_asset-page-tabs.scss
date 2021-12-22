@@ -67,14 +67,16 @@
     svg {
       margin-bottom: 6px;
     }
-
-    &--transfer {
-      background: #FF9E57;
-    }
   }
 
   &__type-name {
     font-weight: 500;
+    text-align: center;
+    margin: 5px 0;
+
+    &:first-letter {
+      text-transform: uppercase;
+    }
   }
 
   &__info {
@@ -154,6 +156,17 @@
     border-radius: 8px;
     background: $whiteToGray;
     margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--svg img {
+      padding: 5px;
+    }
+
+    img {
+      width: 100%
+    }
   }
 
   &__title {

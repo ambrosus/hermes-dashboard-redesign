@@ -4,7 +4,10 @@ import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LocationSvg } from '../../assets/svg/location.svg';
-import { ReactComponent as TruckSvg } from '../../assets/svg/truck.svg';
+import truckSvg from '../../assets/svg/truck.svg';
+import eventLocationSvg from '../../assets/svg/eventLocation.svg';
+import mediaSvg from '../../assets/svg/eventMedia.svg';
+import packSvg from '../../assets/svg/eventPack.svg';
 
 const EventTabItem = ({ data }) => {
   const { location } = useHistory();
@@ -15,11 +18,34 @@ const EventTabItem = ({ data }) => {
   const { timestamp } = data.content.idData;
   const date = moment.unix(timestamp);
 
+  let eventTypeText = contentData.type;
+  let eventTypeImg = truckSvg;
+  let eventTypeColor = '#FF9E57';
+
+  if (contentData.type === 'ambrosus.asset.info') {
+    eventTypeText = 'info';
+  } else if (contentData.type === 'ambrosus.event.pack') {
+    eventTypeColor = '#8A8DF3';
+    eventTypeImg = packSvg;
+    eventTypeText = 'package';
+  } else if (contentData.type === 'media') {
+    eventTypeImg = mediaSvg;
+    eventTypeColor = '#22DED5';
+  } else if (contentData.type === 'location') {
+    eventTypeImg = eventLocationSvg;
+    eventTypeColor = '#1ACD8C';
+  } else if (contentData.type === 'transfer') {
+    eventTypeImg = truckSvg;
+  }
+
   return (
     <div className="event-tab-item">
-      <div className="event-tab-item__type event-tab-item__type--transfer">
-        <TruckSvg />
-        <span className="event-tab-item__type-name">Transfer</span>
+      <div
+        className="event-tab-item__type"
+        style={{ background: eventTypeColor }}
+      >
+        <img src={eventTypeImg} alt={eventTypeText} />
+        <span className="event-tab-item__type-name">{eventTypeText}</span>
         <span>{date.format('DD.MM.YYYY')}</span>
       </div>
       <div className="event-tab-item__info">

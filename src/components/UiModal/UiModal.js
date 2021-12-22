@@ -12,7 +12,11 @@ const UiModal = ({ children, modalName, contentStyles }) => {
       isOpen={isOpen}
       style={{
         content: {
-          maxWidth: 680,
+          position: 'relative',
+          inset: 0,
+          maxHeight: '100%',
+          overflow: 'auto',
+          width: 680,
           margin: '0 auto',
           boxShadow: '0px 4px 12px rgba(55, 29, 199, 0.15)',
           border: 0,

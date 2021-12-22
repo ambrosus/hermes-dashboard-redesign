@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
+import UiInput from '../UiInput';
 
 const UiSelect = ({
   label,
@@ -9,38 +10,63 @@ const UiSelect = ({
   placeholder,
   onChange,
   name,
+  styles,
+  conditionToOnlyDropdownSelect,
+  searchable = true,
+  onSearch = () => {},
 }) => {
   const selectEl = useRef(null);
+  const [filteredOptions, setFilteredOptions] = useState(options);
+  const [inputValue, setInputValue] = useState(selectedValue);
   const [isOptionsOpened, setIsOptionsOpened] = useDetectOutsideClick(
     selectEl,
     false,
   );
+
+  useEffect(() => {
+    setFilteredOptions(options);
+  }, [options]);
+
   const toggleOptionsVisibility = () => setIsOptionsOpened(!isOptionsOpened);
 
   const handleChange = (value) => {
     onChange(name ? { [name]: value } : value);
     setIsOptionsOpened(false);
+    setInputValue(value);
+  };
+
+  const handleSearch = (value) => {
+    onSearch(value);
+    if (
+      !value ||
+      !conditionToOnlyDropdownSelect ||
+      !conditionToOnlyDropdownSelect(value)
+    ) {
+      onChange(name ? { [name]: value } : value);
+    }
+    setInputValue(value);
+    setIsOptionsOpened(true);
+    setFilteredOptions(
+      options.filter(
+        (el) => el && el.label.toLowerCase().includes(value.toLocaleString()),
+      ),
+    );
   };
 
   return (
-    <div className="ui-input ui-select" ref={selectEl}>
-      {label && <label className="ui-input__label">{label}</label>}
-      <button
-        type="button"
-        className="ui-input__input"
-        onClick={toggleOptionsVisibility}
-      >
-        {selectedValue ? (
-          <span className="ui-select__value">
-            {options.find((el) => el.value === selectedValue).label}
-          </span>
-        ) : (
-          <span className="ui-select__placeholder">{placeholder}</span>
-        )}
-      </button>
+    <div className="ui-select" style={styles} ref={selectEl}>
+      {searchable && (
+        <UiInput
+          value={inputValue}
+          placeholder={placeholder}
+          onChange={handleSearch}
+          label={label}
+          onclick={toggleOptionsVisibility}
+        />
+      )}
       {isOptionsOpened && (
         <ul className="ui-select__options">
-          {options.map((el) => (
+          {filteredOptions.map((el) => (
             <li key={el.value}>
               <button
                 className="ui-select__option"
@@ -64,6 +90,10 @@ UiSelect.propTypes = {
   placeholder: PropTypes.string,
   name: PropTypes.string,
   onChange: PropTypes.func,
+  onSearch: PropTypes.func,
+  searchable: PropTypes.bool,
+  conditionToOnlyDropdownSelect: PropTypes.func,
+  styles: PropTypes.object,
 };
 
 export default UiSelect;

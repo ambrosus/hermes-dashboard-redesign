@@ -67,13 +67,13 @@ const calculateHash = (data) =>
 
 const unixTime = () => Math.floor(Date.now() / 1000);
 
-export const generateEvent = (assetId, formData, secret) => {
+export const generateEvent = (assetId, formData, secret, accessLevel) => {
   const address = privateKeyToAddress(secret);
 
   const idData = {
     assetId,
     timestamp: unixTime(),
-    accessLevel: 0,
+    accessLevel,
     createdBy: address,
     dataHash: calculateHash(formData),
   };

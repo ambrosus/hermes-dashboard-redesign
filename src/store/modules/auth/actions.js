@@ -38,7 +38,7 @@ export const signIn = (privateKey) => (dispatch) => {
       if (data.meta && data.meta.code === 200) {
         dispatch({
           type: SIGN_IN,
-          payload: data.data,
+          payload: { ...data.data, publicKey: account.address },
         });
         sessionStorage.setItem('user_private_key', privateKey);
       }

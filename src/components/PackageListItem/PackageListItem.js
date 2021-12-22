@@ -1,13 +1,36 @@
 import React from 'react';
 import cx from 'classnames';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { ReactComponent as DeletePackageSvg } from '../../assets/svg/delete.svg';
 import { ReactComponent as AddPackageSvg } from '../../assets/svg/add-icon.svg';
+import boxImage from '../../assets/svg/delivery-box.svg';
+import palleteImage from '../../assets/svg/pallet.svg';
+import containerImage from '../../assets/svg/container.svg';
+import assetPlaceholderImage from '../../assets/raster/aset-image-placeholder.png';
 
 const PackageListItem = ({ onclick, selected, assetData }) => {
   const info = assetData.content.data.find(
     (el) => el.type === 'ambrosus.asset.info',
   );
+
+  let img;
+
+  if (info.images && info.images.default.url) {
+    img = info.images.default.url;
+  } else if (info.assetType === 'box') {
+    img = boxImage;
+  } else if (info.assetType === 'pallet') {
+    img = palleteImage;
+  } else if (info.assetType === 'container') {
+    img = containerImage;
+  } else {
+    img = assetPlaceholderImage;
+  }
+
+  const date = moment
+    .unix(assetData.content.idData.timestamp)
+    .format('DD.MM.YYYY');
 
   return (
     <div
@@ -21,9 +44,17 @@ const PackageListItem = ({ onclick, selected, assetData }) => {
       <button type="button" className="package-tab-item__action-btn">
         {selected ? <DeletePackageSvg /> : <AddPackageSvg />}
       </button>
-      <div className="package-tab-item__img" />
+      <div
+        className={cx(
+          'package-tab-item__img',
+          ['box', 'pallet', 'container'].includes(info.assetType) &&
+            'package-tab-item__img--svg',
+        )}
+      >
+        <img src={img} alt="asset" />
+      </div>
       <p className="package-tab-item__title">{info.name.toString()}</p>
-      <p className="package-tab-item__date">12 Aug 2021</p>
+      <p className="package-tab-item__date">{date}</p>
     </div>
   );
 };
