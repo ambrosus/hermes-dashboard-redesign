@@ -338,4 +338,4 @@ AccountsListItem.propTypes = {
   info: PropTypes.object,
 };
 
-export default AccountsListItem;
+export default React.memo(AccountsListItem);
