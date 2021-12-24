@@ -53,7 +53,7 @@ const Asset = () => {
         )}
         <div className="asset-page__top-info">
           <div className="asset-page__type">
-            {assetData.content.idData.accessLevel === 0 ? (
+            {assetData.content.idData.accessLevel === 1 ? (
               <>
                 <VisibilityOffSvg />
                 Private

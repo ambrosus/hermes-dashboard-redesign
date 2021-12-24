@@ -26,7 +26,7 @@ import {
 
 const privateToggleOptions = [
   {
-    value: 1,
+    value: 0,
     label: (
       <span>
         <img style={{ marginRight: 5 }} src={visibilityIcon} alt="public-img" />
@@ -35,7 +35,7 @@ const privateToggleOptions = [
     ),
   },
   {
-    value: 0,
+    value: 1,
     label: (
       <span>
         <img
