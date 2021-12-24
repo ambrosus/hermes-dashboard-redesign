@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { handleModal } from '../../../../../../store/modules/modal';
@@ -49,6 +49,7 @@ const MemberDetailsModal = () => {
   const [userPermissions, setUserPermissions] = useState(permissions);
   const [userAccessLevel, setUserAccessLevel] = useState(accessLevel);
   const [modifyOrg, setModifyOrg] = useState({});
+  const [modifyAcc, setModifyAcc] = useState({});
   const [formData, setFormData] = useState({
     type: '',
   });
@@ -65,6 +66,12 @@ const MemberDetailsModal = () => {
     },
     [userPermissions, setUserPermissions],
   );
+  useEffect(() => {
+    if (userPermissions) {
+      modifyAccount(modalData?.address, { permissions: userPermissions });
+      console.log({ permissions: userPermissions });
+    }
+  }, [userPermissions]);
 
   const handleSetFormData = (keyValue) => {
     setFormData({
@@ -108,14 +115,20 @@ const MemberDetailsModal = () => {
   const saveHandler = async () => {
     isNodePage
       ? await modifyOrganization(modalData.organizationId, modifyOrg)
-      : await modifyAccount(modalData?.address, {
-          permissions: userPermissions,
-        });
+      : await modifyAccount(modalData?.address, modifyAcc);
+    console.log({
+      ...modifyAcc,
+    });
   };
 
   const handleModifyOrg = (keyValue) => {
     setModifyOrg({ ...modifyOrg, ...keyValue });
   };
+
+  function handleModifyAccount(keyValue) {
+    setModifyAcc({ ...modifyAcc, ...keyValue });
+    console.log({ ...modifyAcc, ...keyValue });
+  }
 
   return (
     <UiModal
@@ -153,16 +166,18 @@ const MemberDetailsModal = () => {
           <div className="space-10" />
           <div className="buttons-options">
             <div className="buttons">
-              <button
-                type="button"
-                onClick={() =>
-                  organisationBackupHandler([
-                    { id: modalData?.organizationId, data: {} },
-                  ])
-                }
-              >
-                <p>Backup</p>
-              </button>
+              {isNodePage && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    organisationBackupHandler([
+                      { id: modalData?.organizationId, data: {} },
+                    ])
+                  }
+                >
+                  <p>Backup</p>
+                </button>
+              )}
               {modalData?.active ? (
                 <button
                   type="button"
@@ -221,9 +236,17 @@ const MemberDetailsModal = () => {
             <UiInput
               imgSrc={lockIcon}
               label="Public key"
-              placeholder="0x9B8c4E354aE59699246864aCbe1e4963C5d9A26B"
+              name="account"
+              placeholder={modalData?.address}
+              disabled
             />
-            <UiInput label="Name" placeholder="Michelle Antossuare" />
+            <UiInput
+              label="Full Name"
+              placeholder={modalData?.fullName}
+              name="fullName"
+              onChange={handleModifyAccount}
+              value={modifyAcc?.fullName || ''}
+            />
           </>
         ) : (
           <>
@@ -243,8 +266,8 @@ const MemberDetailsModal = () => {
             <UiInput
               label="Legal address"
               placeholder={modalData?.legalAddress}
-              onChange={handleModifyOrg}
               name="legalAddress"
+              onChange={handleModifyOrg}
               value={modifyOrg?.legalAddress || ''}
             />
           </>
@@ -253,7 +276,9 @@ const MemberDetailsModal = () => {
           {/*todo modifyOrg?.email ==> modifyAcc.email*/}
           <UiInput
             label="Email"
-            placeholder={isNodePage ? modifyOrg?.email : modifyOrg?.email}
+            name="email"
+            onChange={isNodePage ? handleModifyOrg : handleModifyAccount}
+            value={isNodePage ? modifyOrg?.email : modifyAcc?.email}
           />
           <UiSelect
             options={[
