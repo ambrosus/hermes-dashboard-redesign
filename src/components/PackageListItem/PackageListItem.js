@@ -16,7 +16,7 @@ const PackageListItem = ({ onclick, selected, assetData }) => {
 
   let img;
 
-  if (info.images && info.images.default.url) {
+  if (info.images?.default?.url) {
     img = info.images.default.url;
   } else if (info.assetType === 'box') {
     img = boxImage;

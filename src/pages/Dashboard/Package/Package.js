@@ -8,6 +8,7 @@ import UiButton from '../../../components/UiButton';
 import { bulkEvents, fetchAssets } from '../../../store/modules/assets/actions';
 import InfiniteScroll from '../../../components/InfiniteScroll';
 import { handleModal } from '../../../store/modules/modal';
+import { isEmptyObj } from '../../../utils/isEmptyObj';
 
 const Assets = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const Assets = () => {
     assetName: false,
     eventName: false,
   });
+  const { userInfo } = useSelector((state) => state.auth);
 
   const { assetsQueryData, assetsList, isAssetsLoading } = useSelector(
     (state) => state.assets,
@@ -31,10 +33,10 @@ const Assets = () => {
   );
 
   useEffect(() => {
-    if (!assetsQueryData.data.length) {
+    if (!assetsQueryData.data.length && !isEmptyObj(userInfo)) {
       dispatch(fetchAssets());
     }
-  }, []);
+  }, [userInfo]);
 
   const handleSetFormData = (keyValue) => {
     setFormData({ ...formData, ...keyValue });
