@@ -54,7 +54,7 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
 
   let img;
 
-  if (assetContentInfo.images && assetContentInfo.images.default.url) {
+  if (assetContentInfo.images?.default?.url) {
     img = assetContentInfo.images.default.url;
   } else if (assetContentInfo.assetType === 'box') {
     img = boxImage;
