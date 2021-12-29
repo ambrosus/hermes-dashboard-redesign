@@ -98,7 +98,7 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
             ['box', 'pallet', 'container'].includes(
               assetContentInfo.assetType,
             ) &&
-              !assetContentInfo.images?.default.url &&
+              !assetContentInfo.images?.default?.url &&
               'asset-item__img--svg',
           )}
         >
