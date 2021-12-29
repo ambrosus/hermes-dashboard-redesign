@@ -1,20 +1,26 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import UiButton from '../../../../components/UiButton';
 import PageMainContent from '../../../../components/PageMainContent';
 import { isEmptyObj } from '../../../../utils/isEmptyObj';
 import AssetItem from '../../../../components/AssetItem';
+import { fetchEventsInfo } from '../../../../store/modules/assets/actions';
 
 const Event = () => {
   const { assetId, eventId } = useParams();
+  const dispatch = useDispatch();
   const events = useSelector((state) => state.assets.eventsList);
+
+  useEffect(() => {
+    dispatch(fetchEventsInfo(assetId));
+  }, []);
 
   if (isEmptyObj(events)) {
     return null;
   }
 
-  const currentEvent = events[assetId].find((el) => el.eventId === eventId);
+  const currentEvent = events.find((el) => el.eventId === eventId);
 
   const assetInfo =
     currentEvent.content.data.find((el) => el.type === 'ambrosus.asset.info') ||
@@ -33,13 +39,17 @@ const Event = () => {
             alt="asset"
           />
         )}
-        <UiButton className="event-page__similar-event">
+        <UiButton
+          type="secondary"
+          className="event-page__similar-event"
+          styles={{ width: 160, height: 48 }}
+        >
           Add similar event
         </UiButton>
         <AssetItem isOnAssetPage assetData={currentEvent} />
         <PageMainContent data={currentEvent} location={location} />
         <Link to={`/dashboard/assets/${assetId}`}>
-          <UiButton className="event-page__back">Back to asset</UiButton>
+          <UiButton styles={{ height: 40 }}>Back to asset</UiButton>
         </Link>
       </div>
     </div>

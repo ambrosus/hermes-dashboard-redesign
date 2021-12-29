@@ -23,6 +23,9 @@ const UiModal = ({ children, modalName, contentStyles }) => {
           padding: 40,
           ...contentStyles,
         },
+        overlay: {
+          backgroundColor: '#333333e6',
+        },
       }}
     >
       {children}

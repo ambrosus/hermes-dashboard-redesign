@@ -65,7 +65,7 @@
           div {
             svg {
               path {
-                fill: #4A38AE;
+                fill: $color-primary;
               }
             }
           }
@@ -73,7 +73,7 @@
       }
 
       &__item-active {
-        color: #4A38AE;
+        color: $color-primary;
       }
     }
   }
@@ -98,30 +98,15 @@
         justify-content: space-between;
         flex-direction: row;
 
+        button {
+          font-size: 12px;
+        }
+
         .sort-by-type {
           gap: 10px;
           font-style: normal;
           display: flex;
           align-items: center;
-
-          .selected-type {
-            color: #FFFFFF;
-            background: #9198BB;
-          }
-
-          button {
-            font-weight: 500;
-            font-size: 12px;
-            line-height: 14px;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: #9198BB;
-            padding: 0 10px;
-            height: 32px;
-            background: #F7F7FD;
-            border-radius: 8px;
-          }
         }
 
         .sort-by-period {
@@ -130,7 +115,7 @@
           gap: 5px;
 
           .selected-period {
-            color: #4A38AE;
+            color: $color-primary;
           }
 
           button {

@@ -9,14 +9,14 @@
   justify-content: center;
   width: 100%;
   overflow: hidden;
+  font-size: 16px;
   min-height: 32px;
   max-height: 54px;
   padding: 0 25px;
-  border-radius: 8px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 500;
-  font-family: Rubik;
+  font-weight: 400;
+  border-radius: 2px;
 
   p {
     font-family: Rubik;
@@ -36,8 +36,9 @@
   // types
 
   &.secondary {
-    background-color: $color-blue;
-    padding: 0 10px !important;
+    background-color: transparent;
+    border: 1px solid $color-primary;
+    color: #333333;
   }
 
   &.primary {
@@ -45,11 +46,11 @@
   }
 
   &.plain {
-    background-color: $whiteToGray;
-    color: $color-gray;
+    background-color: transparent;
+    color: $color-primary;
 
     &.selected {
-      background-color: $color-gray;
+      background-color: $color-primary;
       color: white;
     }
 
@@ -59,9 +60,10 @@
   }
 
   &.light {
-    background: #ffffff;
-    color: $color-gray;
-    border: 1px solid $color-gray;
+    background: transparent;
+    border: 0;
+    color: #333333;
+    border-top: 1px solid $color-gray-light;
   }
 
   &.pale {
@@ -75,9 +77,13 @@
   &.icon {
     height: 32px;
     width: 32px;
-    border-radius: 12px;
     padding: 0;
-    background: $whiteToGray;
+    background: transparent;
+    border: 1px solid $white;
+
+    svg path {
+      fill: white;
+    }
 
     img {
       margin-right: 0;
@@ -99,7 +105,6 @@
 }
 
 button[disabled=disabled], button:disabled {
-  background: $color-blue !important;
   opacity: 0.8;
   cursor: no-drop;
 }

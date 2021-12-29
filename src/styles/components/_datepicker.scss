@@ -18,8 +18,10 @@
     }
 
     .cancelBtn {
-      background: $color-gray-light;
       margin-left: auto;
+      border: 1px solid $color-primary;
+      background: transparent;
+      color: #333333;
     }
   }
 

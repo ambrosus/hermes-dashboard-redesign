@@ -6,6 +6,7 @@ import axios from 'axios';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import Web3 from 'web3';
 import Modal from 'react-modal';
+import 'react-notifications/lib/notifications.css';
 import Main from './Main';
 import configureStore from './store';
 import { generateToken } from './utils/generateToken';

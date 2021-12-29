@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import BackBtn from '../../../components/auth/BackBtn';
 import spyCam from '../../../assets/raster/spy-cam.png';
 import spyPerson from '../../../assets/raster/spy-person.png';
 import AuthButton from '../../../components/auth/AuthButton';
 import GenerateKeyForm from '../../../components/auth/GenerateKeyForm';
+import { handleModal } from '../../../store/modules/modal';
 
 const GeneratedKey = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const setFormVisible = () => setIsFormVisible(true);
+  const dispatch = useDispatch();
+  const openModal = () => dispatch(handleModal({ name: 'secureKeys' }));
 
   return (
     <div className="generated-key">
@@ -42,9 +45,13 @@ const GeneratedKey = () => {
               <br />
               Create a backup.
             </p>
-            <Link to="/" className="auth-page__link">
+            <button
+              onClick={openModal}
+              className="auth-page__link"
+              type="button"
+            >
               How to secure the keys?
-            </Link>
+            </button>
           </div>
           <AuthButton onClick={setFormVisible}>I Understands</AuthButton>
         </>

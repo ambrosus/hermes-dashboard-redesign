@@ -5,6 +5,8 @@ import {
   SET_ASSETS_SEARCH_PARAMS,
   SET_CREATE_RESULT,
   SET_EVENTS_DATA,
+  UNSHIFT_ASSETS_LIST_DATA,
+  UNSHIFT_EVENTS_LIST_DATA,
 } from './constants';
 import { isEmptyObj } from '../../../utils/isEmptyObj';
 
@@ -35,6 +37,10 @@ export default (state = defaultState, { type, payload }) => {
             ? payload
             : [...state.assetsList, ...payload],
       };
+    case UNSHIFT_ASSETS_LIST_DATA:
+      return { ...state, assetsList: [payload].concat(state.assetsList) };
+    case UNSHIFT_EVENTS_LIST_DATA:
+      return { ...state, eventsList: [payload].concat(state.eventsList) };
     case SET_EVENTS_DATA:
       return { ...state, eventsList: payload };
     case SET_CREATE_RESULT:

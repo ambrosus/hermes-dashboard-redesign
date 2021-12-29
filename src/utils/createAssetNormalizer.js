@@ -11,9 +11,11 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
     images,
     rows,
     propertiesItems,
+    customType,
     latitude,
     longitude,
-    customType,
+    city,
+    country,
   } = formData;
 
   if (identifiersItems && !isEmptyObj(identifiersItems)) {
@@ -93,7 +95,7 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
   }
 
   if (latitude && longitude) {
-    result.push({
+    const coordsInfo = {
       type: 'ambrosus.event.location',
       location: {
         type: 'Feature',
@@ -102,7 +104,12 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
           coordinates: [+latitude, +longitude],
         },
       },
-    });
+    };
+
+    if (city) coordsInfo.city = city;
+    if (country) coordsInfo.city = country;
+
+    result.push(coordsInfo);
   }
   return result;
 };

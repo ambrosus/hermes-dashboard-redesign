@@ -37,7 +37,7 @@
       color: #00b7f9!important;
     }
 
-    .page > div {
+    .page > div:not(.notification-container) {
       display: flex;
       align-items: center;
       flex-direction: column;
@@ -56,4 +56,8 @@
 
 .space-10 {
   height: 10px;
+}
+
+.notification-message .message {
+  color: white!important;
 }

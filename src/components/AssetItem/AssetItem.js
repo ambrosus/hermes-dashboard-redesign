@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { NotificationManager } from 'react-notifications';
 import copyIcon from '../../assets/svg/copy-icon.svg';
 import UiButton from '../UiButton';
 import { ReactComponent as ChevronSvg } from '../../assets/svg/chevron.svg';
@@ -46,7 +47,10 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
     .unix(assetData.content.idData.timestamp)
     .format('DD.MM.YYYY');
 
-  const copyId = () => copyToClipboard(assetId);
+  const copyId = () => {
+    copyToClipboard(assetId);
+    NotificationManager.success('Copied to clipboard');
+  };
 
   const select = () => handleSelect(assetId, !selected);
 

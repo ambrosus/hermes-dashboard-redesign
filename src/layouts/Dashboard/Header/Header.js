@@ -2,8 +2,8 @@ import React from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 import logoIcon from '../../../assets/svg/logo.svg';
-import searchIcon from '../../../assets/svg/search.svg';
-import personIcon from '../../../assets/svg/person.svg';
+import { ReactComponent as SearchIcon } from '../../../assets/svg/search.svg';
+import { ReactComponent as UserIcon } from '../../../assets/svg/person.svg';
 import UiButton from '../../../components/UiButton';
 
 const headerConfig = [
@@ -45,11 +45,15 @@ const Header = () => {
         ))}
       </div>
       <div className="header__setting">
-        <UiButton type="icon" onclick={showSearchBar}>
-          <img src={searchIcon} alt="search-icon" />
+        <UiButton
+          type="icon"
+          styles={{ marginRight: 20 }}
+          onclick={showSearchBar}
+        >
+          <SearchIcon />
         </UiButton>
         <UiButton type="icon">
-          <img src={personIcon} alt="user-icon" />
+          <UserIcon />
         </UiButton>
       </div>
     </header>

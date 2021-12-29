@@ -217,7 +217,7 @@ const Search = () => {
         Add identifier
       </button>
       <div className="form-semicolon-wrapper" style={{ marginTop: 40 }}>
-        <UiButton styles={{ background: '#9198BB', padding: 12 }}>
+        <UiButton type="secondary" styles={{ padding: 12 }}>
           Cancel
         </UiButton>
         <UiButton styles={{ padding: 12 }} onclick={submitSearch}>

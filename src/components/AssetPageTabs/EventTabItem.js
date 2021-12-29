@@ -15,6 +15,10 @@ const EventTabItem = ({ data }) => {
     data.content.data.find((el) => el.type === 'ambrosus.asset.info') ||
     data.content.data[0];
 
+  const locationData = data.content.data.find(
+    (el) => el.type === 'ambrosus.event.location',
+  );
+
   const { timestamp } = data.content.idData;
   const date = moment.unix(timestamp);
 
@@ -56,10 +60,13 @@ const EventTabItem = ({ data }) => {
           <span className="event-tab-item__when">
             {moment().add(1, 'day').diff(date, 'days')} days ago
           </span>
-          <span className="event-tab-item__where">
-            <LocationSvg />
-            Odessa, Ukraine
-          </span>
+          {locationData && locationData.city && (
+            <span className="event-tab-item__where">
+              <LocationSvg />
+              {locationData.city}
+              {locationData.country ? `, ${locationData.country}` : ''}
+            </span>
+          )}
         </div>
       </div>
     </div>

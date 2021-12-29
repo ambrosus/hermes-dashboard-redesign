@@ -2,7 +2,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  padding: 20px;
+  cursor: pointer;
+
+  svg {
+    transform: rotate(180deg);
+  }
+
+  &--opened svg {
+    transform: rotate(0);
+  }
 
   &__bulk {
     margin-right: auto;
@@ -102,12 +111,18 @@
 
   &__delete-property {
     position: absolute;
-    right: -30px;
+    right: 10px;
     top: 15px;
   }
 
   &__group {
     margin-top: 30px;
+
+    hr {
+      width: calc(100% + 40px);
+      margin-left: -20px;
+      margin-bottom: 24px;
+    }
   }
 
   &__checkmark-label {
@@ -128,5 +143,28 @@
 
   #file-upload {
     display: none;
+  }
+
+  &__item-wrapper {
+    border: 1px solid $color-gray-light;
+    width: calc(100% + 40px);
+    margin-left: -20px;
+    margin-bottom: 44px;
+  }
+
+  &__item-wrapper-padding {
+    padding: 20px;
+  }
+
+  &__map {
+    padding: 20px;
+    margin-bottom: 10px;
+  }
+
+  &__type img {
+    width: 12px;
+    height: 12px;
+    bottom: 16px;
+    transform: rotate(180deg);
   }
 }

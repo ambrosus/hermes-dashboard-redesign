@@ -6,14 +6,14 @@ import { handleModal } from '../../store/modules/modal';
 import UiInput from '../UiInput';
 import UiSelect from '../UiSelect';
 import UiToggle from '../UiToggle';
-import visibilityIcon from '../../assets/svg/visibility.svg';
-import visibilityOffIcon from '../../assets/svg/visibility_off.svg';
+import { ReactComponent as VisibilityIcon } from '../../assets/svg/visibility.svg';
+import { ReactComponent as VisibilityOffIcon } from '../../assets/svg/visibility_off.svg';
 import { ReactComponent as CheckmarkIcon } from '../../assets/svg/checkmark-transparent.svg';
 import { ReactComponent as CloseFilledIcon } from '../../assets/svg/close-filled.svg';
+// eslint-disable-next-line import/no-duplicates
+import chevronImg from '../../assets/svg/chevron.svg';
 import UiTextarea from '../UiTextaera';
 import addIcon from '../../assets/svg/add-icon.svg';
-import uploadIcon from '../../assets/svg/upload.svg';
-import infoIcon from '../../assets/svg/info-filled.svg';
 import UiButton from '../UiButton';
 import AddedField from './AddedField';
 import createAssetNormalizer from '../../utils/createAssetNormalizer';
@@ -23,13 +23,16 @@ import {
   createAsset,
   createEvent,
 } from '../../store/modules/assets/actions';
+// eslint-disable-next-line import/no-duplicates
+import { ReactComponent as ChevronSvg } from '../../assets/svg/chevron.svg';
+import Map from '../GoogleMap';
 
 const privateToggleOptions = [
   {
     value: 0,
     label: (
       <span>
-        <img style={{ marginRight: 5 }} src={visibilityIcon} alt="public-img" />
+        <VisibilityIcon />
         Public
       </span>
     ),
@@ -38,11 +41,7 @@ const privateToggleOptions = [
     value: 1,
     label: (
       <span>
-        <img
-          style={{ marginRight: 5 }}
-          src={visibilityOffIcon}
-          alt="private-img"
-        />
+        <VisibilityOffIcon />
         Private
       </span>
     ),
@@ -59,6 +58,7 @@ const eventTypes = [
   { value: 'transfer', label: 'Transfer' },
   { value: 'location', label: 'Location' },
   { value: 'media', label: 'Media' },
+  { value: 'ambrosus.event.pack', label: 'Package' },
 ];
 
 const CreateAssetModal = ({
@@ -68,6 +68,10 @@ const CreateAssetModal = ({
   modalType,
 }) => {
   const dispatch = useDispatch();
+
+  const [isPropertyOpened, setIsPropertyOpened] = useState(false);
+  const [isIdentifiersOpened, setIsIdentifiersOpened] = useState(false);
+  const [isLocationOpened, setIsLocationOpened] = useState(false);
 
   const [isJSONForm, setIsJSONForm] = useState(false);
   const [imgUrl, setImgUrl] = useState('');
@@ -274,9 +278,21 @@ const CreateAssetModal = ({
   const entityName =
     isCreateEvent || !isEmptyObj(bulkEventData) ? 'Event' : 'Asset';
 
+  const handlePropertyOpen = () => setIsPropertyOpened(!isPropertyOpened);
+  const handleLocationOpen = () => setIsLocationOpened(!isLocationOpened);
+  const handleIdentifiersOpen = () =>
+    setIsIdentifiersOpened(!isIdentifiersOpened);
+
+  const handleMapCoords = (coords) => {
+    handleSetFormData({ coords });
+  };
+
   return (
     <div className="create-asset">
-      <div className="create-asset-title">
+      <div
+        className="create-asset-title"
+        style={{ padding: '0 0 20px 0', cursor: 'auto' }}
+      >
         <h3 className="create-asset-title__text">New {entityName}</h3>
         {!isEmptyObj(bulkEventData) && (
           <span className="create-asset-title__bulk">
@@ -331,6 +347,7 @@ const CreateAssetModal = ({
           />
           <div className="form-semicolon-wrapper">
             <UiSelect
+              className="create-asset-form__type"
               options={
                 isCreateEvent || !isEmptyObj(bulkEventData)
                   ? eventTypes
@@ -341,6 +358,7 @@ const CreateAssetModal = ({
               name="customType"
               onChange={handleSetFormData}
               selectedValue={formData.customType}
+              imgSrc={chevronImg}
             />
             <UiToggle
               label="Access level"
@@ -382,7 +400,7 @@ const CreateAssetModal = ({
             <>
               <span className="create-asset-form__checkmark-label">
                 <CheckmarkIcon />
-                Chek for cover image
+                Check for cover image
               </span>
               <div className="create-asset-form__added-img-wrapper">
                 {formData.images.map((el) => (
@@ -420,13 +438,6 @@ const CreateAssetModal = ({
           {/*  value={rowUrl} */}
           {/* /> */}
           {/* <input type="file" id="file-upload" onChange={handleRaw} /> */}
-          <label
-            htmlFor="file-upload"
-            className="btn create-asset-form__upload-file"
-          >
-            <img src={uploadIcon} alt="upload icon" />
-            Or upload raw file
-          </label>
           <div className="create-asset-form__added-img-wrapper">
             {formData.rows.map((el) => (
               <div key={el} className="create-asset-form__added-img">
@@ -441,114 +452,173 @@ const CreateAssetModal = ({
               </div>
             ))}
           </div>
-          <hr />
-          <div className="create-asset-title">
-            <h3 className="create-asset-title__text">Properties</h3>
-            <img src={infoIcon} alt="info icon" />
-          </div>
-          <AddedField
-            itemName="propertiesItems"
-            deleteItem={deleteAdditionalField}
-            placeholder="Property"
-            items={additionalFields.propertiesItems}
-            onChange={handleSetFormData}
-            fieldsData={formData.propertiesItems}
-          />
-          <button
-            onClick={addProperties}
-            type="button"
-            className="add-form-item-btn"
-          >
-            <img src={addIcon} alt="add icon" />
-            Add properties
-          </button>
-          {groupFields.map((el) => (
-            <div key={el} className="create-asset-form__group">
-              <UiInput
-                label="Group name"
-                placeholder="Group name"
-                value={formData[`groupPropertyItems${el}`].groupName}
-                onChange={(value) => setGroupName(value, el)}
-              />
-              <AddedField
-                items={additionalFields[`groupPropertyItems${el}`]}
-                deleteItem={deleteAdditionalField}
-                placeholder="Group property"
-                itemName={`groupPropertyItems${el}`}
-                fieldsData={formData[`groupPropertyItems${el}`]}
-                onChange={handleSetFormData}
-              />
-              <button
-                type="button"
-                className="add-form-item-btn"
-                onClick={() => addGroupProperty(el)}
-              >
-                <img src={addIcon} alt="add icon" />
-                Add properties
-              </button>
+          <div className="create-asset-form__item-wrapper">
+            <div
+              className={cx(
+                'create-asset-title',
+                isPropertyOpened && 'create-asset-title--opened',
+              )}
+              onClick={handlePropertyOpen}
+              role="presentation"
+            >
+              <h3 className="create-asset-title__text">Properties</h3>
+              <ChevronSvg />
             </div>
-          ))}
-          <UiButton
-            type="light"
-            styles={{ padding: 12, marginTop: 60 }}
-            onclick={addGroup}
-          >
-            <>
-              <img src={addIcon} alt="add icon" />
-              Add group
-            </>
-          </UiButton>
-          <hr />
-          <div className="create-asset-title">
-            <h3 className="create-asset-title__text">Identifiers</h3>
-            <img src={infoIcon} alt="info icon" />
+            {isPropertyOpened && (
+              <>
+                <div className="create-asset-form__item-wrapper-padding">
+                  <AddedField
+                    itemName="propertiesItems"
+                    deleteItem={deleteAdditionalField}
+                    placeholder="Property"
+                    items={additionalFields.propertiesItems}
+                    onChange={handleSetFormData}
+                    fieldsData={formData.propertiesItems}
+                  />
+                  <button
+                    onClick={addProperties}
+                    type="button"
+                    className="add-form-item-btn"
+                  >
+                    <img src={addIcon} alt="add icon" />
+                    Add properties
+                  </button>
+                  {groupFields.map((el) => (
+                    <div key={el} className="create-asset-form__group">
+                      <hr />
+                      <UiInput
+                        label="Group name"
+                        placeholder="Group name"
+                        value={formData[`groupPropertyItems${el}`].groupName}
+                        onChange={(value) => setGroupName(value, el)}
+                      />
+                      <AddedField
+                        items={additionalFields[`groupPropertyItems${el}`]}
+                        deleteItem={deleteAdditionalField}
+                        placeholder="Group property"
+                        itemName={`groupPropertyItems${el}`}
+                        fieldsData={formData[`groupPropertyItems${el}`]}
+                        onChange={handleSetFormData}
+                      />
+                      <button
+                        type="button"
+                        className="add-form-item-btn"
+                        onClick={() => addGroupProperty(el)}
+                      >
+                        <img src={addIcon} alt="add icon" />
+                        Add properties
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <UiButton
+                  type="light"
+                  styles={{ padding: 12 }}
+                  onclick={addGroup}
+                >
+                  <>
+                    <img src={addIcon} alt="add icon" />
+                    Add group
+                  </>
+                </UiButton>
+              </>
+            )}
           </div>
-          <AddedField
-            itemName="identifiersItems"
-            deleteItem={deleteAdditionalField}
-            placeholder="Identifier"
-            items={additionalFields.identifiersItems}
-            onChange={handleSetFormData}
-            fieldsData={formData.identifiersItems}
-          />
-          <button
-            onClick={addIdentifier}
-            type="button"
-            className="add-form-item-btn"
-          >
-            <img src={addIcon} alt="add icon" />
-            Add identifier
-          </button>
-          <hr />
+          <div className="create-asset-form__item-wrapper">
+            <div
+              className={cx(
+                'create-asset-title',
+                isIdentifiersOpened && 'create-asset-title--opened',
+              )}
+              onClick={handleIdentifiersOpen}
+              role="presentation"
+            >
+              <h3 className="create-asset-title__text">Identifiers</h3>
+              <ChevronSvg />
+            </div>
+            {isIdentifiersOpened && (
+              <>
+                <div className="create-asset-form__item-wrapper-padding">
+                  <AddedField
+                    itemName="identifiersItems"
+                    deleteItem={deleteAdditionalField}
+                    placeholder="Identifier"
+                    items={additionalFields.identifiersItems}
+                    onChange={handleSetFormData}
+                    fieldsData={formData.identifiersItems}
+                  />
+                  <button
+                    onClick={addIdentifier}
+                    type="button"
+                    className="add-form-item-btn"
+                  >
+                    <img src={addIcon} alt="add icon" />
+                    Add identifier
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
           {isCreateEvent && (
-            <>
-              <div className="create-asset-title">
+            <div className="create-asset-form__item-wrapper">
+              <div
+                className={cx(
+                  'create-asset-title',
+                  isPropertyOpened && 'create-asset-title--opened',
+                )}
+                onClick={handleLocationOpen}
+                role="presentation"
+              >
                 <h3 className="create-asset-title__text">Location</h3>
+                <ChevronSvg />
               </div>
-              <div className="form-semicolon-wrapper">
-                <UiInput
-                  type="number"
-                  label="Latitude"
-                  name="latitude"
-                  onChange={handleSetFormData}
-                  value={formData.latitude}
-                />
-                <UiInput
-                  type="number"
-                  label="Longitude"
-                  name="longitude"
-                  onChange={handleSetFormData}
-                  value={formData.longitude}
-                />
-              </div>
-              <hr />
-            </>
+              {isLocationOpened && (
+                <>
+                  <div className="create-asset-form__map">
+                    <Map getMarkerPosition={handleMapCoords} />
+                  </div>
+                  <div
+                    className="form-semicolon-wrapper"
+                    style={{ padding: '0 20px' }}
+                  >
+                    <UiInput
+                      type="number"
+                      label="Latitude"
+                      name="latitude"
+                      onChange={handleSetFormData}
+                      value={formData.latitude}
+                    />
+                    <UiInput
+                      type="number"
+                      label="Longitude"
+                      name="longitude"
+                      onChange={handleSetFormData}
+                      value={formData.longitude}
+                    />
+                  </div>
+                  <div
+                    className="form-semicolon-wrapper"
+                    style={{ padding: '0 20px' }}
+                  >
+                    <UiInput
+                      label="City"
+                      name="city"
+                      onChange={handleSetFormData}
+                      value={formData.city}
+                    />
+                    <UiInput
+                      label="Country"
+                      name="country"
+                      onChange={handleSetFormData}
+                      value={formData.country}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
           )}
           <div className="form-semicolon-wrapper">
-            <UiButton
-              onclick={closeModal}
-              styles={{ background: '#9198BB', padding: 12 }}
-            >
+            <UiButton type="secondary" onclick={closeModal}>
               Cancel
             </UiButton>
             <UiButton

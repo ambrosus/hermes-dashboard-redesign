@@ -7,6 +7,8 @@ import {
   SET_ASSETS_SEARCH_PARAMS,
   SET_CREATE_RESULT,
   SET_EVENTS_DATA,
+  UNSHIFT_ASSETS_LIST_DATA,
+  UNSHIFT_EVENTS_LIST_DATA,
 } from './constants';
 import { generateAsset, generateEvent } from '../../../utils/generateToken';
 import createAssetNormalizer from '../../../utils/createAssetNormalizer';
@@ -107,22 +109,10 @@ export const fetchEventsInfo = (eventId) => (dispatch) => {
   axios
     .post('https://vitalii427-hermes.ambrosus-test.io/event2/query', params)
     .then(({ data }) => {
-      const obj = {};
-
-      data.data.forEach((el) => {
-        const { assetId } = el.content.idData;
-
-        if (!obj[assetId]) {
-          obj[assetId] = [el];
-        } else {
-          obj[assetId] = [...obj[assetId], el];
-        }
-      });
-
       if (data.data) {
         dispatch({
           type: SET_EVENTS_DATA,
-          payload: obj,
+          payload: data.data,
         });
       }
     });
@@ -195,6 +185,12 @@ export const createEvent =
                 percentsComplete: 100,
               }),
             );
+            dispatch({
+              type: isAssetCreating
+                ? UNSHIFT_ASSETS_LIST_DATA
+                : UNSHIFT_EVENTS_LIST_DATA,
+              payload: data.data,
+            });
           }
           resolve(data);
         })

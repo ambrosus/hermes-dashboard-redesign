@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import { NotificationManager } from 'react-notifications';
 import Tooltip from 'react-simple-tooltip';
 import AuthInput from '../AuthInput';
 import AuthButton from '../AuthButton';
@@ -21,7 +22,15 @@ const KeyLogin = () => {
 
   const signInUser = (e) => {
     e.preventDefault();
-    dispatch(signIn(privateKey));
+    if (privateKey.length === 66) {
+      dispatch(signIn(privateKey));
+    } else {
+      console.log(
+        '0x1462c0744fb4ea6053b78a4dd6b64f1b7042c26d7dfe86540ac14b9f2fcd8b8e'
+          .length,
+      );
+      NotificationManager.error('Incorrect key');
+    }
   };
 
   return (
@@ -31,7 +40,10 @@ const KeyLogin = () => {
         label="your private key"
         className="key-login__input"
         rightEl={
-          <Tooltip content="asdfasdfaf">
+          <Tooltip
+            content="For maximum security, your private key will never leave your browser."
+            fontSize="13px"
+          >
             <svg
               className="tooltip-info-btn"
               xmlns="http://www.w3.org/2000/svg"

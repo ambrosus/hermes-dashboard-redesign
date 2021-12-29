@@ -32,8 +32,7 @@
     color: #333333;
 
     button {
-      border-radius: 12px;
-
+      height: 48px;
       p {
         font-style: normal;
         font-weight: 500;
@@ -78,6 +77,10 @@
     gap: 10px;
     display: flex;
     flex-direction: row;
+
+    .btn {
+      font-size: 12px;
+    }
   }
 
   &__advanced-sorting {
@@ -89,6 +92,11 @@
       width: 32px;
       height: 32px;
       padding: 0;
+      border: 1px solid $color-primary;
+
+      svg path {
+        fill: $color-primary;
+      }
     }
   }
 }

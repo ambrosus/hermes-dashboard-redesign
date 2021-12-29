@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
 import UiInput from '../UiInput';
 
@@ -14,6 +15,8 @@ const UiSelect = ({
   conditionToOnlyDropdownSelect,
   searchable = true,
   onSearch = () => {},
+  imgSrc,
+  className,
 }) => {
   const selectEl = useRef(null);
   const [filteredOptions, setFilteredOptions] = useState(options);
@@ -54,7 +57,7 @@ const UiSelect = ({
   };
 
   return (
-    <div className="ui-select" style={styles} ref={selectEl}>
+    <div className={cx('ui-select', className)} style={styles} ref={selectEl}>
       {searchable && (
         <UiInput
           value={inputValue}
@@ -62,6 +65,7 @@ const UiSelect = ({
           onChange={handleSearch}
           label={label}
           onclick={toggleOptionsVisibility}
+          imgSrc={imgSrc}
         />
       )}
       {isOptionsOpened && (
@@ -89,6 +93,8 @@ UiSelect.propTypes = {
   options: PropTypes.array,
   placeholder: PropTypes.string,
   name: PropTypes.string,
+  className: PropTypes.string,
+  imgSrc: PropTypes.string,
   onChange: PropTypes.func,
   onSearch: PropTypes.func,
   searchable: PropTypes.bool,

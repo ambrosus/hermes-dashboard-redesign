@@ -11,6 +11,18 @@
     border-radius: 90px;
     width: 49%;
 
+    span {
+      color: $color-primary;
+    }
+
+    svg {
+      margin-right: 5px;
+
+      path {
+        fill: $color-primary;
+      }
+    }
+
     &--selected {
       background: white;
     }

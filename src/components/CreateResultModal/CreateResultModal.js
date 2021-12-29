@@ -20,12 +20,18 @@ const CreateResultModal = () => {
   const [modalStep, setModalStep] = useState(1);
   const [progressPercent, setProgressPercent] = useState(0);
 
+  const isAllSuccess = resultData.every((el) => el.isSuccess);
+
   useEffect(() => {
     setProgressPercent(percentsComplete);
 
     if (percentsComplete === 100) {
       setTimeout(() => {
         setModalStep(3);
+
+        if (isAllSuccess) {
+          dispatch(handleModal({ name: '' }));
+        }
       }, 500);
     }
   }, [percentsComplete]);
@@ -51,8 +57,6 @@ const CreateResultModal = () => {
   const closeModal = () => dispatch(handleModal(null));
   const showDetails = () => setModalStep(4);
 
-  const isAllSuccess = resultData.every((el) => el.isSuccess);
-
   return (
     <div className="create-result-modal">
       <button
@@ -68,7 +72,7 @@ const CreateResultModal = () => {
             You want proceed editing this asset?
           </p>
           <div className="create-result-modal__actions">
-            <UiButton type="pale" onclick={closeModal}>
+            <UiButton type="secondary" onclick={closeModal}>
               Cancel
             </UiButton>
             <UiButton onclick={handleApply}>Proceed</UiButton>
@@ -104,7 +108,8 @@ const CreateResultModal = () => {
           )}
           <UiButton
             onclick={showDetails}
-            type="pale"
+            type="secondary"
+            styles={{ width: 160, height: 48 }}
             className="create-result-modal__wait-block"
           >
             Details

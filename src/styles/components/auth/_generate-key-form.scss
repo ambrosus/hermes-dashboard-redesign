@@ -43,8 +43,9 @@
     display: flex;
     align-items: center;
     text-transform: uppercase;
-    color: #00b7f9;
+    color: #00b7f9!important;
     font-weight: 500;
+    width: fit-content;
     margin-left: auto;
   }
 
@@ -59,5 +60,42 @@
 
   &__img {
     width: 30px;
+  }
+}
+
+.auth-modal-container {
+  h2 {
+    font-size: 24px;
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+
+  p {
+    font-size: 13px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  li {
+    list-style-type: disc;
+    font-size: 13px;
+    margin-bottom: 5px;
+
+    a {
+      color: #00b7f9;
+    }
+  }
+
+  h3 {
+    font-weight: 500;
+    margin: 30px 0 20px;
+  }
+
+  ul {
+    margin-bottom: 30px;
+  }
+
+  button {
+    height: 48px;
   }
 }

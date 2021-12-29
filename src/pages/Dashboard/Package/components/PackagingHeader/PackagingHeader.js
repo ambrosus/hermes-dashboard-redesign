@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { ReactSVG } from 'react-svg';
 import PropTypes from 'prop-types';
 import UiToggle from '../../../../../components/UiToggle';
-import visibilityIcon from '../../../../../assets/svg/visibility.svg';
-import visibilityOffIcon from '../../../../../assets/svg/visibility_off.svg';
+import { ReactComponent as VisibilityIcon } from '../../../../../assets/svg/visibility.svg';
+import { ReactComponent as VisibilityOffIcon } from '../../../../../assets/svg/visibility_off.svg';
 import borderOuter from '../../../../../assets/svg/border_outer.svg';
 import UiInput from '../../../../../components/UiInput';
 import { searchAssets } from '../../../../../store/modules/assets/actions';
@@ -16,7 +16,7 @@ const privateToggleOptions = [
     value: 0,
     label: (
       <span>
-        <img style={{ marginRight: 5 }} src={visibilityIcon} alt="public-img" />
+        <VisibilityIcon />
         Public
       </span>
     ),
@@ -25,11 +25,7 @@ const privateToggleOptions = [
     value: 1,
     label: (
       <span>
-        <img
-          style={{ marginRight: 5 }}
-          src={visibilityOffIcon}
-          alt="private-img"
-        />
+        <VisibilityOffIcon />
         Private
       </span>
     ),

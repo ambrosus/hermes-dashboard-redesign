@@ -15,6 +15,7 @@ const TabOptions = ({ period = '7d', setPeriod, type = 'asset', setType }) => {
             <UiButton
               onclick={() => pushBundle()}
               priority="primary"
+              type="plain"
               styles={{
                 backgroundColor: '#4A38AE',
                 padding: '0 20px',
@@ -23,29 +24,29 @@ const TabOptions = ({ period = '7d', setPeriod, type = 'asset', setType }) => {
             >
               Push Bundle
             </UiButton>
-            <button
-              type="button"
-              onClick={() => setType('bundle')}
-              className={cx({ 'selected-type': type === 'bundle' })}
+            <UiButton
+              type="plain"
+              onclick={() => setType('bundle')}
+              className={cx({ selected: type === 'bundle' })}
             >
               Bundles
-            </button>
+            </UiButton>
           </>
         )}
-        <button
-          type="button"
-          onClick={() => setType('asset')}
-          className={cx({ 'selected-type': type === 'asset' })}
+        <UiButton
+          type="plain"
+          onclick={() => setType('asset')}
+          className={cx({ selected: type === 'asset' })}
         >
           Assets
-        </button>
-        <button
-          type="button"
-          onClick={() => setType('event')}
-          className={cx({ 'selected-type': type === 'event' })}
+        </UiButton>
+        <UiButton
+          type="plain"
+          onclick={() => setType('event')}
+          className={cx({ selected: type === 'event' })}
         >
           Events
-        </button>
+        </UiButton>
       </div>
       <div className="sort-by-period">
         <button

@@ -78,15 +78,19 @@ const Asset = () => {
               </div>
             )}
             <UiButton
-              type="pale"
-              styles={{ marginRight: 20 }}
+              type="secondary"
+              styles={{ marginRight: 20, width: 160, height: 48 }}
               onclick={() => window.open(assetLink, '_blank')}
             >
-              Chek on amb.to
+              Check on amb.to
             </UiButton>
           </div>
 
-          <UiButton onclick={() => setViewJson(!viewJson)} type="pale">
+          <UiButton
+            onclick={() => setViewJson(!viewJson)}
+            type="secondary"
+            styles={{ marginRight: 20, width: 160, height: 48 }}
+          >
             View JSON
           </UiButton>
         </div>

@@ -57,7 +57,7 @@ UiInput.propTypes = {
   type: PropTypes.string,
   onChange: PropTypes.func,
   onImageClick: PropTypes.func,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   className: PropTypes.string,
   name: PropTypes.string,
   disabled: PropTypes.bool,

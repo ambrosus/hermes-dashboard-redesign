@@ -68,7 +68,7 @@ hr {
 }
 
 .container {
-  max-width: 960px;
+  width: 960px;
   margin: 0 auto;
 }
 
@@ -152,14 +152,14 @@ h4 {
   background: $color-primary!important;
 
   path {
-    fill: white;
+    fill: white!important;
   }
 }
 
 .add-form-item-btn {
   font-size: 14px;
   font-weight: 500;
-  color: $color-gray;
+  color: $color-primary;
   display: flex;
   align-items: center;
 
@@ -171,7 +171,7 @@ h4 {
 .select-all-btn {
   font-weight: 500;
   font-size: 12px;
-  color: $color-gray;
+  color: $color-primary;
 }
 
 .error-message {

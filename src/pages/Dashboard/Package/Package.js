@@ -119,11 +119,11 @@ const Assets = () => {
       {Object.keys(selectedPackages).length > 0 && (
         <div className="bottom-fixed-pad">
           <UiButton
-            styles={{ width: 200, height: 48 }}
+            styles={{ height: 48, width: 'fit-content' }}
             onclick={createPackage}
             type="primary"
           >
-            Packaging selected
+            Add selected items to the pack
           </UiButton>
         </div>
       )}

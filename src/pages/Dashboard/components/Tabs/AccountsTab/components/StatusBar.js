@@ -12,33 +12,38 @@ const StatusBar = ({ type = 'asset', setType }) => {
     <div className="accounts-tab__status-bar">
       <div className="sort-by-type">
         <UiButton
+          type="plain"
           onclick={() => setType('all')}
-          className={cx({ 'selected-type': type === 'all' })}
+          className={cx({ selected: type === 'all' })}
         >
           All
         </UiButton>
         <UiButton
+          type="plain"
           onclick={() => setType('active')}
-          className={cx({ 'selected-type': type === 'active' })}
+          className={cx({ selected: type === 'active' })}
         >
           Active
         </UiButton>
         <UiButton
+          type="plain"
           onclick={() => setType('pending')}
-          className={cx({ 'selected-type': type === 'pending' })}
+          className={cx({ selected: type === 'pending' })}
         >
           Pending
         </UiButton>
         <UiButton
+          type="plain"
           onclick={() => setType('disabled')}
-          className={cx({ 'selected-type': type === 'disabled' })}
+          className={cx({ selected: type === 'disabled' })}
         >
           Disabled
         </UiButton>
         {isNodePage && (
           <UiButton
+            type="plain"
             onclick={() => setType('declined')}
-            className={cx({ 'selected-type': type === 'declined' })}
+            className={cx({ selected: type === 'declined' })}
           >
             Declined
           </UiButton>

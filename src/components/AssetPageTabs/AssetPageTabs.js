@@ -5,7 +5,7 @@ import EventTab from './EventTab';
 import PackageTab from './PackageTab';
 import HistoryTab from './HistoryTab';
 
-const tabsBtns = ['events', 'packages', 'history'];
+const tabsBtns = ['events'];
 
 const AssetPageTabs = ({ assetId }) => {
   const [currentTab, setCurrentTab] = useState('events');
