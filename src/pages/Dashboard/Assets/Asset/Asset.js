@@ -42,7 +42,7 @@ const Asset = () => {
   );
 
   return (
-    <>
+    <div className="asset-page-wrapper">
       <div className="asset-page container">
         {assetInfo.images && assetInfo.images.default && (
           <img
@@ -116,7 +116,7 @@ const Asset = () => {
           assetId={assetId}
         />
       </UiModal>
-    </>
+    </div>
   );
 };
 

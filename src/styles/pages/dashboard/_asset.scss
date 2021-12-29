@@ -77,3 +77,10 @@
     border: 1px solid #9198bb;
   }
 }
+
+.asset-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
