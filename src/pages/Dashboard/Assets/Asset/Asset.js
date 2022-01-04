@@ -15,6 +15,8 @@ import PageMainContent from '../../../../components/PageMainContent';
 import CreateAssetModal from '../../../../components/CreateAssetModal';
 import UiModal from '../../../../components/UiModal';
 import useHover from '../../../../hooks/useHover';
+import { handleModal } from '../../../../store/modules/modal';
+import assetInfoTransform from '../../../../utils/assetInfoTransform';
 
 const Asset = () => {
   const dispatch = useDispatch();
@@ -40,6 +42,21 @@ const Asset = () => {
   const assetInfo = assetData.content.data.find(
     (el) => el.type === 'ambrosus.asset.info',
   );
+
+  const handleEditButton = () => {
+    const dataFromStorage = localStorage.getItem('createAssetData');
+    const data = dataFromStorage ? JSON.parse(dataFromStorage) : {};
+
+    localStorage.setItem(
+      'createAssetData',
+      JSON.stringify({
+        ...data,
+        editAsset: assetInfoTransform(assetData),
+      }),
+    );
+
+    dispatch(handleModal({ name: 'editAsset' }));
+  };
 
   return (
     <div className="asset-page-wrapper">
@@ -93,6 +110,13 @@ const Asset = () => {
           >
             View JSON
           </UiButton>
+          <UiButton
+            type="secondary"
+            styles={{ marginRight: 20, width: 160, height: 48 }}
+            onclick={handleEditButton}
+          >
+            Edit
+          </UiButton>
         </div>
         <div className="space-25" />
         {viewJson ? (
@@ -115,6 +139,9 @@ const Asset = () => {
           modalType="createEvent"
           assetId={assetId}
         />
+      </UiModal>
+      <UiModal modalName="editAsset">
+        <CreateAssetModal modalType="editAsset" assetId={assetId} />
       </UiModal>
     </div>
   );

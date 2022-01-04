@@ -1,15 +1,21 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
+import { handleModal } from '../../store/modules/modal';
 
 const UiModal = ({ children, modalName, contentStyles }) => {
+  const dispatch = useDispatch();
+
   const openedModalName = useSelector((state) => state.modal.openedModal.name);
   const isOpen = modalName === openedModalName;
+
+  const closeModal = () => dispatch(handleModal({ name: '' }));
 
   return (
     <Modal
       isOpen={isOpen}
+      onRequestClose={closeModal}
       style={{
         content: {
           position: 'relative',

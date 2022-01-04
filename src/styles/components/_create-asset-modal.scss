@@ -70,8 +70,21 @@
   &__set-cover-img {
     display: none;
     position: absolute;
-    left: -7px;
-    top: -3px;
+    left: 5px;
+    top: 5px;
+    background: $color-primary;
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+
+    svg {
+      height: 10px;
+      width: 10px;
+    }
+
+    path {
+      fill: white;
+    }
 
     &--selected {
       display: block;
@@ -94,6 +107,17 @@
       height: 100%;
       object-fit: cover;
     }
+
+    &--file {
+      height: auto;
+
+      img {
+        width: 80%;
+        height: auto;
+        margin: 0 auto;
+        display: block;
+      }
+    }
   }
 
   &__delete-img {
@@ -103,9 +127,10 @@
     border-radius: 50%;
     right: 5px;
     top: 5px;
+    background: #fff;
 
     path {
-      fill: white;
+      fill: $color-primary;
     }
   }
 
@@ -166,5 +191,9 @@
     height: 12px;
     bottom: 16px;
     transform: rotate(180deg);
+  }
+
+  &__added-file-name {
+    width: 100%;
   }
 }

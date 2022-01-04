@@ -25,10 +25,6 @@ const KeyLogin = () => {
     if (privateKey.length === 66) {
       dispatch(signIn(privateKey));
     } else {
-      console.log(
-        '0x1462c0744fb4ea6053b78a4dd6b64f1b7042c26d7dfe86540ac14b9f2fcd8b8e'
-          .length,
-      );
       NotificationManager.error('Incorrect key');
     }
   };

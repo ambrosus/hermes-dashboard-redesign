@@ -27,6 +27,14 @@ const UiSelect = ({
   );
 
   useEffect(() => {
+    if (selectedValue && options && options.length) {
+      const selectedItem = options.find((el) => selectedValue === el.value);
+
+      setInputValue(selectedItem ? selectedItem.label : selectedValue);
+    }
+  }, [selectedValue]);
+
+  useEffect(() => {
     setFilteredOptions(options);
   }, [options]);
 

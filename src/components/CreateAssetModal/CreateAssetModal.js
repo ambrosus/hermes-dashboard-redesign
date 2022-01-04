@@ -10,6 +10,8 @@ import { ReactComponent as VisibilityIcon } from '../../assets/svg/visibility.sv
 import { ReactComponent as VisibilityOffIcon } from '../../assets/svg/visibility_off.svg';
 import { ReactComponent as CheckmarkIcon } from '../../assets/svg/checkmark-transparent.svg';
 import { ReactComponent as CloseFilledIcon } from '../../assets/svg/close-filled.svg';
+import { ReactComponent as CheckboxIcon } from '../../assets/svg/checkbox-green.svg';
+import FileIcon from '../../assets/svg/file.svg';
 // eslint-disable-next-line import/no-duplicates
 import chevronImg from '../../assets/svg/chevron.svg';
 import UiTextarea from '../UiTextaera';
@@ -26,6 +28,7 @@ import {
 // eslint-disable-next-line import/no-duplicates
 import { ReactComponent as ChevronSvg } from '../../assets/svg/chevron.svg';
 import Map from '../GoogleMap';
+import DragAndDrop from '../DragAndDrop';
 
 const privateToggleOptions = [
   {
@@ -75,7 +78,7 @@ const CreateAssetModal = ({
 
   const [isJSONForm, setIsJSONForm] = useState(false);
   const [imgUrl, setImgUrl] = useState('');
-  // const [rowUrl, setRowUrl] = useState('');
+  const [rowUrl, setRowUrl] = useState('');
   const [additionalFields, setAdditionalFields] = useState({
     propertiesItems: [0],
     identifiersItems: [0],
@@ -232,6 +235,9 @@ const CreateAssetModal = ({
     if (isCreateEvent) {
       submitFunc = () => createEvent(assetId, formData);
     }
+    if (modalType === 'editAsset') {
+      submitFunc = () => createEvent(assetId, formData, true);
+    }
     if (!isEmptyObj(bulkEventData)) {
       submitFunc = () => bulkEvents(bulkEventData.assetsIds, formData);
     }
@@ -245,35 +251,73 @@ const CreateAssetModal = ({
 
     localStorage.removeItem('createAssetData');
   };
-  //
-  // const handleRaw = async (e) => {
-  //   handleSetFormData({
-  //     rows: [...formData.rows, e.target.files[0]],
-  //   });
-  // };
 
-  // const addRow = () => {
-  //   const value = rowUrl;
-  //   const nameExpansion = value.match(/\w[^.]*$/)[0];
-  //
-  //   if (value) {
-  //     let name = value.split('/');
-  //     name = name[name.length - 1];
-  //
-  //     handleSetFormData({
-  //       rows: [
-  //         ...formData.rows,
-  //         {
-  //           name,
-  //           data: value,
-  //           nameExpansion,
-  //           type: 'url',
-  //           background: '',
-  //         },
-  //       ],
-  //     });
-  //   }
-  // };
+  const handleRaw = async (blob) => {
+    const reader = new FileReader();
+    await reader.readAsDataURL(blob);
+
+    reader.onloadend = () => {
+      if (!reader.result) {
+        return;
+      }
+
+      const nameExpansion = blob.name.match(/\w[^.]*$/)[0];
+      // eslint-disable-next-line no-nested-ternary
+      const type = blob.type.match(/^\w*/)
+        ? blob.type.match(/^\w*/)[0]
+        : nameExpansion === 'wbmp'
+        ? 'image'
+        : 'unknown';
+      const expansion = blob.type.match(/\w[^/]*$/)
+        ? blob.type.match(/\w[^/]*$/)[0]
+        : nameExpansion;
+
+      handleSetFormData({
+        rows: [
+          ...formData.rows,
+          {
+            name: blob.name,
+            data: reader.result,
+            expansion,
+            nameExpansion,
+            type,
+            background: FileIcon,
+          },
+        ],
+      });
+    };
+  };
+
+  const addRow = () => {
+    const value = rowUrl;
+    const nameExpansion = value.match(/\w[^.]*$/)[0];
+
+    if (value) {
+      let name = value.split('/');
+      name = name[name.length - 1];
+
+      handleSetFormData({
+        rows: [
+          ...formData.rows,
+          {
+            name,
+            data: value,
+            nameExpansion,
+            type: 'url',
+            background: FileIcon,
+          },
+        ],
+      });
+
+      setRowUrl('');
+    }
+  };
+
+  const deleteFile = (name) => {
+    handleSetFormData({
+      rows: formData.rows.filter((el) => el.name !== name),
+    });
+  };
 
   const entityName =
     isCreateEvent || !isEmptyObj(bulkEventData) ? 'Event' : 'Asset';
@@ -409,12 +453,13 @@ const CreateAssetModal = ({
                       type="button"
                       className={cx(
                         'create-asset-form__set-cover-img',
+                        'create-asset-form__set-cover-img',
                         formData.coverImgUrl === el &&
                           'create-asset-form__set-cover-img--selected',
                       )}
                       onClick={() => setCoverImg(el)}
                     >
-                      <CheckmarkIcon />
+                      <CheckboxIcon />
                     </button>
                     <img src={el} alt="added" />
                     <button
@@ -429,26 +474,34 @@ const CreateAssetModal = ({
               </div>
             </>
           )}
-          {/* <UiInput */}
-          {/*  placeholder="Raws" */}
-          {/*  label="Enter a raw file url" */}
-          {/*  imgSrc={addIcon} */}
-          {/*  onChange={setRowUrl} */}
-          {/*  onImageClick={addRow} */}
-          {/*  value={rowUrl} */}
-          {/* /> */}
-          {/* <input type="file" id="file-upload" onChange={handleRaw} /> */}
+          <p className="ui-input__label">Rows</p>
+          <DragAndDrop dropped={handleRaw} />
+          <UiInput
+            placeholder="Raws"
+            imgSrc={addIcon}
+            onChange={setRowUrl}
+            onImageClick={addRow}
+            value={rowUrl}
+          />
           <div className="create-asset-form__added-img-wrapper">
             {formData.rows.map((el) => (
               <div key={el} className="create-asset-form__added-img">
-                <img src={el} alt="row-file" />
+                <img src={el.background} alt="row-file" />
                 <button
                   type="button"
                   className="create-asset-form__delete-img"
-                  onClick={() => deleteImg(el)}
+                  onClick={() => deleteFile(el.name)}
                 >
                   <CloseFilledIcon />
                 </button>
+                <p className="create-asset-form__added-file-name">
+                  {el.name.length > 20
+                    ? `${el.name.substring(
+                        0,
+                        17 - el.nameExpansion.length,
+                      )}...${el.nameExpansion}`
+                    : el.name}
+                </p>
               </div>
             ))}
           </div>

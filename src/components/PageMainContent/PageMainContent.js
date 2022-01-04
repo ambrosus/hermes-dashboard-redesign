@@ -3,20 +3,11 @@ import PropTypes from 'prop-types';
 import { ReactComponent as FileSvg } from '../../assets/svg/file.svg';
 import Maps from '../GoogleMap';
 import { isEmptyObj } from '../../utils/isEmptyObj';
-
-const notPropertyOrGroupKey = [
-  'assetType',
-  'description',
-  'encryption',
-  'name',
-  'raws',
-  'type',
-  'images',
-];
+import getPropertiesAndGroups from '../../utils/getPropertiesAndGroups';
 
 const PageMainContent = ({ data, location = {} }) => {
-  const [properties, setProperties] = useState([]);
-  const [groups, setGroups] = useState([]);
+  const [properties, setProperties] = useState({});
+  const [groups, setGroups] = useState({});
 
   const info =
     data.content.data.find((el) => el.type === 'ambrosus.asset.info') ||
@@ -24,23 +15,8 @@ const PageMainContent = ({ data, location = {} }) => {
 
   useEffect(() => {
     if (info) {
-      const propers = [];
-      const groupsArr = [];
-
-      Object.keys(info).forEach((el) => {
-        if (
-          !notPropertyOrGroupKey.includes(el) &&
-          typeof info[el] === 'object'
-        ) {
-          groupsArr.push(info[el]);
-        }
-        if (
-          !notPropertyOrGroupKey.includes(el) &&
-          typeof info[el] !== 'object'
-        ) {
-          propers.push({ name: el, descr: info[el] });
-        }
-      });
+      const { properties: propers, groups: groupsArr } =
+        getPropertiesAndGroups(info);
 
       setProperties(propers);
       setGroups(groupsArr);
@@ -76,32 +52,31 @@ const PageMainContent = ({ data, location = {} }) => {
               <hr />
             </>
           )}
-          {!!properties.length && (
+          {!isEmptyObj(properties) && (
             <>
               <h4 className="page-main-title">Properties</h4>
-              {properties.map((el) => (
-                <div key={el.name}>
-                  <p className="page-main-subtitle">{el.name}</p>
-                  <p>{el.descr}</p>
+              {Object.keys(properties).map((el) => (
+                <div key={properties[el].name}>
+                  <p className="page-main-subtitle">{properties[el].name}</p>
+                  <p>{properties[el].description}</p>
                 </div>
               ))}
               <hr />
             </>
           )}
-          {!!groups.length && (
-            <>
-              <h4 style={{ marginTop: 55 }}>Properties groups</h4>
-              {groups.map((el) =>
-                Object.keys(el).map((name) => (
-                  <div key={name}>
-                    <p className="page-main-subtitle">{name}</p>
-                    <p>{el[name]}</p>
+          {!isEmptyObj(groups) &&
+            Object.keys(groups).map((el) => (
+              <>
+                <h4 style={{ marginTop: 55 }}>{el}</h4>
+                {Object.keys(groups[el]).map((idx) => (
+                  <div key={idx}>
+                    <p className="page-main-subtitle">{groups[el][idx].name}</p>
+                    <p>{groups[el][idx].description}</p>
                   </div>
-                )),
-              )}
-              <hr />
-            </>
-          )}
+                ))}
+                <hr />
+              </>
+            ))}
         </div>
         {!isEmptyObj(location) && (
           <>
