@@ -112,7 +112,7 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
         )}
       >
         <Link to={`/dashboard/assets/${assetId}`} className="asset-item__title">
-          {assetContentInfo.name.toString()}
+          {assetContentInfo.name && assetContentInfo.name.toString()}
         </Link>
         <div className="asset-item-info">
           <span className="asset-item-info__address-label">Asset address</span>
