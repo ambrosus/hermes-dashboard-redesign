@@ -4,6 +4,7 @@ import {
   SET_ASSETS_QUERY_DATA,
   SET_ASSETS_SEARCH_PARAMS,
   SET_CREATE_RESULT,
+  REMOVE_ASSET,
   SET_EVENTS_DATA,
   UNSHIFT_ASSETS_LIST_DATA,
   UNSHIFT_EVENTS_LIST_DATA,
@@ -57,6 +58,13 @@ export default (state = defaultState, { type, payload }) => {
       return { ...state, assetsSearchParams: payload };
     case SET_ASSETS_LOADING:
       return { ...state, isAssetsLoading: payload };
+    case REMOVE_ASSET:
+      return {
+        ...state,
+        assetsList: state.assetsList.filter(
+          (el) => el.content.idData.assetId !== payload,
+        ),
+      };
     default:
       return state;
   }

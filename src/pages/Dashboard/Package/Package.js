@@ -88,6 +88,13 @@ const Assets = () => {
           data: () => bulkEvents(selectedPackages, packageData),
         }),
       );
+      console.log(1);
+      unselectAll();
+      setFormData({
+        assetId: '',
+        eventName: '',
+        accessLevel: 0,
+      });
     }
   };
 

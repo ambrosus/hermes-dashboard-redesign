@@ -32,6 +32,9 @@ const UiSelect = ({
 
       setInputValue(selectedItem ? selectedItem.label : selectedValue);
     }
+    if (!selectedValue) {
+      setInputValue('');
+    }
   }, [selectedValue]);
 
   useEffect(() => {
