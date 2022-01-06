@@ -125,11 +125,7 @@ const CreateAssetModal = ({
   }, [groupFields]);
 
   useEffect(() => {
-    const clone = { ...formData };
-
-    delete clone.rows;
-
-    setDataInLocalStorage({ formData: clone });
+    setDataInLocalStorage({ ...formData, rows: [] });
   }, [formData]);
 
   const setDataInLocalStorage = (keyValue) => {
@@ -616,64 +612,65 @@ const CreateAssetModal = ({
               </>
             )}
           </div>
-          {isCreateEvent && (
-            <div className="create-asset-form__item-wrapper">
-              <div
-                className={cx(
-                  'create-asset-title',
-                  isPropertyOpened && 'create-asset-title--opened',
+          {isCreateEvent ||
+            (!isEmptyObj(bulkEventData) && (
+              <div className="create-asset-form__item-wrapper">
+                <div
+                  className={cx(
+                    'create-asset-title',
+                    isPropertyOpened && 'create-asset-title--opened',
+                  )}
+                  onClick={handleLocationOpen}
+                  role="presentation"
+                >
+                  <h3 className="create-asset-title__text">Location</h3>
+                  <ChevronSvg />
+                </div>
+                {isLocationOpened && (
+                  <>
+                    <div className="create-asset-form__map">
+                      <Map getMarkerPosition={handleMapCoords} />
+                    </div>
+                    <div
+                      className="form-semicolon-wrapper"
+                      style={{ padding: '0 20px' }}
+                    >
+                      <UiInput
+                        type="number"
+                        label="Latitude"
+                        name="latitude"
+                        onChange={handleSetFormData}
+                        value={formData.latitude}
+                      />
+                      <UiInput
+                        type="number"
+                        label="Longitude"
+                        name="longitude"
+                        onChange={handleSetFormData}
+                        value={formData.longitude}
+                      />
+                    </div>
+                    <div
+                      className="form-semicolon-wrapper"
+                      style={{ padding: '0 20px' }}
+                    >
+                      <UiInput
+                        label="City"
+                        name="city"
+                        onChange={handleSetFormData}
+                        value={formData.city}
+                      />
+                      <UiInput
+                        label="Country"
+                        name="country"
+                        onChange={handleSetFormData}
+                        value={formData.country}
+                      />
+                    </div>
+                  </>
                 )}
-                onClick={handleLocationOpen}
-                role="presentation"
-              >
-                <h3 className="create-asset-title__text">Location</h3>
-                <ChevronSvg />
               </div>
-              {isLocationOpened && (
-                <>
-                  <div className="create-asset-form__map">
-                    <Map getMarkerPosition={handleMapCoords} />
-                  </div>
-                  <div
-                    className="form-semicolon-wrapper"
-                    style={{ padding: '0 20px' }}
-                  >
-                    <UiInput
-                      type="number"
-                      label="Latitude"
-                      name="latitude"
-                      onChange={handleSetFormData}
-                      value={formData.latitude}
-                    />
-                    <UiInput
-                      type="number"
-                      label="Longitude"
-                      name="longitude"
-                      onChange={handleSetFormData}
-                      value={formData.longitude}
-                    />
-                  </div>
-                  <div
-                    className="form-semicolon-wrapper"
-                    style={{ padding: '0 20px' }}
-                  >
-                    <UiInput
-                      label="City"
-                      name="city"
-                      onChange={handleSetFormData}
-                      value={formData.city}
-                    />
-                    <UiInput
-                      label="Country"
-                      name="country"
-                      onChange={handleSetFormData}
-                      value={formData.country}
-                    />
-                  </div>
-                </>
-              )}
-            </div>
-          )}
+            ))}
           <div className="form-semicolon-wrapper">
             <UiButton type="secondary" onclick={closeModal}>
               Cancel
