@@ -125,7 +125,11 @@ const CreateAssetModal = ({
   }, [groupFields]);
 
   useEffect(() => {
-    setDataInLocalStorage({ formData });
+    const clone = { ...formData };
+
+    delete clone.rows;
+
+    setDataInLocalStorage({ formData: clone });
   }, [formData]);
 
   const setDataInLocalStorage = (keyValue) => {
