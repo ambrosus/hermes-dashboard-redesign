@@ -680,7 +680,11 @@ const CreateAssetModal = ({
               onclick={showResultModal}
               disabled={!formData.name || !formData.customType}
             >
-              Create {isCreateEvent ? 'Event' : 'Asset'}
+              {!isEmptyObj(bulkEventData) ? (
+                'Bulk Event'
+              ) : (
+                <span>Create {isCreateEvent ? 'Event' : 'Asset'}</span>
+              )}
             </UiButton>
           </div>
         </form>
