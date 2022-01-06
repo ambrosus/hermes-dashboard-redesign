@@ -71,7 +71,9 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
       if (el === coverImgUrl) {
         info.images.default = { url: el };
       } else {
-        info.images[el.substring(el.length - 10, el.length - 1)] = { url: el };
+        info.images[
+          el.replace('.', '').substring(el.length - 10, el.length - 1)
+        ] = { url: el };
       }
     });
   }

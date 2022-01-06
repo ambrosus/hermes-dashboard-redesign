@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-/* eslint-disable */
 import {
   GoogleMap,
   InfoWindow,
@@ -11,8 +10,9 @@ import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from 'use-places-autocomplete';
+import Geocode from 'react-geocode';
+import { NotificationManager } from 'react-notifications';
 import { isEmptyObj } from '../../utils/isEmptyObj';
-import { Combobox, ComboboxInput, ComboboxOption, ComboboxPopover } from '@reach/combobox';
 import '@reach/combobox/styles.css';
 const libraries = ['places'];
 
@@ -21,25 +21,60 @@ const options = {
   zoomControl: true,
 };
 
+Geocode.setApiKey('AIzaSyAiefOqIuYCfafKYdZRGkGt_7TqLn4n2Ng');
+
 const Map = ({ coordinates = {}, getMarkerPosition = () => {} }) => {
   const [center, setCenter] = useState({
-    lat: 50.487279,
-    lng: 30.452726,
+    lat: coordinates.lat || 50.487279,
+    lng: coordinates.lng || 30.452726,
   });
   const [selected, setSelected] = useState(false);
   const [marker, setMarker] = useState(coordinates);
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyCCtQeWi-QXdVEWcaUqWj1AVS8L_w6NReI',
+    googleMapsApiKey: 'AIzaSyAiefOqIuYCfafKYdZRGkGt_7TqLn4n2Ng',
     libraries,
   });
 
   const handleClick = (e) => {
-    const coords = {
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng(),
-    };
+    const lat = e.latLng.lat();
+    const lng = e.latLng.lng();
+
+    setMarker({ lat, lng });
+    Geocode.fromLatLng(lat, lng).then(({ results }) => {
+      const result = results[0];
+      const { address_components: addressComponents } = result;
+
+      const country = getAddress(addressComponents);
+      const city = getAddress(addressComponents, true);
+
+      getMarkerPosition({
+        lat,
+        lng,
+        country: country ? country.long_name : '',
+        city: city ? city.long_name : '',
+      });
+    });
+  };
+
+  const getAddress = (addresses, isCity) =>
+    addresses.find((el) =>
+      el.types.find((type) => type === (isCity ? 'locality' : 'country')),
+    );
+
+  const handleSelect = (result) => {
+    const { coordinates: coords, address_components: addressComponents } =
+      result;
+
+    const country = getAddress(addressComponents);
+    const city = getAddress(addressComponents, true);
+
     setMarker(coords);
-    getMarkerPosition(coords)
+    getMarkerPosition({
+      ...coords,
+      country: country ? country.long_name : '',
+      city: city ? city.long_name : '',
+    });
+    setCenter(coords);
   };
 
   if (loadError) return 'Error loading map';
@@ -53,56 +88,82 @@ const Map = ({ coordinates = {}, getMarkerPosition = () => {} }) => {
       onClick={handleClick}
       options={options}
     >
-      {!isEmptyObj(marker) && <Marker position={marker} onClick={() => setSelected(true)}/>}
+      {!isEmptyObj(marker) && (
+        <Marker position={marker} onClick={() => setSelected(true)} />
+      )}
       {selected && (
-        <InfoWindow
-          position={marker}
-          onCloseClick={() => setSelected(false)}
-        >
+        <InfoWindow position={marker} onCloseClick={() => setSelected(false)}>
           <div className="gmap-info-window">
             <p>Latitude {marker.lat}</p>
             <p>Longitude {marker.lng}</p>
           </div>
         </InfoWindow>
       )}
-      <Search />
+      {isEmptyObj(coordinates) && <Search handleSelect={handleSelect} />}
     </GoogleMap>
   );
 };
 
 Map.propTypes = {
   coordinates: PropTypes.object,
+  getMarkerPosition: PropTypes.func,
 };
 
 export default Map;
 
-const Search = () => {
-  const { value, ready, suggestions: { status, data }, setValue } = usePlacesAutocomplete();
+const Search = ({ handleSelect }) => {
+  const {
+    value,
+    suggestions: { status, data },
+    setValue,
+  } = usePlacesAutocomplete();
 
-  const handleSelect = (e) => {
-    console.log(e);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
+  const onSelect = async (address) => {
+    setValue(address);
+    setIsDropdownVisible(false);
+
+    try {
+      const results = await getGeocode({ address });
+      const coordinates = await getLatLng(results[0]);
+
+      handleSelect({ coordinates, ...results[0] });
+    } catch (e) {
+      NotificationManager.error('Error');
+    }
   };
 
   const handleInput = (e) => {
-    console.log(e);
-    setValue(e.target.value)
-  }
+    setValue(e.target.value);
+    setIsDropdownVisible(true);
+  };
 
   return (
     <div className="map-search">
-      <Combobox onSelect={handleSelect}>
-        <ComboboxInput
-          value={value}
-          onChange={handleInput}
-          disabled={!ready}
-          placeholder="Enter an address"
-        />
-        <ComboboxPopover>
-          {status === 'OK' && data.map((el) => ({ id, description }) => (
-             <ComboboxOption key={id} value={description} />
-          ))}
-        </ComboboxPopover>
-      </Combobox>
+      <input
+        onChange={handleInput}
+        className="map-search__input"
+        value={value}
+      />
+      {isDropdownVisible && (
+        <ul className="map-search__dropdown">
+          {status === 'OK' &&
+            data.map(({ description }) => (
+              <li
+                role="presentation"
+                key={description}
+                onClick={() => onSelect(description)}
+              >
+                {description}
+              </li>
+            ))}
+        </ul>
+      )}
     </div>
   );
+};
+
+Search.propTypes = {
+  handleSelect: PropTypes.func,
 };

@@ -327,8 +327,8 @@ const CreateAssetModal = ({
   const handleIdentifiersOpen = () =>
     setIsIdentifiersOpened(!isIdentifiersOpened);
 
-  const handleMapCoords = (coords) => {
-    handleSetFormData({ longitude: coords.lng, latitude: coords.lat });
+  const handleMapCoords = ({ lat, lng, city, country }) => {
+    handleSetFormData({ longitude: lng, latitude: lat, city, country });
   };
 
   return (
