@@ -9,3 +9,4 @@ export const SET_CREATE_RESULT = `${moduleName}/SET_CREATE_RESULT`;
 export const SET_ASSETS_SEARCH_PARAMS = `${moduleName}/SET_ASSETS_SEARCH_PARAMS`;
 export const SET_ASSETS_LOADING = `${moduleName}/SET_ASSETS_LOADING`;
 export const REMOVE_ASSET = `${moduleName}/REMOVE_ASSET`;
+export const SET_ASSET_PAGE_INFO = `${moduleName}/SET_ASSET_PAGE_INFO`;

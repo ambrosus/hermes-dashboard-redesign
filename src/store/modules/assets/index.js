@@ -8,6 +8,7 @@ import {
   SET_EVENTS_DATA,
   UNSHIFT_ASSETS_LIST_DATA,
   UNSHIFT_EVENTS_LIST_DATA,
+  SET_ASSET_PAGE_INFO,
 } from './constants';
 import { isEmptyObj } from '../../../utils/isEmptyObj';
 
@@ -24,6 +25,7 @@ const defaultState = {
   },
   assetsSearchParams: [],
   isAssetsLoading: false,
+  assetPageInfo: null,
 };
 
 export default (state = defaultState, { type, payload }) => {
@@ -59,6 +61,8 @@ export default (state = defaultState, { type, payload }) => {
           (el) => el.content.idData.assetId !== payload,
         ),
       };
+    case SET_ASSET_PAGE_INFO:
+      return { ...state, assetPageInfo: payload };
     default:
       return state;
   }

@@ -10,6 +10,7 @@ import {
   SET_EVENTS_DATA,
   UNSHIFT_ASSETS_LIST_DATA,
   UNSHIFT_EVENTS_LIST_DATA,
+  SET_ASSET_PAGE_INFO,
 } from './constants';
 import { generateAsset, generateEvent } from '../../../utils/generateToken';
 import createAssetNormalizer from '../../../utils/createAssetNormalizer';
@@ -71,31 +72,31 @@ export const fetchAssetsInfo = (assetsIds, isAssetPage) => (dispatch) => {
     type: 'ambrosus.asset.info',
   };
 
-  return new Promise((resolve, reject) => {
-    axios
-      .post(
-        'https://vitalii427-hermes.ambrosus-test.io/event2/latest/type',
-        params,
-      )
-      .then(({ data }) => {
-        if (data.data) {
-          if (isAssetPage) {
-            resolve(data.data);
-          } else {
-            dispatch(
-              setAssetsListData(
-                data.data.sort(
-                  (a, b) =>
-                    b.content.idData.timestamp - a.content.idData.timestamp,
-                ),
+  axios
+    .post(
+      'https://vitalii427-hermes.ambrosus-test.io/event2/latest/type',
+      params,
+    )
+    .then(({ data }) => {
+      if (data.data) {
+        if (isAssetPage) {
+          dispatch({
+            type: SET_ASSET_PAGE_INFO,
+            payload: data.data[0],
+          });
+        } else {
+          dispatch(
+            setAssetsListData(
+              data.data.sort(
+                (a, b) =>
+                  b.content.idData.timestamp - a.content.idData.timestamp,
               ),
-            );
-          }
+            ),
+          );
         }
-      })
-      .catch((err) => reject(err))
-      .finally(() => dispatch(handleAssetsLoading(false)));
-  });
+      }
+    })
+    .finally(() => dispatch(handleAssetsLoading(false)));
 };
 
 export const setAssetsListData = (list) => ({
@@ -199,6 +200,10 @@ export const createEvent =
               dispatch({
                 type: REMOVE_ASSET,
                 payload: assetId,
+              });
+              dispatch({
+                type: SET_ASSET_PAGE_INFO,
+                payload: data.data,
               });
             }
             dispatch({

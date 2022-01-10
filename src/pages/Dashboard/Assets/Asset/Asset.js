@@ -23,23 +23,22 @@ const Asset = () => {
   const { assetId } = useParams();
   const [qrCodeHover, isQrCodeHover] = useHover();
   const [viewJson, setViewJson] = useState(false);
-  const [assetData, setAssetData] = useState(null);
+
+  const { assetPageInfo } = useSelector((state) => state.assets);
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(fetchEventsInfo(assetId));
-    dispatch(fetchAssetsInfo([assetId], true)).then((response) => {
-      setAssetData(response[0]);
-    });
+    dispatch(fetchAssetsInfo([assetId], true));
   }, []);
 
-  if (!assetData) {
+  if (!assetPageInfo) {
     return null;
   }
 
   const assetLink = `https://test.amb.to/${assetId}`;
 
-  const assetInfo = assetData.content.data.find(
+  const assetInfo = assetPageInfo.content.data.find(
     (el) => el.type === 'ambrosus.asset.info',
   );
 
@@ -51,7 +50,7 @@ const Asset = () => {
       'createAssetData',
       JSON.stringify({
         ...data,
-        editAsset: assetInfoTransform(assetData),
+        editAsset: assetInfoTransform(assetPageInfo),
       }),
     );
 
@@ -70,7 +69,7 @@ const Asset = () => {
         )}
         <div className="asset-page__top-info">
           <div className="asset-page__type">
-            {assetData.content.idData.accessLevel === 1 ? (
+            {assetPageInfo.content.idData.accessLevel === 1 ? (
               <>
                 <VisibilityOffSvg />
                 Private
@@ -127,13 +126,13 @@ const Asset = () => {
             className="asset__detail-json"
             style={{ borderBottom: '1px solid #BFC9E0', paddingBottom: 10 }}
           >
-            {JSON.stringify(assetData, null, 4)}
+            {JSON.stringify(assetPageInfo, null, 4)}
           </pre>
         ) : (
-          <AssetItem isOnAssetPage assetData={assetData} />
+          <AssetItem isOnAssetPage assetData={assetPageInfo} />
         )}
 
-        {!!assetData && <PageMainContent data={assetData} />}
+        {!!assetPageInfo && <PageMainContent data={assetPageInfo} />}
       </div>
       <AssetPageTabs assetId={assetId} />
       <UiModal modalName="createEvent">
