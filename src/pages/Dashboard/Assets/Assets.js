@@ -63,14 +63,16 @@ const Assets = () => {
     <div className="dashboard-container">
       <div className="assets-options">
         <h1 className="assets-options__title">My Assets</h1>
-        <div className="assets-options__buttons">
-          <UiButton type="secondary" onclick={openPackagingHandler}>
-            Packaging
-          </UiButton>
-          <UiButton type="primary" onclick={openCreateModal}>
-            Create Asset
-          </UiButton>
-        </div>
+        {userInfo.permissions && userInfo.permissions.includes('create_asset') && (
+          <div className="assets-options__buttons">
+            <UiButton type="secondary" onclick={openPackagingHandler}>
+              Packaging
+            </UiButton>
+            <UiButton type="primary" onclick={openCreateModal}>
+              Create Asset
+            </UiButton>
+          </div>
+        )}
       </div>
       <Sorting selectAll={selectAll} unselectAll={unselectAll} />
       <div className="assets-list">

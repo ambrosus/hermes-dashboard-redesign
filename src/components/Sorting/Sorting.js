@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import cx from 'classnames';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import UiButton from '../UiButton';
 import { ReactComponent as BorderOutlet } from '../../assets/svg/border_outer.svg';
 import { ReactComponent as DatePickerIcon } from '../../assets/svg/date-picker.svg';
@@ -14,6 +14,8 @@ const timeFilter = ['Day', 'Week', 'Month', 'Year'];
 
 const Sorting = ({ selectAll, unselectAll }) => {
   const dispatch = useDispatch();
+
+  const { userInfo } = useSelector((state) => state.auth);
 
   const [currentTimeFilter, setCurrentTimeFilter] = useState('');
   const [isDateRangeSelected, setIsDateRangeSelected] = useState(false);
@@ -63,14 +65,20 @@ const Sorting = ({ selectAll, unselectAll }) => {
 
   return (
     <div className="assets-sorting">
-      <div className="assets-sorting__selects">
-        <button type="button" onClick={selectAll} className="select-all-btn">
-          Select all
-        </button>
-        <button type="button" onClick={unselectAll} className="select-all-btn">
-          Unselect all
-        </button>
-      </div>
+      {userInfo.permissions && userInfo.permissions.includes('create_event') && (
+        <div className="assets-sorting__selects">
+          <button type="button" onClick={selectAll} className="select-all-btn">
+            Select all
+          </button>
+          <button
+            type="button"
+            onClick={unselectAll}
+            className="select-all-btn"
+          >
+            Unselect all
+          </button>
+        </div>
+      )}
       <div className="assets-sorting__period-pick">
         {timeFilter.map((el) => (
           <UiButton

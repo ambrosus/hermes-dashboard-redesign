@@ -68,11 +68,12 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
     info.images = {};
 
     images.forEach((el) => {
+      console.log(el.substring(el.length - 10, el.length - 1).replace('.', ''));
       if (el === coverImgUrl) {
         info.images.default = { url: el };
       } else {
         info.images[
-          el.replace('.', '').substring(el.length - 10, el.length - 1)
+          el.substring(el.length - 10, el.length - 1).replace('.', '')
         ] = { url: el };
       }
     });

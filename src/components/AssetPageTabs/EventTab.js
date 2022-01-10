@@ -8,7 +8,7 @@ import { handleModal } from '../../store/modules/modal';
 const EventTab = () => {
   const dispatch = useDispatch();
   const events = useSelector((state) => state.assets.eventsList);
-
+  const { userInfo } = useSelector((state) => state.auth);
   if (isEmptyObj(events)) {
     return null;
   }
@@ -20,12 +20,14 @@ const EventTab = () => {
     <div className="event-tab">
       <div className="asset-tab-title-wrapper">
         <p className="asset-tab-title">All events</p>
-        <UiButton
-          styles={{ width: 200, height: 48 }}
-          onclick={openCreateEventModal}
-        >
-          Add Event
-        </UiButton>
+        {userInfo.permissions && userInfo.permissions.includes('create_event') && (
+          <UiButton
+            styles={{ width: 200, height: 48 }}
+            onclick={openCreateEventModal}
+          >
+            Add Event
+          </UiButton>
+        )}
       </div>
       {events ? (
         events.map((el) => <EventTabItem key={el.eventId} data={el} />)

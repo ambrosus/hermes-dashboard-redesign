@@ -31,13 +31,7 @@ export default (state = defaultState, { type, payload }) => {
     case SET_ASSETS_QUERY_DATA:
       return { ...state, assetsQueryData: payload };
     case SET_ASSETS_LIST_DATA:
-      return {
-        ...state,
-        assetsList:
-          state.assetsList.length === 1 || !payload.length
-            ? payload
-            : [...state.assetsList, ...payload],
-      };
+      return { ...state, assetsList: [...state.assetsList, ...payload] };
     case UNSHIFT_ASSETS_LIST_DATA:
       return { ...state, assetsList: [payload].concat(state.assetsList) };
     case UNSHIFT_EVENTS_LIST_DATA:

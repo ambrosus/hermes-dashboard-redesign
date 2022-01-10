@@ -23,17 +23,17 @@ const Asset = () => {
   const { assetId } = useParams();
   const [qrCodeHover, isQrCodeHover] = useHover();
   const [viewJson, setViewJson] = useState(false);
-  const assetsData = useSelector((state) => state.assets.assetsList);
-  const assetData = assetsData.find(
-    (el) => el.content.idData.assetId === assetId,
-  );
+  const [assetData, setAssetData] = useState(null);
+  const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(fetchEventsInfo(assetId));
+    dispatch(fetchAssetsInfo([assetId], true)).then((response) => {
+      setAssetData(response[0]);
+    });
   }, []);
 
   if (!assetData) {
-    dispatch(fetchAssetsInfo([assetId]));
     return null;
   }
 
@@ -110,13 +110,16 @@ const Asset = () => {
           >
             View JSON
           </UiButton>
-          <UiButton
-            type="secondary"
-            styles={{ marginRight: 20, width: 160, height: 48 }}
-            onclick={handleEditButton}
-          >
-            Edit
-          </UiButton>
+          {userInfo.permissions &&
+            userInfo.permissions.includes('create_event') && (
+              <UiButton
+                type="secondary"
+                styles={{ marginRight: 20, width: 160, height: 48 }}
+                onclick={handleEditButton}
+              >
+                Edit
+              </UiButton>
+            )}
         </div>
         <div className="space-25" />
         {viewJson ? (

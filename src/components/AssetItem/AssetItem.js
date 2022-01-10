@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { useSelector } from 'react-redux';
 import { NotificationManager } from 'react-notifications';
 import copyIcon from '../../assets/svg/copy-icon.svg';
 import UiButton from '../UiButton';
@@ -16,6 +17,8 @@ import containerImage from '../../assets/svg/container.svg';
 import palleteImage from '../../assets/svg/pallet.svg';
 
 const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
+  const { userInfo } = useSelector((state) => state.auth);
+
   const [showDetails, setShowDetails] = useState(false);
 
   const { assetId, createdBy, timestamp, sequenceNumber } =
@@ -52,7 +55,11 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
     NotificationManager.success('Copied to clipboard');
   };
 
-  const select = () => handleSelect(assetId, !selected);
+  const select = () => {
+    if (userInfo.permissions && userInfo.permissions.includes('create_event')) {
+      handleSelect(assetId, !selected);
+    }
+  };
 
   const handleShowDetails = () => setShowDetails(!showDetails);
 

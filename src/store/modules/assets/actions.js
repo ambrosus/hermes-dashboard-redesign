@@ -65,29 +65,37 @@ const handleAssetsLoading = (isLoading) => ({
   payload: isLoading,
 });
 
-export const fetchAssetsInfo = (assetsIds) => (dispatch) => {
+export const fetchAssetsInfo = (assetsIds, isAssetPage) => (dispatch) => {
   const params = {
     assets: assetsIds,
     type: 'ambrosus.asset.info',
   };
 
-  axios
-    .post(
-      'https://vitalii427-hermes.ambrosus-test.io/event2/latest/type',
-      params,
-    )
-    .then(({ data }) => {
-      if (data.data) {
-        dispatch(
-          setAssetsListData(
-            data.data.sort(
-              (a, b) => b.content.idData.timestamp - a.content.idData.timestamp,
-            ),
-          ),
-        );
-      }
-    })
-    .finally(() => dispatch(handleAssetsLoading(false)));
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        'https://vitalii427-hermes.ambrosus-test.io/event2/latest/type',
+        params,
+      )
+      .then(({ data }) => {
+        if (data.data) {
+          if (isAssetPage) {
+            resolve(data.data);
+          } else {
+            dispatch(
+              setAssetsListData(
+                data.data.sort(
+                  (a, b) =>
+                    b.content.idData.timestamp - a.content.idData.timestamp,
+                ),
+              ),
+            );
+          }
+        }
+      })
+      .catch((err) => reject(err))
+      .finally(() => dispatch(handleAssetsLoading(false)));
+  });
 };
 
 export const setAssetsListData = (list) => ({

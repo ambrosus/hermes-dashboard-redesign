@@ -37,10 +37,10 @@ const Header = () => {
       <div className="header__menu">
         {headerConfig.map(({ link, text }) => (
           <div key={text} className="header__menu-link">
-            {pathname === link && <div className="header__menu-link--active" />}
-            <Link to={link} className="test">
-              {text}
-            </Link>
+            {pathname.includes(link) && (
+              <div className="header__menu-link--active" />
+            )}
+            <Link to={link}>{text}</Link>
           </div>
         ))}
       </div>
