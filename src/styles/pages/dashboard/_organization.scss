@@ -92,6 +92,7 @@
     }
 
     .dashboard-tab {
+      width: 100%;
       &__options {
         display: flex;
         align-items: center;
@@ -149,6 +150,7 @@
     }
 
     .accounts-tab {
+      width: 100%;
       &__header {
         display: flex;
         align-items: center;

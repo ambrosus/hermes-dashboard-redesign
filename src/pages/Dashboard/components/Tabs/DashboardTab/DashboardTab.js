@@ -13,12 +13,7 @@ import {
 import moment from 'moment';
 
 import TabOptions from './components/TabOptions';
-import {
-  getTimestamp,
-  getTimestampSubDays,
-  getTimestampSubHours,
-  getTimestampSubMonths,
-} from '../../../../../utils/datetime';
+
 import {
   getTimeRangeCountAggregateForOrganization,
   getTimeRangeCountAggregate,
@@ -27,6 +22,7 @@ import {
 } from '../../../../../utils/analytisService';
 import { debugLog } from '../../../../../utils/debugLog';
 import { useLocation } from 'react-router-dom';
+import { formattingGroup, getGroup, getStartEnd } from 'utils/helpers';
 
 ChartJS.register(
   CategoryScale,
@@ -49,58 +45,6 @@ const DashboardTab = () => {
   useEffect(() => {
     generateDiagram(groupBy);
   }, [groupBy, display]);
-
-  const formattingGroup = (type) => {
-    switch (type) {
-      case '24h':
-        return 'HH';
-      case '7d':
-        return 'DD-MM';
-      case '28d':
-        return 'DD-MM';
-      case '12m':
-        return 'MMMM';
-      default:
-        return 'Y-MM-DD-HH';
-    }
-  };
-  const getGroup = (type) => {
-    switch (type) {
-      case '24h':
-        return 'hour';
-      case '12m':
-        return 'month';
-      default:
-        return 'day';
-    }
-  };
-  const getStartEnd = (type) => {
-    let start = 0;
-    let end = 0;
-
-    switch (type) {
-      case '24h':
-        start = getTimestampSubHours(24);
-        break;
-
-      case '7d':
-        start = getTimestampSubDays(7);
-        break;
-
-      case '28d':
-        start = getTimestampSubDays(28);
-        break;
-
-      case '12m':
-        start = getTimestampSubMonths(12);
-        break;
-    }
-
-    end = getTimestamp();
-
-    return [start, end];
-  };
-
   const generateDiagram = async (type) => {
     debugLog('generateDiagram render');
     Dlabels = [];
@@ -178,9 +122,10 @@ const DashboardTab = () => {
         },
       });
     } catch (e) {
-      alert('in generateDiagram error', e);
+      console.log('in generateDiagram error', e);
     }
   };
+
   return (
     <div className="dashboard-tab">
       <div className="organization-container__heading">Dashboard</div>
