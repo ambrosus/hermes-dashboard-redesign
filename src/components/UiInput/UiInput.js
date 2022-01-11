@@ -38,6 +38,7 @@ const UiInput = ({
       />
       {imgSrc && (
         <img
+          style={{ cursor: onImageClick ? 'pointer' : 'auto' }}
           role="presentation"
           onClick={onImageClick}
           src={imgSrc}

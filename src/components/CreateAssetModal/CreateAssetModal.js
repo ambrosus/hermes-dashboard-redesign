@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import NotificationManager from 'react-notifications/lib/NotificationManager';
 import cx from 'classnames';
 import { handleModal } from '../../store/modules/modal';
 import UiInput from '../UiInput';
@@ -144,12 +145,28 @@ const CreateAssetModal = ({
   const setJSONForm = () => setIsJSONForm(true);
   const setUsualForm = () => setIsJSONForm(false);
 
+  const mediaBundle = (
+    JSON.stringify(createAssetNormalizer(formData)).length /
+    1024 /
+    1024
+  ).toFixed(4);
+
+  const handleBundleSize = (data, callback) => {
+    if (data.length / 1024 / 1024 + +mediaBundle < 16) {
+      callback();
+    } else {
+      NotificationManager.error('Bundle size is too big');
+    }
+  };
+
   const addImg = () => {
     const { images } = formData;
 
     if (imgUrl && !images.find((el) => el === imgUrl)) {
-      handleSetFormData({ images: [...images, imgUrl] });
-      setImgUrl('');
+      handleBundleSize(imgUrl, () => {
+        handleSetFormData({ images: [...images, imgUrl] });
+        setImgUrl('');
+      });
     }
   };
 
@@ -272,43 +289,46 @@ const CreateAssetModal = ({
         ? blob.type.match(/\w[^/]*$/)[0]
         : nameExpansion;
 
-      handleSetFormData({
-        rows: [
-          ...formData.rows,
-          {
-            name: blob.name,
-            data: reader.result,
-            expansion,
-            nameExpansion,
-            type,
-            background: FileIcon,
-          },
-        ],
+      handleBundleSize(reader.result, () => {
+        handleSetFormData({
+          rows: [
+            ...formData.rows,
+            {
+              name: blob.name,
+              data: reader.result,
+              expansion,
+              nameExpansion,
+              type,
+              background: FileIcon,
+            },
+          ],
+        });
       });
     };
   };
 
   const addRow = () => {
     const value = rowUrl;
-    const nameExpansion = value.match(/\w[^.]*$/)[0];
 
     if (value) {
+      const nameExpansion = value.match(/\w[^.]*$/)[0];
       let name = value.split('/');
       name = name[name.length - 1];
 
-      handleSetFormData({
-        rows: [
-          ...formData.rows,
-          {
-            name,
-            data: value,
-            nameExpansion,
-            type: 'url',
-            background: FileIcon,
-          },
-        ],
+      handleBundleSize(value, () => {
+        handleSetFormData({
+          rows: [
+            ...formData.rows,
+            {
+              name,
+              data: value,
+              nameExpansion,
+              type: 'url',
+              background: FileIcon,
+            },
+          ],
+        });
       });
-
       setRowUrl('');
     }
   };
@@ -423,15 +443,7 @@ const CreateAssetModal = ({
           />
           <hr />
           <div className="create-asset-form__media-bundle">
-            Media bundle size{' '}
-            <span>
-              {(
-                JSON.stringify(createAssetNormalizer(formData)).length /
-                1024 /
-                1024
-              ).toFixed(4)}{' '}
-              Mb
-            </span>{' '}
+            Media bundle size <span>{mediaBundle} Mb </span>
             from <span>16 Mb</span>
           </div>
           <UiInput

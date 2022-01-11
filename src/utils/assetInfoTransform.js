@@ -8,7 +8,7 @@ const assetInfoTransform = (assetInfo) => {
   const identifiers = assetInfo.content.data.find(
     (el) => el.type === 'ambrosus.asset.identifiers',
   );
-  const { name, assetType: customType, images, description, raws } = info;
+  const { name, assetType: customType, images, description } = info;
 
   const transformedImages = [];
   let coverImgUrl = '';
@@ -93,7 +93,7 @@ const assetInfoTransform = (assetInfo) => {
       accessLevel: assetInfo.content.idData.accessLevel,
       propertiesItems: properties,
       ...transformedGroups,
-      rows: raws || [],
+      rows: [],
     },
     groupFields,
     additionalFields,

@@ -10,6 +10,7 @@ import AssetPageTabs from '../../../../components/AssetPageTabs';
 import {
   fetchAssetsInfo,
   fetchEventsInfo,
+  setAssetPageInfo,
 } from '../../../../store/modules/assets/actions';
 import PageMainContent from '../../../../components/PageMainContent';
 import CreateAssetModal from '../../../../components/CreateAssetModal';
@@ -24,21 +25,29 @@ const Asset = () => {
   const [qrCodeHover, isQrCodeHover] = useHover();
   const [viewJson, setViewJson] = useState(false);
 
-  const { assetPageInfo } = useSelector((state) => state.assets);
+  const { assetPageInfo, assetsList } = useSelector((state) => state.assets);
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(fetchEventsInfo(assetId));
     dispatch(fetchAssetsInfo([assetId], true));
+
+    return () => dispatch(setAssetPageInfo(null));
   }, []);
 
-  if (!assetPageInfo) {
+  const assetDataFromList = assetsList.find(
+    (el) => el.content.idData.assetId === assetId,
+  );
+
+  const assetData = assetPageInfo || assetDataFromList;
+
+  if (!assetData) {
     return null;
   }
 
   const assetLink = `https://test.amb.to/${assetId}`;
 
-  const assetInfo = assetPageInfo.content.data.find(
+  const assetInfo = assetData.content.data.find(
     (el) => el.type === 'ambrosus.asset.info',
   );
 
@@ -50,7 +59,7 @@ const Asset = () => {
       'createAssetData',
       JSON.stringify({
         ...data,
-        editAsset: assetInfoTransform(assetPageInfo),
+        editAsset: assetInfoTransform(assetData),
       }),
     );
 
@@ -69,7 +78,7 @@ const Asset = () => {
         )}
         <div className="asset-page__top-info">
           <div className="asset-page__type">
-            {assetPageInfo.content.idData.accessLevel === 1 ? (
+            {assetData.content.idData.accessLevel === 1 ? (
               <>
                 <VisibilityOffSvg />
                 Private
@@ -126,13 +135,15 @@ const Asset = () => {
             className="asset__detail-json"
             style={{ borderBottom: '1px solid #BFC9E0', paddingBottom: 10 }}
           >
-            {JSON.stringify(assetPageInfo, null, 4)}
+            {JSON.stringify(assetData, null, 4)}
           </pre>
         ) : (
-          <AssetItem isOnAssetPage assetData={assetPageInfo} />
+          <AssetItem isOnAssetPage assetData={assetData} />
         )}
 
-        {!!assetPageInfo && <PageMainContent data={assetPageInfo} />}
+        {!!assetData && (
+          <PageMainContent data={assetData} filesLoading={!assetPageInfo} />
+        )}
       </div>
       <AssetPageTabs assetId={assetId} />
       <UiModal modalName="createEvent">

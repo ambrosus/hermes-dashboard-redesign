@@ -28,8 +28,8 @@
 
       &__qr-code {
         position: absolute;
-        bottom: 58px;
-        z-index: 1  ;
+        top: 58px;
+        z-index: 1;
         box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
         border-radius: 12px!important;
 
@@ -40,7 +40,7 @@
           z-index: -1;
           content: '';
           position: absolute;
-          bottom: -7px;
+          top: -7px;
           right: 70px;
           width: 16px;
           height: 16px;

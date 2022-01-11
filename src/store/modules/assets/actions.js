@@ -80,10 +80,7 @@ export const fetchAssetsInfo = (assetsIds, isAssetPage) => (dispatch) => {
     .then(({ data }) => {
       if (data.data) {
         if (isAssetPage) {
-          dispatch({
-            type: SET_ASSET_PAGE_INFO,
-            payload: data.data[0],
-          });
+          dispatch(setAssetPageInfo(data.data[0]));
         } else {
           dispatch(
             setAssetsListData(
@@ -201,10 +198,7 @@ export const createEvent =
                 type: REMOVE_ASSET,
                 payload: assetId,
               });
-              dispatch({
-                type: SET_ASSET_PAGE_INFO,
-                payload: data.data,
-              });
+              dispatch(setAssetPageInfo(data.data));
             }
             dispatch({
               type: isAssetCreating
@@ -308,3 +302,8 @@ export const searchAssets = (searchQueries) => (dispatch, getState) => {
       });
   });
 };
+
+export const setAssetPageInfo = (payload) => ({
+  type: SET_ASSET_PAGE_INFO,
+  payload,
+});

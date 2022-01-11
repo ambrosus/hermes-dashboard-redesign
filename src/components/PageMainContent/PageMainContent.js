@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
 import PropTypes from 'prop-types';
 import { ReactComponent as FileSvg } from '../../assets/svg/file.svg';
 import Maps from '../GoogleMap';
 import { isEmptyObj } from '../../utils/isEmptyObj';
 import getPropertiesAndGroups from '../../utils/getPropertiesAndGroups';
 
-const PageMainContent = ({ data, location = {} }) => {
+const PageMainContent = ({ data, location = {}, filesLoading }) => {
   const [properties, setProperties] = useState({});
   const [groups, setGroups] = useState({});
 
@@ -106,16 +107,20 @@ const PageMainContent = ({ data, location = {} }) => {
             <hr />
           </>
         )}
-        {!!raws && (
+        {(!!raws || filesLoading) && (
           <>
             <h4 className="page-main-title">Files</h4>
             <div className="page-files-wrapper">
-              {raws.map((el) => (
-                <a className="page-file" href={el.data} download={el.name}>
-                  <FileSvg />
-                  <p className="page-file-name">{el.name}</p>
-                </a>
-              ))}
+              {filesLoading ? (
+                <Skeleton width={100} height={80} />
+              ) : (
+                raws.map((el) => (
+                  <a className="page-file" href={el.data} download={el.name}>
+                    <FileSvg />
+                    <p className="page-file-name">{el.name}</p>
+                  </a>
+                ))
+              )}
             </div>
             <hr />
           </>
@@ -128,6 +133,7 @@ const PageMainContent = ({ data, location = {} }) => {
 PageMainContent.propTypes = {
   data: PropTypes.object,
   location: PropTypes.object,
+  filesLoading: PropTypes.bool,
 };
 
 export default PageMainContent;

@@ -38,7 +38,6 @@ const Node = () => {
         <Sidebar menuStructure={tabMenu} setActiveTab={viewActiveTab} />
       </div>
       <div className="content">{tab}</div>
-      <div className="sidebar" />
     </div>
   );
 };

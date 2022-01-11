@@ -126,7 +126,11 @@ h4 {
 }
 
 .page-file-name {
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
   font-size: 12px;
+  color: $color-primary;
 }
 .flex-row{
   flex-direction: row;
@@ -180,8 +184,4 @@ h4 {
   color: red;
   margin-top: -5px;
   margin-bottom: 10px;
-}
-
-.page-file-name {
-  color: $color-primary;
 }
