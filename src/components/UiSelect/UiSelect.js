@@ -60,25 +60,25 @@ const UiSelect = ({
     }
     setInputValue(value);
     setIsOptionsOpened(true);
-    setFilteredOptions(
-      options.filter(
-        (el) => el && el.label.toLowerCase().includes(value.toLocaleString()),
-      ),
-    );
+    if (searchable) {
+      setFilteredOptions(
+        options.filter(
+          (el) => el && el.label.toLowerCase().includes(value.toLocaleString()),
+        ),
+      );
+    }
   };
 
   return (
     <div className={cx('ui-select', className)} style={styles} ref={selectEl}>
-      {searchable && (
-        <UiInput
-          value={inputValue}
-          placeholder={placeholder}
-          onChange={handleSearch}
-          label={label}
-          onclick={toggleOptionsVisibility}
-          imgSrc={imgSrc}
-        />
-      )}
+      <UiInput
+        value={inputValue}
+        placeholder={placeholder}
+        onChange={handleSearch}
+        label={label}
+        onclick={toggleOptionsVisibility}
+        imgSrc={imgSrc}
+      />
       {isOptionsOpened && (
         <ul className="ui-select__options">
           {filteredOptions.map((el) => (

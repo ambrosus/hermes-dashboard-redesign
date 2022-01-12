@@ -18,7 +18,11 @@ const BulkEvent = () => {
           By clicking on the account icon in the top right corner, you can
           navigate to “Settings” to revew or update your personal details.
         </p>
-        <UiButton onclick={openBulkModal} styles={{ height: 48, width: 180 }}>
+        <UiButton
+          type="primary"
+          onclick={openBulkModal}
+          styles={{ height: 48, width: 180 }}
+        >
           Bulk Event
         </UiButton>
       </div>

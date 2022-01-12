@@ -86,7 +86,7 @@ const Map = ({ coordinates = {}, getMarkerPosition = () => {} }) => {
       mapContainerStyle={{ width: '100%', height: 400 }}
       center={center}
       zoom={8}
-      onClick={handleClick}
+      onClick={isEmptyObj(coordinates) ? handleClick : () => {}}
       options={options}
     >
       {!isEmptyObj(marker) && (

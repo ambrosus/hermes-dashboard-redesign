@@ -24,6 +24,7 @@ const EventTab = () => {
           <UiButton
             styles={{ width: 200, height: 48 }}
             onclick={openCreateEventModal}
+            type="primary"
           >
             Add Event
           </UiButton>

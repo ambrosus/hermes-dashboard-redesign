@@ -1,11 +1,10 @@
-/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ReactComponent as UploadIcon } from '../../assets/svg/upload.svg';
 
 const DragAndDrop = ({ dropped }) => {
   const handleChange = ({ target }) => {
-    dropped(target.files[0]);
+    dropped(target.files);
   };
 
   const handleDrop = (e) => {
@@ -27,7 +26,13 @@ const DragAndDrop = ({ dropped }) => {
 
   return (
     <div>
-      <input type="file" id="file-upload" onChange={handleChange} />
+      <input
+        multiple="multiple"
+        value=""
+        type="file"
+        id="file-upload"
+        onChange={handleChange}
+      />
       <label
         onDrop={(event) => handleDrop(event)}
         onDragOver={(event) => handleDragOver(event)}

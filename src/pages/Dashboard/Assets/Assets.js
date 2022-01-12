@@ -87,15 +87,6 @@ const Assets = () => {
           ))}
         </InfiniteScroll>
       </div>
-      {paginationInfo.hasNext && !!assetsList.length && (
-        <UiButton
-          styles={{ margin: '64px auto 0' }}
-          type="pale"
-          onclick={showMore}
-        >
-          Show more
-        </UiButton>
-      )}
       <UiModal modalName="createAsset">
         <CreateAssetModal modalType="createAsset" />
       </UiModal>

@@ -49,9 +49,14 @@ const CreateResultModal = () => {
     [],
   );
 
+  useEffect(() => {
+    if (modalStep === 2) {
+      dispatch(applyFunc());
+    }
+  }, [modalStep]);
+
   const handleApply = () => {
     setModalStep(2);
-    dispatch(applyFunc());
   };
 
   const closeModal = () => dispatch(handleModal(null));
@@ -75,16 +80,16 @@ const CreateResultModal = () => {
             <UiButton type="secondary" onclick={closeModal}>
               Cancel
             </UiButton>
-            <UiButton onclick={handleApply}>Proceed</UiButton>
+            <UiButton type="primary" onclick={handleApply}>
+              Proceed
+            </UiButton>
           </div>
         </>
       )}
       {modalStep === 2 && (
         <>
           <p className="create-result-modal__title">Creating asset</p>
-          <div className="create-result-modal__wait-block btn pale">
-            Please wait...
-          </div>
+          <div className="create-result-modal__wait-block">Please wait...</div>
           <div className="create-result-modal__progress">
             <div
               className="create-result-modal__progress-bar"

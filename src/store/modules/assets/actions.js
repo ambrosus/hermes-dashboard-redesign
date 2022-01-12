@@ -175,7 +175,6 @@ export const createEvent =
       privateKey,
       formData.accessLevel,
     );
-
     return new Promise((resolve, reject) => {
       axios
         .post(

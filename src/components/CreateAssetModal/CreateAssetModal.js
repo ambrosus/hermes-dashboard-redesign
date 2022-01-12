@@ -126,7 +126,7 @@ const CreateAssetModal = ({
   }, [groupFields]);
 
   useEffect(() => {
-    setDataInLocalStorage({ ...formData, rows: [] });
+    setDataInLocalStorage({ formData: { ...formData, rows: [] } });
   }, [formData]);
 
   const setDataInLocalStorage = (keyValue) => {
@@ -151,8 +151,8 @@ const CreateAssetModal = ({
     1024
   ).toFixed(4);
 
-  const handleBundleSize = (data, callback) => {
-    if (data.length / 1024 / 1024 + +mediaBundle < 16) {
+  const handleBundleSize = (size, callback) => {
+    if (size / 1024 / 1024 + +mediaBundle < 16) {
       callback();
     } else {
       NotificationManager.error('Bundle size is too big');
@@ -163,7 +163,7 @@ const CreateAssetModal = ({
     const { images } = formData;
 
     if (imgUrl && !images.find((el) => el === imgUrl)) {
-      handleBundleSize(imgUrl, () => {
+      handleBundleSize(imgUrl.length, () => {
         handleSetFormData({ images: [...images, imgUrl] });
         setImgUrl('');
       });
@@ -175,7 +175,7 @@ const CreateAssetModal = ({
   };
 
   const setCoverImg = (url) => {
-    handleSetFormData({ coverImgUrl: url });
+    handleSetFormData({ coverImgUrl: formData.coverImgUrl ? '' : url });
   };
 
   const addAdditionalField = (itemName) => {
@@ -269,15 +269,30 @@ const CreateAssetModal = ({
     localStorage.removeItem('createAssetData');
   };
 
+  const processFile = (files) => {
+    let filesSize = 0;
+
+    for (let i = 0; i < files.length; i += 1) {
+      filesSize += files[i].size;
+    }
+    handleBundleSize(filesSize + 4 * 1024 * 1024, () => {
+      for (let i = 0; i < files.length; i += 1) {
+        handleRaw(files[i]);
+      }
+    });
+  };
+
   const handleRaw = async (blob) => {
     const reader = new FileReader();
-    await reader.readAsDataURL(blob);
+
+    if (blob) {
+      await reader.readAsDataURL(blob);
+    }
 
     reader.onloadend = () => {
       if (!reader.result) {
         return;
       }
-
       const nameExpansion = blob.name.match(/\w[^.]*$/)[0];
       // eslint-disable-next-line no-nested-ternary
       const type = blob.type.match(/^\w*/)
@@ -289,21 +304,20 @@ const CreateAssetModal = ({
         ? blob.type.match(/\w[^/]*$/)[0]
         : nameExpansion;
 
-      handleBundleSize(reader.result, () => {
-        handleSetFormData({
-          rows: [
-            ...formData.rows,
-            {
-              name: blob.name,
-              data: reader.result,
-              expansion,
-              nameExpansion,
-              type,
-              background: FileIcon,
-            },
-          ],
-        });
-      });
+      setFormData((state) => ({
+        ...state,
+        rows: [
+          ...state.rows,
+          {
+            name: blob.name,
+            data: reader.result,
+            expansion,
+            nameExpansion,
+            type,
+            background: FileIcon,
+          },
+        ],
+      }));
     };
   };
 
@@ -315,7 +329,7 @@ const CreateAssetModal = ({
       let name = value.split('/');
       name = name[name.length - 1];
 
-      handleBundleSize(value, () => {
+      handleBundleSize(value.length, () => {
         handleSetFormData({
           rows: [
             ...formData.rows,
@@ -425,6 +439,7 @@ const CreateAssetModal = ({
               onChange={handleSetFormData}
               selectedValue={formData.customType}
               imgSrc={chevronImg}
+              searchable={false}
             />
             <UiToggle
               label="Access level"
@@ -489,7 +504,7 @@ const CreateAssetModal = ({
             </>
           )}
           <p className="ui-input__label">Rows</p>
-          <DragAndDrop dropped={handleRaw} />
+          <DragAndDrop dropped={processFile} />
           <UiInput
             placeholder="Raws"
             imgSrc={addIcon}
@@ -689,8 +704,8 @@ const CreateAssetModal = ({
               Cancel
             </UiButton>
             <UiButton
-              styles={{ padding: 12 }}
               onclick={showResultModal}
+              type="primary"
               disabled={!formData.name || !formData.customType}
             >
               {!isEmptyObj(bulkEventData) ? (

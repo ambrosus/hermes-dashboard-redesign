@@ -40,6 +40,14 @@
 
   &__wait-block {
     margin: 25px auto 40px;
+    width: 160px;
+    height: 48px;
+    background: #F7F7FD;
+    color: #9198BB;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__progress {

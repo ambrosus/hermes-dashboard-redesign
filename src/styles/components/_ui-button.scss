@@ -12,7 +12,7 @@
   font-size: 16px;
   min-height: 32px;
   max-height: 54px;
-  padding: 0 25px;
+  padding: 1px 25px;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 400;
@@ -33,21 +33,38 @@
     margin-right: 8px;
   }
 
-  // types
-
   &.secondary {
     background-color: transparent;
     border: 1px solid $color-primary;
     color: #333333;
+
+    &:hover {
+      box-shadow: 0 4px 4px 0 #77777726;
+    }
   }
 
   &.primary {
     background-color: $color-primary;
+
+    &:not(&:disabled):hover {
+      padding: 0 24px;
+      border: 1px solid white;
+      box-shadow: 0 4px 4px 0 #49494926;
+    }
+
+    &:disabled {
+      background: #cccccc;
+      color: #F1F1F1;
+    }
   }
 
   &.plain {
     background-color: transparent;
     color: $color-primary;
+
+    &:hover {
+      text-decoration: underline;
+    }
 
     &.selected {
       background-color: $color-primary;
@@ -66,14 +83,6 @@
     border-top: 1px solid $color-gray-light;
   }
 
-  &.pale {
-    padding: 12px;
-    min-width: 160px;
-    width: min-content;
-    background: $whiteToGray;
-    color: $color-gray;
-  }
-
   &.icon {
     height: 32px;
     width: 32px;
@@ -88,19 +97,6 @@
     img {
       margin-right: 0;
     }
-  }
-
-  //priority
-  &.icon-btn {
-    padding: 6px !important;
-  }
-
-  &.outline {
-    border: 1px solid $color-blue;
-    box-sizing: border-box;
-    border-radius: 12px;
-    background-color: $white !important;
-    color: $color-gray;
   }
 }
 

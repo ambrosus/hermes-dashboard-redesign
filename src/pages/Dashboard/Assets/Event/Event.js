@@ -49,7 +49,9 @@ const Event = () => {
         <AssetItem isOnAssetPage assetData={currentEvent} />
         <PageMainContent data={currentEvent} location={location} />
         <Link to={`/dashboard/assets/${assetId}`}>
-          <UiButton styles={{ height: 40 }}>Back to asset</UiButton>
+          <UiButton styles={{ height: 40 }} type="primary">
+            Back to asset
+          </UiButton>
         </Link>
       </div>
     </div>

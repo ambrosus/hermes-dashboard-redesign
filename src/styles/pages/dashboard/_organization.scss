@@ -132,6 +132,10 @@
             text-align: center;
             color: #9198BB;
             padding: 0 6px;
+
+            &:hover {
+              text-decoration: underline;
+            }
           }
         }
       }
@@ -159,23 +163,10 @@
         align-items: center;
         justify-content: space-between;
         flex-direction: row;
-        .invite-btn {
-          cursor: pointer;
-          height: 48px;
-          padding: 12px 33px;
-          background: #4A38AE;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-style: normal;
-          font-weight: 500;
-          font-size: 16px;
-          line-height: 19px;
-          text-align: center;
-          color: #FFFFFF;
-        }
 
+        .invite-btn {
+          height: 48px;
+        }
       }
 
       &__status-bar {
@@ -194,22 +185,12 @@
             color: #FFFFFF;
             background: #9198BB;
           }
-
-          button {
-            font-weight: 500;
-            font-size: 12px;
-            line-height: 14px;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: #9198BB;
-            padding: 0 10px;
-            height: 32px;
-            background: #F7F7FD;
-            border-radius: 8px;
-          }
         }
 
+        button {
+          font-size: 12px;
+          padding: 0 15px;
+        }
       }
 
       &__list {
@@ -596,16 +577,15 @@
     justify-content: space-between;
     margin-bottom: 50px;
 
+    .auth-checkbox__checkmark {
+      background: #F7F7FD;
+    }
+    
     .checkboxes {
       label {
         margin: 8px 0 8px !important;
       }
     }
-
-    .access-lvl {
-
-    }
-
   }
 }
 

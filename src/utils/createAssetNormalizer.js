@@ -109,7 +109,7 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
     };
 
     if (city) coordsInfo.city = city;
-    if (country) coordsInfo.city = country;
+    if (country) coordsInfo.country = country;
 
     result.push(coordsInfo);
   }

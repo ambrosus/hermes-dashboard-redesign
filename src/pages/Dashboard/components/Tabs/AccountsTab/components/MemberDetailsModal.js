@@ -323,13 +323,13 @@ const MemberDetailsModal = () => {
         <div className="btn-group">
           <UiButton
             onclick={closeModal}
-            styles={{ background: '#9198BB', padding: 12 }}
+            type="secondary"
           >
             Cancel
           </UiButton>
           <UiButton
+            type="primary"
             onclick={saveHandler}
-            styles={{ background: '#4A38AE', padding: 12 }}
           >
             Save
           </UiButton>
