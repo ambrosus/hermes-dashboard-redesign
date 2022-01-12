@@ -42,6 +42,13 @@ const EventTabItem = ({ data }) => {
     eventTypeImg = truckSvg;
   }
 
+  const passedHours = moment().diff(date, 'hours');
+
+  const passedTime =
+    passedHours > 24
+      ? `${moment().add(1, 'day').diff(date, 'days')} days`
+      : `${passedHours} hours`;
+
   return (
     <div className="event-tab-item">
       <div
@@ -57,9 +64,7 @@ const EventTabItem = ({ data }) => {
           <p className="event-tab-item__title">{contentData.name}</p>
         </Link>
         <div className="event-tab-item__sub-info">
-          <span className="event-tab-item__when">
-            {moment().add(1, 'day').diff(date, 'days')} days ago
-          </span>
+          <span className="event-tab-item__when">{passedTime} ago</span>
           {locationData && locationData.city && (
             <span className="event-tab-item__where">
               <LocationSvg />
