@@ -2,17 +2,17 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import NotificationManager from 'react-notifications/lib/NotificationManager';
 import { handleModal } from '../../../../../../store/modules/modal';
 import {
   backupJSON,
   deleteInvite,
   handleOrganizationRequest,
-  modifyAccount,
   modifyOrganization,
   resendInvites,
 } from '../../../../../../utils/organizationService';
 
-const AccountsListItem = ({ info }) => {
+const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const isNodePage = pathname === '/dashboard/node';
@@ -25,21 +25,19 @@ const AccountsListItem = ({ info }) => {
         </div>
       );
     }
-    if (obj && obj?.refused) {
+    if (obj && obj.refused) {
       return (
         <div className="top__status" style={{ backgroundColor: '#D9E0EF' }}>
           Declined
         </div>
       );
     }
-    if (obj.accessLevel === 1) {
-      return (
-        <div className="top__status" style={{ backgroundColor: '#BFC9E0' }}>
-          Disabled
-        </div>
-      );
-    }
-    if (!obj.active && obj.modifiedOn) {
+    if (
+      (obj.accessLevel === 1 ||
+        (!obj.active && obj.modifiedOn) ||
+        !obj.active) &&
+      !(!obj.active && !obj.owner && !obj.organizationId && !obj.refused)
+    ) {
       return (
         <div className="top__status" style={{ backgroundColor: '#BFC9E0' }}>
           Disabled
@@ -59,50 +57,67 @@ const AccountsListItem = ({ info }) => {
   const resendInviteHandler = async (email) => {
     await resendInvites({ email: [`${email}`] });
   };
+
   const revokeInviteHandler = async (inviteId) => {
     await deleteInvite(inviteId);
   };
+
   const organisationBackupHandler = async (...args) => {
     const { id } = args[0][0];
     try {
       await backupJSON(id);
     } catch (error) {
-      console.error('[BACKUP] Organization: ', error);
+      NotificationManager.error(error);
     }
   };
+
   const openMemberDetailsModal = () =>
     dispatch(handleModal({ name: 'memberDetailsModal', data: info }));
+
   const modifyOrganizationHandler = async (...args) => {
     const { id, data } = args[0];
     try {
-      console.log('modify');
       await modifyOrganization(id, data);
-      alert('Organization modified');
+
+      handleAccounts(id, data.active);
+
+      NotificationManager.success('Organization modified');
     } catch (error) {
-      console.error('[MODIFY] Organization: ', error);
-      alert(error);
+      NotificationManager.error(error);
     }
   };
-  const modifyAccountHandler = async (...args) => {
-    const { address, data } = args[0];
-    try {
-      await modifyAccount(address, data);
-      console.log('Account modified');
-    } catch (error) {
-      console.error('[MODIFY] Account: ', error);
-    }
-  };
+
   const organizationRequest = async (...args) => {
     const { id, approved } = args[0];
-    console.log(id);
-    console.log(approved);
     try {
       await handleOrganizationRequest(id, approved);
-      console.log('Account modified');
+
+      fetchOrganizations();
+
+      NotificationManager.success('Account modified');
     } catch (error) {
-      console.error('[MODIFY] Account: ', error);
+      NotificationManager.error(error);
     }
   };
+
+  const openModal = () => {
+    dispatch(
+      handleModal({
+        name: 'deleteAccount',
+        data: async () => {
+          await modifyOrganizationHandler({
+            id: info.organizationId || info.organization,
+            data: { active: false },
+          });
+
+          sessionStorage.removeItem('user_private_key');
+          sessionStorage.removeItem('user_account');
+          window.location.reload();
+        },
+      }),
+    );
+  };
+
   const nodePageButtons = (
     <div className="options__buttons">
       <>
@@ -119,14 +134,15 @@ const AccountsListItem = ({ info }) => {
             <button
               type="button"
               onClick={() =>
-                organizationRequest({ id: info.address, approved: true })
+                organizationRequest({ id: info.address, approved: false })
               }
             >
               <p>Decline</p>
             </button>
           </>
         )}
-        {isNodePage && info.owner === null && (
+        {((isNodePage && info.owner === null) ||
+          (isNodePage && !!info.owner && info.organizationId)) && (
           <>
             <button type="button" onClick={openMemberDetailsModal}>
               <p>Edit</p>
@@ -145,15 +161,10 @@ const AccountsListItem = ({ info }) => {
               <button
                 type="button"
                 onClick={() =>
-                  isNodePage
-                    ? modifyOrganizationHandler({
-                        id: info.organizationId,
-                        data: { active: false },
-                      })
-                    : modifyAccountHandler({
-                        address: info.address,
-                        data: { active: false },
-                      })
+                  modifyOrganizationHandler({
+                    id: info.organizationId,
+                    data: { active: false },
+                  })
                 }
               >
                 <p>Disable</p>
@@ -162,67 +173,10 @@ const AccountsListItem = ({ info }) => {
               <button
                 type="button"
                 onClick={() =>
-                  isNodePage
-                    ? modifyOrganizationHandler({
-                        id: info.organizationId,
-                        data: { active: true },
-                      })
-                    : modifyAccountHandler({
-                        address: info.address,
-                        data: { active: false },
-                      })
-                }
-              >
-                <p>Activate</p>
-              </button>
-            )}
-          </>
-        )}
-        {isNodePage && !!info.owner && info.organizationId && (
-          <>
-            <button type="button" onClick={openMemberDetailsModal}>
-              <p>Edit</p>
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                organisationBackupHandler([
-                  { id: info.organizationId, data: {} },
-                ])
-              }
-            >
-              <p>Backup</p>
-            </button>
-            {info.active ? (
-              <button
-                type="button"
-                onClick={() =>
-                  isNodePage
-                    ? modifyOrganizationHandler({
-                        id: info.organizationId,
-                        data: { active: false },
-                      })
-                    : modifyAccountHandler({
-                        address: info.address,
-                        data: { active: false },
-                      })
-                }
-              >
-                <p>Disable</p>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() =>
-                  isNodePage
-                    ? modifyOrganizationHandler({
-                        id: info.organizationId,
-                        data: { active: true },
-                      })
-                    : modifyAccountHandler({
-                        address: info.address,
-                        data: { active: false },
-                      })
+                  modifyOrganizationHandler({
+                    id: info.organizationId,
+                    data: { active: true },
+                  })
                 }
               >
                 <p>Activate</p>
@@ -233,6 +187,7 @@ const AccountsListItem = ({ info }) => {
       </>
     </div>
   );
+
   const notNodePageButtons = (
     <div className="options__buttons">
       <>
@@ -259,35 +214,17 @@ const AccountsListItem = ({ info }) => {
               <p>Edit</p>
             </button>
             {info.active ? (
-              <button
-                type="button"
-                onClick={() =>
-                  isNodePage
-                    ? modifyOrganizationHandler({
-                        id: info.organizationId,
-                        data: { active: false },
-                      })
-                    : modifyAccountHandler({
-                        address: info.address,
-                        data: { active: false },
-                      })
-                }
-              >
+              <button type="button" onClick={openModal}>
                 <p>Disable</p>
               </button>
             ) : (
               <button
                 type="button"
                 onClick={() =>
-                  isNodePage
-                    ? modifyOrganizationHandler({
-                        id: info.organizationId,
-                        data: { active: true },
-                      })
-                    : modifyAccountHandler({
-                        address: info.address,
-                        data: { active: false },
-                      })
+                  modifyOrganizationHandler({
+                    id: info.organizationId,
+                    data: { active: true },
+                  })
                 }
               >
                 <p>Activate</p>
@@ -298,6 +235,7 @@ const AccountsListItem = ({ info }) => {
       </>
     </div>
   );
+
   return (
     <div className="accounts-tab__list--item">
       <div className="top">
@@ -336,6 +274,8 @@ const AccountsListItem = ({ info }) => {
 
 AccountsListItem.propTypes = {
   info: PropTypes.object,
+  handleAccounts: PropTypes.func,
+  fetchOrganizations: PropTypes.func,
 };
 
 export default React.memo(AccountsListItem);

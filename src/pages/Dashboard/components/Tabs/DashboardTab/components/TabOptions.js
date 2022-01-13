@@ -14,13 +14,8 @@ const TabOptions = ({ period = '7d', setPeriod, type = 'asset', setType }) => {
           <>
             <UiButton
               onclick={() => pushBundle()}
-              priority="primary"
-              type="plain"
-              styles={{
-                backgroundColor: '#4A38AE',
-                padding: '0 20px',
-                color: '#FFFFFF',
-              }}
+              type="primary"
+              styles={{ padding: '1px 40px' }}
             >
               Push Bundle
             </UiButton>

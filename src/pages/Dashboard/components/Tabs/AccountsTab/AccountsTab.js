@@ -34,24 +34,44 @@ const AccountsTab = () => {
             JSON.parse(sessionStorage.getItem('user_account')).organization,
           ).then((data) => {
             if (data) {
-              console.log('[ACCOUNT TAB] getOrganizationAccounts', data);
               setAccounts(data);
             }
           })
-        : getOrganizations().then((data) => {
-            if (data) {
-              console.log('[ACCOUNT TAB] getOrganizations', data);
-              setAccounts(data);
-            }
-          }),
+        : fetchOrganizations(),
     [display],
   );
+
+  const fetchOrganizations = () => {
+    getOrganizations().then((data) => {
+      if (data) setAccounts(data);
+    });
+  };
 
   function getFileHandler() {
     const inputFile = document.getElementById('selectedFile');
     inputFile.addEventListener('change', getFile);
     inputFile.click();
   }
+
+  const handleAccounts = (id, isActive) => {
+    const accountsKey = isActive ? 'disabled' : 'active';
+
+    setAccounts((state) => ({
+      ...state,
+      [accountsKey]: state[accountsKey].filter(
+        ({ organizationId }) => organizationId !== id,
+      ),
+      all: state.all.map((el) => {
+        if (el.organizationId === id) {
+          return {
+            ...el,
+            active: isActive,
+          };
+        }
+        return el;
+      }),
+    }));
+  };
 
   return (
     <div className="accounts-tab">
@@ -80,13 +100,23 @@ const AccountsTab = () => {
         <div className="flex align-items-center">
           <input type="file" id="selectedFile" />
           {isNodePage && (
-            <UiButton onclick={() => getFileHandler()}>Restore</UiButton>
+            <UiButton
+              onclick={() => getFileHandler()}
+              styles={{ fontSize: 12 }}
+            >
+              Restore
+            </UiButton>
           )}
         </div>
       </div>
 
       <div className="space-25" />
-      <AccountsList displayAccounts={display} accounts={accounts && accounts} />
+      <AccountsList
+        handleAccounts={handleAccounts}
+        displayAccounts={display}
+        accounts={accounts && accounts}
+        fetchOrganizations={fetchOrganizations}
+      />
       <AccountInviteModal />
     </div>
   );

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import NotificationManager from 'react-notifications/lib/NotificationManager';
 import { SET_ETH_ADDRESS, SIGN_IN } from './constants';
 import { generateToken } from '../../../utils/generateToken';
 
@@ -43,5 +44,8 @@ export const signIn = (privateKey) => (dispatch) => {
         sessionStorage.setItem('user_account', JSON.stringify(data.data));
         sessionStorage.setItem('user_private_key', privateKey);
       }
+    })
+    .catch(() => {
+      NotificationManager.error('Sign in error');
     });
 };

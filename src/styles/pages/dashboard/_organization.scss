@@ -606,3 +606,21 @@
     text-align: center;
   }
 }
+
+.delete-account-modal {
+  text-align: center;
+
+  p {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  button {
+    width: 250px;
+    display: inline;
+
+    &:last-child {
+      margin-left: 20px;
+    }
+  }
+}

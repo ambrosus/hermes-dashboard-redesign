@@ -1,29 +1,35 @@
 import React from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { ReactSVG } from 'react-svg';
 import logoIcon from '../../../assets/svg/logo.svg';
 import { ReactComponent as SearchIcon } from '../../../assets/svg/search.svg';
 import { ReactComponent as UserIcon } from '../../../assets/svg/person.svg';
 import UiButton from '../../../components/UiButton';
 
-const headerConfig = [
-  {
-    link: '/dashboard/node',
-    text: 'Node',
-  },
-  {
-    link: '/dashboard/organization',
-    text: 'Organization',
-  },
-  {
-    link: '/dashboard/assets',
-    text: 'Assets',
-  },
-];
-
 const Header = () => {
   const history = useHistory();
   const { pathname } = useLocation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const headerConfig = userInfo.permissions?.includes('super_account')
+    ? [
+        {
+          link: '/dashboard/node',
+          text: 'Node',
+        },
+      ]
+    : [
+        {
+          link: '/dashboard/organization',
+          text: 'Organization',
+        },
+        {
+          link: '/dashboard/assets',
+          text: 'Assets',
+        },
+      ];
 
   const showSearchBar = () => history.push('/dashboard/assets/search');
 

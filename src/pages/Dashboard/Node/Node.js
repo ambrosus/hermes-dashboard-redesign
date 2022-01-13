@@ -18,7 +18,7 @@ const tabMenu = [
 
 const Node = () => {
   const [tab, setTab] = useState(() => <DashboardTab />);
-  const modalData = useSelector((state) => state.modal.openedModal.data);
+  const { data, name } = useSelector((state) => state.modal.openedModal);
 
   const viewActiveTab = (tabType) => {
     switch (tabType) {
@@ -33,7 +33,7 @@ const Node = () => {
 
   return (
     <div className="organization-container">
-      {modalData && <MemberDetailsModal />}
+      {name === 'memberDetailsModal' && data && <MemberDetailsModal />}
       <div className="sidebar">
         <Sidebar menuStructure={tabMenu} setActiveTab={viewActiveTab} />
       </div>

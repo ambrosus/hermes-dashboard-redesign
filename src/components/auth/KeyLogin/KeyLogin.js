@@ -11,13 +11,17 @@ import { signIn } from '../../../store/modules/auth/actions';
 const KeyLogin = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const isAuth = useSelector((state) => state.auth.isAuth);
+  const { isAuth, userInfo } = useSelector((state) => state.auth);
 
   const [privateKey, setPrivateKey] = useState('');
 
   useEffect(() => {
     if (isAuth) {
-      history.push('/dashboard/assets/');
+      if (userInfo.permissions?.includes('super_account')) {
+        history.push('/dashboard/node/');
+      } else {
+        history.push('/dashboard/assets/');
+      }
     }
   }, [isAuth]);
 
