@@ -18,7 +18,7 @@ const KeyLogin = () => {
   useEffect(() => {
     if (isAuth) {
       if (userInfo.permissions?.includes('super_account')) {
-        history.push('/dashboard/node/');
+        history.push('/dashboard/node');
       } else {
         history.push('/dashboard/assets/');
       }
