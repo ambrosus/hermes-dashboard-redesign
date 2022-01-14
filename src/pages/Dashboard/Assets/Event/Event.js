@@ -80,7 +80,11 @@ const Event = () => {
         </Link>
       </div>
       <UiModal modalName="similarEvent">
-        <CreateAssetModal modalType="similarEvent" assetId={assetId} />
+        <CreateAssetModal
+          isCreateEvent
+          modalType="similarEvent"
+          assetId={assetId}
+        />
       </UiModal>
     </div>
   );
