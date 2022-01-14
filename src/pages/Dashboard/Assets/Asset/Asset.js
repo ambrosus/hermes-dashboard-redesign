@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import QRCode from 'qrcode.react';
 import { ReactComponent as VisibilitySvg } from '../../../../assets/svg/visibility.svg';
 import { ReactComponent as VisibilityOffSvg } from '../../../../assets/svg/visibility_off.svg';
+import { ReactComponent as ArrowLeftIcon } from '../../../../assets/svg/arrow-left.svg';
 import UiButton from '../../../../components/UiButton';
 import AssetItem from '../../../../components/AssetItem';
 import AssetPageTabs from '../../../../components/AssetPageTabs';
@@ -68,6 +69,9 @@ const Asset = () => {
 
   return (
     <div className="asset-page-wrapper">
+      <Link to="/dashboard/assets" className="back-arrow-btn">
+        <ArrowLeftIcon />
+      </Link>
       <div className="asset-page container">
         {assetInfo.images && assetInfo.images.default && (
           <img

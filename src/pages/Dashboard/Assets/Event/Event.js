@@ -6,6 +6,11 @@ import PageMainContent from '../../../../components/PageMainContent';
 import { isEmptyObj } from '../../../../utils/isEmptyObj';
 import AssetItem from '../../../../components/AssetItem';
 import { fetchEventsInfo } from '../../../../store/modules/assets/actions';
+import { ReactComponent as ArrowLeftIcon } from '../../../../assets/svg/arrow-left.svg';
+import CreateAssetModal from '../../../../components/CreateAssetModal';
+import UiModal from '../../../../components/UiModal';
+import assetInfoTransform from '../../../../utils/assetInfoTransform';
+import { handleModal } from '../../../../store/modules/modal';
 
 const Event = () => {
   const { assetId, eventId } = useParams();
@@ -29,8 +34,27 @@ const Event = () => {
   const location = currentEvent.content.data.find(
     (el) => el.type === 'ambrosus.event.location',
   );
+
+  const handleOpenSimilarEventModal = () => {
+    const dataFromStorage = localStorage.getItem('createAssetData');
+    const data = dataFromStorage ? JSON.parse(dataFromStorage) : {};
+
+    localStorage.setItem(
+      'createAssetData',
+      JSON.stringify({
+        ...data,
+        similarEvent: assetInfoTransform(currentEvent, true),
+      }),
+    );
+
+    dispatch(handleModal({ name: 'similarEvent' }));
+  };
+
   return (
     <div className="event-page">
+      <Link to={`/dashboard/assets/${assetId}`} className="back-arrow-btn">
+        <ArrowLeftIcon />
+      </Link>
       <div className="container">
         {assetInfo.images && assetInfo.images.default && (
           <img
@@ -43,6 +67,7 @@ const Event = () => {
           type="secondary"
           className="event-page__similar-event"
           styles={{ width: 160, height: 48 }}
+          onclick={handleOpenSimilarEventModal}
         >
           Add similar event
         </UiButton>
@@ -54,6 +79,9 @@ const Event = () => {
           </UiButton>
         </Link>
       </div>
+      <UiModal modalName="similarEvent">
+        <CreateAssetModal modalType="similarEvent" assetId={assetId} />
+      </UiModal>
     </div>
   );
 };

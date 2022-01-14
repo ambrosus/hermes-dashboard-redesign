@@ -1,14 +1,14 @@
 import { isEmptyObj } from './isEmptyObj';
 import getPropertiesAndGroups from './getPropertiesAndGroups';
 
-const assetInfoTransform = (assetInfo) => {
+const assetInfoTransform = (assetInfo, isEvent) => {
   const info = assetInfo.content.data.find(
     (el) => el.type === 'ambrosus.asset.info',
   );
   const identifiers = assetInfo.content.data.find(
     (el) => el.type === 'ambrosus.asset.identifiers',
   );
-  const { name, assetType: customType, images, description } = info;
+  const { name, assetType: customType, images, description, type } = info;
 
   const transformedImages = [];
   let coverImgUrl = '';
@@ -85,7 +85,7 @@ const assetInfoTransform = (assetInfo) => {
   return {
     formData: {
       name,
-      customType,
+      customType: isEvent ? type : customType,
       images: transformedImages,
       coverImgUrl,
       identifiersItems: transformedIdentifiers,

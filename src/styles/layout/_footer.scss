@@ -1,36 +1,24 @@
 .footer {
-  width: inherit;
-  max-height: 60px;
-  padding: 0 40px;
-  background: #FFFFFF;
-  box-shadow: 0px -2px 4px rgba(55, 29, 199, 0.05);
   display: flex;
   align-items: center;
-  flex-direction: row;
   justify-content: space-between;
-  font-family: Roboto, sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 12px;
-  line-height: 30px;
-  color: #9198BB;
+  background: #212121;
+  height: 80px;
+  padding: 0 100px;
 
-  &__copy {
-    flex-basis: 50%;
-    align-items: flex-start;
+  &__mail {
+    color: #8F8F8F;
+    font-size: 16px;
   }
-
-  &__info {
-    flex-basis: 50%;
+  
+  &__social {
+    width: 208px;
     display: flex;
-    align-items: center;
     justify-content: flex-end;
-    flex-direction: row;
-    gap: 10px;
-    text-align: right;
+    align-items: center;
 
-    a {
-      color: $color-gray;
+    svg {
+      margin-left: 20px;
     }
   }
 }

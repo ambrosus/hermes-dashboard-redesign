@@ -10,3 +10,4 @@ export const SET_ASSETS_SEARCH_PARAMS = `${moduleName}/SET_ASSETS_SEARCH_PARAMS`
 export const SET_ASSETS_LOADING = `${moduleName}/SET_ASSETS_LOADING`;
 export const REMOVE_ASSET = `${moduleName}/REMOVE_ASSET`;
 export const SET_ASSET_PAGE_INFO = `${moduleName}/SET_ASSET_PAGE_INFO`;
+export const SET_SEARCHED_ASSETS_LIST = `${moduleName}/SET_SEARCHED_ASSETS_LIST`;

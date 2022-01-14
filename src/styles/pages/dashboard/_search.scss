@@ -1,6 +1,6 @@
-.search-page {
+.search-modal {
   max-width: 600px;
-  margin: 50px auto 100px;
+  margin: 0 auto;
 
   &__title {
     font-size: 31px;
@@ -27,6 +27,11 @@
 .search-result-page {
   max-width: 680px;
   margin: 50px auto 100px;
+
+  .search-page__title {
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
 
   &__count {
     font-size: 12px;

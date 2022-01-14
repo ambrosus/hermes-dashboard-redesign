@@ -38,7 +38,7 @@ const AddedField = ({
             <UiInput
               value={fieldsData[el]?.description}
               label={el === 0 ? 'Description' : ''}
-              placeholder={`${placeholder} description`}
+              placeholder="Description"
               onChange={(value) => handleChange(el, value)}
               name="description"
             />

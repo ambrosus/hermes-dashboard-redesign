@@ -49,14 +49,17 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
     if (el.includes('groupPropertyItems')) {
       const currentGroup = formData[el];
 
-      info[currentGroup.groupName] = {};
-
       Object.keys(currentGroup).forEach((groupEl) => {
         if (
           groupEl !== 'groupName' &&
           currentGroup[groupEl].name &&
-          currentGroup[groupEl].description
+          currentGroup[groupEl].description &&
+          currentGroup.groupName
         ) {
+          if (!info[currentGroup.groupName]) {
+            info[currentGroup.groupName] = {};
+          }
+
           info[currentGroup.groupName][currentGroup[groupEl].name] =
             currentGroup[groupEl].description;
         }

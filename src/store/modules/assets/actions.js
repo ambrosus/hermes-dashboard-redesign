@@ -11,6 +11,7 @@ import {
   UNSHIFT_ASSETS_LIST_DATA,
   UNSHIFT_EVENTS_LIST_DATA,
   SET_ASSET_PAGE_INFO,
+  SET_SEARCHED_ASSETS_LIST,
 } from './constants';
 import { generateAsset, generateEvent } from '../../../utils/generateToken';
 import createAssetNormalizer from '../../../utils/createAssetNormalizer';
@@ -301,6 +302,11 @@ export const searchAssets = (searchQueries) => (dispatch, getState) => {
       });
   });
 };
+
+export const setSearchedAssets = (assets) => ({
+  type: SET_SEARCHED_ASSETS_LIST,
+  payload: assets,
+});
 
 export const setAssetPageInfo = (payload) => ({
   type: SET_ASSET_PAGE_INFO,

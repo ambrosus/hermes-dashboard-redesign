@@ -42,17 +42,18 @@
     top: 0;
     z-index: 111;
     background: white;
-    box-shadow: 0 6px 12px rgba(74, 56, 174, 0.15);
-    padding: 12px 24px;
+    padding: 15px 24px;
     font-size: 14px;
     font-weight: 400;
     color: $color-gray;
-    border-radius: 90px;
-    max-width: 368px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid $color-gray-light;
     margin: 0 auto 44px;
 
     span {
       color: $color-primary;
+      font-weight: 700;
     }
   }
 
@@ -141,12 +142,28 @@
   }
 
   &__group {
-    margin-top: 30px;
+    position: relative;
 
     hr {
       width: calc(100% + 40px);
       margin-left: -20px;
       margin-bottom: 24px;
+    }
+  }
+
+  &__group-delete {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1;
+    &:hover {
+      text-decoration: underline;
+    }
+
+    svg {
+      margin-right: 5px;
     }
   }
 

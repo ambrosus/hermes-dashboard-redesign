@@ -5,9 +5,7 @@ import cx from 'classnames';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { useDispatch, useSelector } from 'react-redux';
 import UiButton from '../UiButton';
-import { ReactComponent as BorderOutlet } from '../../assets/svg/border_outer.svg';
 import { ReactComponent as DatePickerIcon } from '../../assets/svg/date-picker.svg';
-import { ReactComponent as PlacePickerIcon } from '../../assets/svg/place-picker.svg';
 import { handleAssetsListSearch } from '../../store/modules/assets/actions';
 
 const timeFilter = ['Day', 'Week', 'Month', 'Year'];
@@ -92,9 +90,6 @@ const Sorting = ({ selectAll, unselectAll }) => {
         ))}
       </div>
       <div className="assets-sorting__advanced-sorting">
-        <UiButton type="plain">
-          <BorderOutlet />
-        </UiButton>
         <DateRangePicker
           onApply={handleDateRange}
           onCancel={cancelDateRangeFilter}
@@ -106,9 +101,6 @@ const Sorting = ({ selectAll, unselectAll }) => {
             <DatePickerIcon />
           </button>
         </DateRangePicker>
-        <UiButton type="plain">
-          <PlacePickerIcon />
-        </UiButton>
       </div>
     </div>
   );

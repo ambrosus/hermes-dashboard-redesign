@@ -12,6 +12,7 @@ import { ReactComponent as VisibilityOffIcon } from '../../assets/svg/visibility
 import { ReactComponent as CheckmarkIcon } from '../../assets/svg/checkmark-transparent.svg';
 import { ReactComponent as CloseFilledIcon } from '../../assets/svg/close-filled.svg';
 import { ReactComponent as CheckboxIcon } from '../../assets/svg/checkbox-green.svg';
+import { ReactComponent as DeleteIcon } from '../../assets/svg/trash.svg';
 import FileIcon from '../../assets/svg/file.svg';
 // eslint-disable-next-line import/no-duplicates
 import chevronImg from '../../assets/svg/chevron.svg';
@@ -367,6 +368,16 @@ const CreateAssetModal = ({
 
   const isShowLocation = isCreateEvent || !isEmptyObj(bulkEventData);
 
+  const deleteGroup = (el) => {
+    setGroupFields((state) => state.filter((idx) => el !== idx));
+
+    delete additionalFields[`groupPropertyItems${el}`];
+    setAdditionalFields(additionalFields);
+
+    delete formData[`groupPropertyItems${el}`];
+    setFormData(formData);
+  };
+
   return (
     <div className="create-asset">
       <div
@@ -503,10 +514,10 @@ const CreateAssetModal = ({
               </div>
             </>
           )}
-          <p className="ui-input__label">Rows</p>
+          <p className="ui-input__label">Raws</p>
           <DragAndDrop dropped={processFile} />
           <UiInput
-            placeholder="Raws"
+            placeholder="Or enter a raw file url"
             imgSrc={addIcon}
             onChange={setRowUrl}
             onImageClick={addRow}
@@ -565,11 +576,19 @@ const CreateAssetModal = ({
                     <img src={addIcon} alt="add icon" />
                     Add properties
                   </button>
-                  {groupFields.map((el) => (
+                  {groupFields.map((el, i) => (
                     <div key={el} className="create-asset-form__group">
                       <hr />
+                      <button
+                        type="button"
+                        className="create-asset-form__group-delete"
+                        onClick={() => deleteGroup(el)}
+                      >
+                        <DeleteIcon />
+                        Delete group
+                      </button>
                       <UiInput
-                        label="Group name"
+                        label={`${i + 1}. Group name`}
                         placeholder="Group name"
                         value={formData[`groupPropertyItems${el}`].groupName}
                         onChange={(value) => setGroupName(value, el)}

@@ -1,19 +1,23 @@
 import React from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { ReactSVG } from 'react-svg';
 import logoIcon from '../../../assets/svg/logo.svg';
 import { ReactComponent as SearchIcon } from '../../../assets/svg/search.svg';
 import { ReactComponent as UserIcon } from '../../../assets/svg/person.svg';
 import UiButton from '../../../components/UiButton';
+import { handleModal } from '../../../store/modules/modal';
 
 const Header = () => {
-  const history = useHistory();
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
 
   const { userInfo } = useSelector((state) => state.auth);
+  const openedModalName = useSelector((state) => state.modal.openedModal.name);
 
-  const headerConfig = userInfo.permissions?.includes('super_account')
+  const isSuperAccount = userInfo.permissions?.includes('super_account');
+
+  const headerConfig = isSuperAccount
     ? [
         {
           link: '/dashboard/node',
@@ -31,7 +35,7 @@ const Header = () => {
         },
       ];
 
-  const showSearchBar = () => history.push('/dashboard/assets/search');
+  const showSearchBar = () => dispatch(handleModal({ name: 'searchModal' }));
 
   return (
     <header className="header">
@@ -51,13 +55,15 @@ const Header = () => {
         ))}
       </div>
       <div className="header__setting">
-        <UiButton
-          type="icon"
-          styles={{ marginRight: 20 }}
-          onclick={showSearchBar}
-        >
-          <SearchIcon />
-        </UiButton>
+        {!isSuperAccount && openedModalName !== 'searchModal' && (
+          <UiButton
+            type="icon"
+            styles={{ marginRight: 20 }}
+            onclick={showSearchBar}
+          >
+            <SearchIcon />
+          </UiButton>
+        )}
         <UiButton type="icon">
           <UserIcon />
         </UiButton>

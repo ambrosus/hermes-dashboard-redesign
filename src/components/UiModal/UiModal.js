@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import { handleModal } from '../../store/modules/modal';
 
-const UiModal = ({ children, modalName, contentStyles }) => {
+const UiModal = ({ children, modalName, contentStyles, overlayStyles }) => {
   const dispatch = useDispatch();
 
   const openedModalName = useSelector((state) => state.modal.openedModal.name);
@@ -31,6 +31,7 @@ const UiModal = ({ children, modalName, contentStyles }) => {
         },
         overlay: {
           backgroundColor: '#333333e6',
+          ...overlayStyles,
         },
       }}
     >
@@ -43,6 +44,7 @@ UiModal.propTypes = {
   children: PropTypes.element,
   modalName: PropTypes.string,
   contentStyles: PropTypes.object,
+  overlayStyles: PropTypes.object,
 };
 
 export default UiModal;

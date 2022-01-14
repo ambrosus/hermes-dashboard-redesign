@@ -87,6 +87,8 @@
     display: flex;
     flex-direction: row;
     grid-gap: 10px;
+    width: 100px;
+    justify-content: flex-end;
 
     .btn {
       width: 32px;

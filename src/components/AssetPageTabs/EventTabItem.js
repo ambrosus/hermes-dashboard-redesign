@@ -57,7 +57,7 @@ const EventTabItem = ({ data }) => {
       >
         <img src={eventTypeImg} alt={eventTypeText} />
         <span className="event-tab-item__type-name">{eventTypeText}</span>
-        <span>{date.format('DD.MM.YYYY')}</span>
+        <span>{date.format('DD MMM YYYY')}</span>
       </div>
       <div className="event-tab-item__info">
         <Link to={`${location.pathname}/events/${data.eventId}`}>

@@ -12,6 +12,7 @@ import UiModal from './components/UiModal';
 import CreateResultModal from './components/CreateResultModal';
 import UiButton from './components/UiButton';
 import { handleModal } from './store/modules/modal';
+import SearchModal from './components/SearchModal';
 const Main = () => {
   const dispatch = useDispatch();
 
@@ -91,6 +92,19 @@ const Main = () => {
           </ul>
           <UiButton onclick={closeModal}>Close</UiButton>
         </div>
+      </UiModal>
+      <UiModal
+        modalName="searchModal"
+        contentStyles={{
+          width: '100%',
+          height: '100%',
+        }}
+        overlayStyles={{
+          paddingTop: 60,
+          background: 'transparent',
+        }}
+      >
+        <SearchModal />
       </UiModal>
       <NotificationContainer />
     </Layout>

@@ -49,7 +49,7 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
 
   const date = moment
     .unix(assetData.content.idData.timestamp)
-    .format('DD.MM.YYYY');
+    .format('DD MMM YYYY');
 
   const copyId = () => {
     copyToClipboard(assetId);

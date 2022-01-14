@@ -9,6 +9,7 @@ import {
   UNSHIFT_ASSETS_LIST_DATA,
   UNSHIFT_EVENTS_LIST_DATA,
   SET_ASSET_PAGE_INFO,
+  SET_SEARCHED_ASSETS_LIST,
 } from './constants';
 import { isEmptyObj } from '../../../utils/isEmptyObj';
 
@@ -26,6 +27,7 @@ const defaultState = {
   assetsSearchParams: [],
   isAssetsLoading: false,
   assetPageInfo: null,
+  searchedAssetsList: [],
 };
 
 export default (state = defaultState, { type, payload }) => {
@@ -33,7 +35,10 @@ export default (state = defaultState, { type, payload }) => {
     case SET_ASSETS_QUERY_DATA:
       return { ...state, assetsQueryData: payload };
     case SET_ASSETS_LIST_DATA:
-      return { ...state, assetsList: [...state.assetsList, ...payload] };
+      return {
+        ...state,
+        assetsList: payload.length ? [...state.assetsList, ...payload] : [],
+      };
     case UNSHIFT_ASSETS_LIST_DATA:
       return { ...state, assetsList: [payload].concat(state.assetsList) };
     case UNSHIFT_EVENTS_LIST_DATA:
@@ -63,6 +68,8 @@ export default (state = defaultState, { type, payload }) => {
       };
     case SET_ASSET_PAGE_INFO:
       return { ...state, assetPageInfo: payload };
+    case SET_SEARCHED_ASSETS_LIST:
+      return { ...state, searchedAssetsList: payload };
     default:
       return state;
   }
