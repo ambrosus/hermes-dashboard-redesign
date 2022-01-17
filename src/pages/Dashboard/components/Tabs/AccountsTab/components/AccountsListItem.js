@@ -55,7 +55,15 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
   };
 
   const resendInviteHandler = async (email) => {
-    await resendInvites({ email: [`${email}`] });
+    try {
+      await resendInvites({ email: [`${email}`] });
+      NotificationManager.success(
+        `Invite for ${email} was resend successfully`,
+        'Resend success',
+      );
+    } catch (e) {
+      NotificationManager.error(e.toString());
+    }
   };
 
   const revokeInviteHandler = async (inviteId) => {
@@ -66,6 +74,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
     const { id } = args[0][0];
     try {
       await backupJSON(id);
+      NotificationManager.success(`id: ${id}`, 'Backup created');
     } catch (error) {
       NotificationManager.error(error);
     }

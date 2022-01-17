@@ -472,7 +472,7 @@ const CreateAssetModal = ({
             value={formData.description}
             onChange={handleSetFormData}
           />
-          <hr />
+          <div className="hr-line" />
           <div className="create-asset-form__media-bundle">
             Media bundle size <span>{mediaBundle} Mb </span>
             from <span>16 Mb</span>
@@ -583,7 +583,7 @@ const CreateAssetModal = ({
                   </button>
                   {groupFields.map((el, i) => (
                     <div key={el} className="create-asset-form__group">
-                      <hr />
+                      <div className="hr-line" />
                       <button
                         type="button"
                         className="create-asset-form__group-delete"

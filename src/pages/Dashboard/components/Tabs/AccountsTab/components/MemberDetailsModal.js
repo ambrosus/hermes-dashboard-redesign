@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import NotificationManager from 'react-notifications/lib/NotificationManager';
+import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 import { handleModal } from '../../../../../../store/modules/modal';
 import UiButton from '../../../../../../components/UiButton';
@@ -69,7 +71,6 @@ const MemberDetailsModal = () => {
   useEffect(() => {
     if (userPermissions) {
       modifyAccount(modalData?.address, { permissions: userPermissions });
-      console.log({ permissions: userPermissions });
     }
   }, [userPermissions]);
 
@@ -86,19 +87,18 @@ const MemberDetailsModal = () => {
     const { id } = args[0][0];
     try {
       await backupJSON(id);
+      NotificationManager.success(`Organization ${id} backup`);
     } catch (error) {
-      console.error('[BACKUP] Organization: ', error);
+      NotificationManager.success(error.toString());
     }
   };
   const modifyOrganizationHandler = async (...args) => {
     const { id, data } = args[0];
     try {
-      console.log('modify');
       await modifyOrganization(id, data);
-      alert('Organization modified');
+      NotificationManager.success(`Organization ${id} modified`);
     } catch (error) {
-      console.error('[MODIFY] Organization: ', error);
-      alert(error);
+      NotificationManager.error(error.toString());
     }
   };
 
@@ -106,19 +106,21 @@ const MemberDetailsModal = () => {
     const { address, data } = args[0];
     try {
       await modifyAccount(address, data);
-      console.log('Account modified');
+      NotificationManager.success(`Modifier ${address} success`);
     } catch (error) {
-      console.error('[MODIFY] Account: ', error);
+      NotificationManager.success(error.toString());
     }
   };
 
   const saveHandler = async () => {
-    isNodePage
-      ? await modifyOrganization(modalData.organizationId, modifyOrg)
-      : await modifyAccount(modalData?.address, modifyAcc);
-    console.log({
-      ...modifyAcc,
-    });
+    try {
+      isNodePage
+        ? await modifyOrganization(modalData.organizationId, modifyOrg)
+        : await modifyAccount(modalData?.address, modifyAcc);
+      NotificationManager.success(`Changes was save successfully`);
+    } catch (error) {
+      NotificationManager.success(error.toString());
+    }
   };
 
   const handleModifyOrg = (keyValue) => {
@@ -129,7 +131,6 @@ const MemberDetailsModal = () => {
     setModifyAcc({ ...modifyAcc, ...keyValue });
     console.log({ ...modifyAcc, ...keyValue });
   }
-
   return (
     <UiModal
       modalName="memberDetailsModal"
@@ -150,15 +151,16 @@ const MemberDetailsModal = () => {
           </div>
           <div className="space-10" />
           <div className="options">
-            <p className="options__text">
-              {' '}
-              <span className="key">
-                {!isNodePage ? 'Key' : 'Owner'} &nbsp; &nbsp;
-              </span>
-              <span>{!isNodePage ? modalData?.address : modalData?.owner}</span>
-            </p>
+            {!isNodePage && (
+              <p className="options__text">
+                {' '}
+                <span className="key">Key &nbsp; &nbsp;</span>
+                <span>{modalData?.address}</span>
+              </p>
+            )}
             {!isNodePage && (
               <div className="createdAt">
+                {/* TODO format data from server */}
                 <span className="created">Created</span> {modalData?.createdOn}
               </div>
             )}
@@ -166,6 +168,23 @@ const MemberDetailsModal = () => {
           <div className="space-10" />
           <div className="buttons-options">
             <div className="buttons">
+              <button
+                style={{ backgroundColor: '#1ACD8C' }}
+                type="button"
+                onClick={() =>
+                  isNodePage
+                    ? modifyOrganizationHandler({
+                        id: modalData?.organizationId,
+                        data: { active: true },
+                      })
+                    : modifyAccountHandler({
+                        address: modalData?.address,
+                        data: { active: false },
+                      })
+                }
+              >
+                <p>Activate</p>
+              </button>
               {isNodePage && (
                 <button
                   type="button"
@@ -178,41 +197,22 @@ const MemberDetailsModal = () => {
                   <p>Backup</p>
                 </button>
               )}
-              {modalData?.active ? (
-                <button
-                  type="button"
-                  onClick={() =>
-                    isNodePage
-                      ? modifyOrganizationHandler({
-                          id: modalData?.organizationId,
-                          data: { active: false },
-                        })
-                      : modifyAccountHandler({
-                          address: modalData?.address,
-                          data: { active: false },
-                        })
-                  }
-                >
-                  <p>Disable</p>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() =>
-                    isNodePage
-                      ? modifyOrganizationHandler({
-                          id: modalData?.organizationId,
-                          data: { active: true },
-                        })
-                      : modifyAccountHandler({
-                          address: modalData?.address,
-                          data: { active: false },
-                        })
-                  }
-                >
-                  <p>Activate</p>
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() =>
+                  isNodePage
+                    ? modifyOrganizationHandler({
+                        id: modalData?.organizationId,
+                        data: { active: false },
+                      })
+                    : modifyAccountHandler({
+                        address: modalData?.address,
+                        data: { active: false },
+                      })
+                }
+              >
+                <p>Disable</p>
+              </button>
             </div>
             {isNodePage && (
               <div className="options">
@@ -221,10 +221,12 @@ const MemberDetailsModal = () => {
                   {modalData?.createdOn}
                 </div>
                 &nbsp;&nbsp;&nbsp;
-                <div className="createdAt">
-                  <span className="created">Modified</span>{' '}
-                  {modalData?.modifiedOn}
-                </div>
+                {modalData?.modifiedOn && (
+                  <div className="createdAt">
+                    <span className="created">Modified</span>{' '}
+                    {moment.unix(modalData.modifiedOn).format('DD ddd YYYY')}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -241,7 +243,7 @@ const MemberDetailsModal = () => {
               disabled
             />
             <UiInput
-              label="Full Name"
+              label="Name"
               placeholder={modalData?.fullName}
               name="fullName"
               onChange={handleModifyAccount}
@@ -294,9 +296,10 @@ const MemberDetailsModal = () => {
         </div>
         {!isNodePage && (
           <>
-            <hr />
+            <div className="hr-line" />
             <div className="permissions-container">
               <div className="checkboxes">
+                <label className="ui-input__label">Permissions</label>
                 {permissionsArray.map((el) => (
                   <AuthCheckbox
                     key={el.key}
@@ -320,17 +323,28 @@ const MemberDetailsModal = () => {
             </div>
           </>
         )}
+        {!isNodePage && (
+          <div className="info-member-modal-block">
+            {modalData?.active ? (
+              <div className="status" style={{ backgroundColor: '#1ACD8C' }}>
+                Active
+              </div>
+            ) : (
+              <div className="status" style={{ backgroundColor: '#BFC9E0' }}>
+                Disabled
+              </div>
+            )}
+            <div className="text">
+              You can add or remove account permissions and access level. If you
+              uncheck all permissions, you will disable this account.
+            </div>
+          </div>
+        )}
         <div className="btn-group">
-          <UiButton
-            onclick={closeModal}
-            type="secondary"
-          >
+          <UiButton onclick={closeModal} type="secondary">
             Cancel
           </UiButton>
-          <UiButton
-            type="primary"
-            onclick={saveHandler}
-          >
+          <UiButton type="primary" onclick={saveHandler}>
             Save
           </UiButton>
         </div>

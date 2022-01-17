@@ -13,6 +13,9 @@
 
   &__checkbox {
     margin: 40px 0 45px;
+    .auth-checkbox__checkmark{
+      margin-left: 0;
+    }
   }
 }
 

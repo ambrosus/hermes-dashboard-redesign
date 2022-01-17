@@ -186,7 +186,7 @@ const SearchModal = () => {
           </div>
         </DateRangePicker>
       </div>
-      <hr style={{ margin: '24px 0' }} />
+      <div className="hr-line" style={{ margin: '24px 0' }} />
       <h2 className="search-modal__section-title">Identifiers</h2>
       <AddedField
         itemName="identifiers"
@@ -204,7 +204,7 @@ const SearchModal = () => {
         <img src={addIcon} alt="add icon" />
         Add identifier
       </button>
-      <hr style={{ margin: '24px 0' }} />
+      <div className="hr-line" style={{ margin: '24px 0' }} />
       <h2 className="search-modal__section-title">Location</h2>
       <div className="form-semicolon-wrapper">
         <UiInput

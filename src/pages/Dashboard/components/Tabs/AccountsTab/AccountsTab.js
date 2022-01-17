@@ -111,12 +111,22 @@ const AccountsTab = () => {
       </div>
 
       <div className="space-25" />
-      <AccountsList
-        handleAccounts={handleAccounts}
-        displayAccounts={display}
-        accounts={accounts && accounts}
-        fetchOrganizations={fetchOrganizations}
-      />
+
+      {accounts?.all.length > 0 ? (
+        <AccountsList
+          handleAccounts={handleAccounts}
+          displayAccounts={display}
+          accounts={accounts && accounts}
+          fetchOrganizations={fetchOrganizations}
+        />
+      ) : (
+        <progress
+          style={{
+            width: '100%',
+            height: 20,
+          }}
+        />
+      )}
       <AccountInviteModal />
     </div>
   );

@@ -101,8 +101,7 @@ export const backupJSON = async (organizationId) => {
           );
         }
         if (response.data.data) {
-          download.bind(this)('Backup.json', response.data);
-          alert('Organization backuped');
+          download.bind(this)(`Backup_${organizationId}.json`, response.data);
         } else console.log('No data received!');
         return false;
       });
@@ -182,6 +181,15 @@ export const modifyOrganization = async (organizationId, body) => {
   return organization.data;
 };
 
+export const getOrganization = async (organizationId) => {
+  const url = `${apiExtended}/organization/${organizationId}`;
+  const organization = await axios.get(url);
+  if (organization.error) {
+    throw organization.error;
+  }
+  return organization.data.data;
+};
+
 export const modifyAccount = async (address, body) => {
   const url = `${apiExtended}/account2/modify/${address}`;
   const account = await axios.post(url, body);
@@ -190,6 +198,7 @@ export const modifyAccount = async (address, body) => {
   }
   return account.data;
 };
+
 export default {
   getFile,
   backupJSON,
