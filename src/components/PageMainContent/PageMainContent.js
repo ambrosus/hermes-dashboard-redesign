@@ -38,7 +38,7 @@ const PageMainContent = ({ data, location = {}, filesLoading }) => {
             <>
               <h4 className="page-main-title">Description</h4>
               <p>{description}</p>
-              <hr />
+              <div className="hr-line" />
             </>
           )}
           {!!identifiersInfo && (
@@ -50,7 +50,7 @@ const PageMainContent = ({ data, location = {}, filesLoading }) => {
                   <p>{identifiersInfo.identifiers[el][0]}</p>
                 </div>
               ))}
-              <hr />
+              <div className="hr-line" />
             </>
           )}
           {!isEmptyObj(properties) && (
@@ -62,7 +62,7 @@ const PageMainContent = ({ data, location = {}, filesLoading }) => {
                   <p>{properties[el].description}</p>
                 </div>
               ))}
-              <hr />
+              <div className="hr-line" />
             </>
           )}
           {!isEmptyObj(groups) &&
@@ -75,7 +75,7 @@ const PageMainContent = ({ data, location = {}, filesLoading }) => {
                     <p>{groups[el][idx].description}</p>
                   </div>
                 ))}
-                <hr />
+                <div className="hr-line" />
               </>
             ))}
         </div>
@@ -88,7 +88,7 @@ const PageMainContent = ({ data, location = {}, filesLoading }) => {
                 lng: location.location.geometry.coordinates[1],
               }}
             />
-            <hr />
+            <div className="hr-line" />
           </>
         )}
         {!!images && (
@@ -104,7 +104,7 @@ const PageMainContent = ({ data, location = {}, filesLoading }) => {
                 />
               ))}
             </div>
-            <hr />
+            <div className="hr-line" />
           </>
         )}
         {(!!raws || filesLoading) && (
@@ -122,7 +122,7 @@ const PageMainContent = ({ data, location = {}, filesLoading }) => {
                 ))
               )}
             </div>
-            <hr />
+            <div className="hr-line" />
           </>
         )}
       </div>

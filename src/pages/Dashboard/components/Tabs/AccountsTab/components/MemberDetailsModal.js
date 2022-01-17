@@ -294,7 +294,7 @@ const MemberDetailsModal = () => {
         </div>
         {!isNodePage && (
           <>
-            <hr />
+            <div className="hr-line" />
             <div className="permissions-container">
               <div className="checkboxes">
                 {permissionsArray.map((el) => (

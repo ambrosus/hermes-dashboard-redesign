@@ -62,9 +62,10 @@ p, span, button, label, h1, h2, h3, a, input, textarea, div {
   }
 }
 
-hr {
+.hr-line {
   margin: 40px 0;
-  border-top: 1px solid $color-blue;
+  height: 1px;
+  background-color: $color-blue;
 }
 
 .container {
