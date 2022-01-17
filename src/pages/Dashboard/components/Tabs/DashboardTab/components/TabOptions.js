@@ -1,4 +1,5 @@
 import React from 'react';
+import { NotificationManager } from 'react-notifications';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
@@ -7,13 +8,23 @@ import { pushBundle } from '../../../../../../utils/analytisService';
 
 const TabOptions = ({ period = '7d', setPeriod, type = 'asset', setType }) => {
   const { pathname } = useLocation();
+
+  const pushBundleHandler = async () => {
+    try {
+      await pushBundle();
+      NotificationManager.success('Push success', 'Push bundle');
+    } catch (e) {
+      NotificationManager.error(e.toString(), 'Push error');
+    }
+  };
+
   return (
     <div className="dashboard-tab__options">
       <div className="sort-by-type">
         {pathname === '/dashboard/node' && (
           <>
             <UiButton
-              onclick={() => pushBundle()}
+              onclick={pushBundleHandler}
               type="primary"
               styles={{ padding: '1px 40px' }}
             >
