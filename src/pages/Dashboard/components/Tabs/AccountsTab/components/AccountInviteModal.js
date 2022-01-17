@@ -14,7 +14,16 @@ const AccountInviteModal = () => {
   const closeModal = () => dispatch(handleModal({ name: null }));
 
   const sendInviteHandler = async () => {
-    await createInvites({ email: [`${email}`] });
+    if (!email) return;
+    await createInvites({ email: [`${email}`] }).then((e) => {
+      console.log(e);
+      if (e && e?.errors?.length) {
+        // TODO add validation
+      } else {
+        closeModal();
+        setEmail('');
+      }
+    });
   };
   return (
     <UiModal
@@ -39,6 +48,7 @@ const AccountInviteModal = () => {
           label="Email"
           placeholder="Asset name for example"
           onChange={(e) => setEmail(e)}
+          value={email}
         />
         <div className="space-10" />
         <button
@@ -56,13 +66,16 @@ const AccountInviteModal = () => {
         <div className="btn-group">
           <UiButton
             onclick={closeModal}
-            styles={{ background: '#9198BB', padding: 12 }}
+            priority="secondary"
+            styles={{ padding: 12 }}
           >
             Cancel
           </UiButton>
           <UiButton
+            disabled={!email}
             onclick={sendInviteHandler}
-            styles={{ background: '#4A38AE', padding: 12 }}
+            priority="primary"
+            styles={{ padding: 12 }}
           >
             Invite
           </UiButton>

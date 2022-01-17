@@ -101,8 +101,7 @@ export const backupJSON = async (organizationId) => {
           );
         }
         if (response.data.data) {
-          download.bind(this)('Backup.json', response.data);
-          alert('Organization backuped');
+          download.bind(this)(`Backup_${organizationId}.json`, response.data);
         } else console.log('No data received!');
         return false;
       });

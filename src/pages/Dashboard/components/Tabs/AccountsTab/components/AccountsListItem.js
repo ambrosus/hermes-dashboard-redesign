@@ -66,6 +66,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
     const { id } = args[0][0];
     try {
       await backupJSON(id);
+      NotificationManager.success(`id: ${id}`, 'Backup created');
     } catch (error) {
       NotificationManager.error(error);
     }
