@@ -321,16 +321,10 @@ const MemberDetailsModal = () => {
           </>
         )}
         <div className="btn-group">
-          <UiButton
-            onclick={closeModal}
-            type="secondary"
-          >
+          <UiButton onclick={closeModal} type="secondary">
             Cancel
           </UiButton>
-          <UiButton
-            type="primary"
-            onclick={saveHandler}
-          >
+          <UiButton type="primary" onclick={saveHandler}>
             Save
           </UiButton>
         </div>
