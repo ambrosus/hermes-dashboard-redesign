@@ -159,6 +159,7 @@ const MemberDetailsModal = () => {
             </p>
             {!isNodePage && (
               <div className="createdAt">
+                {/* TODO format data from server */}
                 <span className="created">Created</span> {modalData?.createdOn}
               </div>
             )}
@@ -241,7 +242,7 @@ const MemberDetailsModal = () => {
               disabled
             />
             <UiInput
-              label="Full Name"
+              label="Name"
               placeholder={modalData?.fullName}
               name="fullName"
               onChange={handleModifyAccount}
