@@ -92,8 +92,8 @@ const DashboardTab = () => {
           datasets: [
             {
               data: Ddata,
-              backgroundColor: '#4A38AE',
-              hoverBackgroundColor: '#bed0ef',
+              backgroundColor: '#BFC9E0',
+              hoverBackgroundColor: '#BFC9E0C2',
             },
           ],
         },
