@@ -21,13 +21,6 @@ const AccountInviteModal = () => {
           <h2 className="account-invite-modal__header--heading">
             Invite Members
           </h2>
-          <button
-            className="account-invite-modal__header--form"
-            type="button"
-            onClick={() => alert('formHandler()')}
-          >
-            Form
-          </button>
         </div>
         <div className="space-25" />
         <UiInput
@@ -49,16 +42,10 @@ const AccountInviteModal = () => {
         <div className="space-25" />
 
         <div className="btn-group">
-          <UiButton
-            onclick={closeModal}
-            styles={{ background: '#9198BB', padding: 12 }}
-          >
+          <UiButton type="secondary" onclick={closeModal}>
             Cancel
           </UiButton>
-          <UiButton
-            onclick={() => alert('inviteHandler()')}
-            styles={{ background: '#4A38AE', padding: 12 }}
-          >
+          <UiButton type="primary" onclick={() => alert('inviteHandler()')}>
             Invite
           </UiButton>
         </div>

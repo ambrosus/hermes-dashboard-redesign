@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React, { useState } from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
@@ -12,6 +11,7 @@ import { ReactComponent as ChevronSvg } from '../../assets/svg/chevron.svg';
 import { copyToClipboard } from '../../utils/copyToClipboard';
 import { ReactComponent as DeletePackageSvg } from '../../assets/svg/delete.svg';
 import { ReactComponent as AddPackageSvg } from '../../assets/svg/add-icon.svg';
+import { ReactComponent as MapMarkerSvg } from '../../assets/svg/map-marker.svg';
 import assetPlaceholderImage from '../../assets/raster/aset-image-placeholder.png';
 import boxImage from '../../assets/svg/delivery-box.svg';
 import containerImage from '../../assets/svg/container.svg';
@@ -78,6 +78,10 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
     img = assetPlaceholderImage;
   }
 
+  const location = assetData.content.data.find(
+    (el) => el.type === 'ambrosus.event.location',
+  );
+
   return (
     <div
       className={cx(
@@ -123,6 +127,14 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
           {assetContentInfo.name && assetContentInfo.name.toString()}
         </Link>
         <div className="asset-item-info">
+          {location && (location.city || location.country) && (
+            <div className="asset-item-info__loc">
+              <MapMarkerSvg />
+              {location.city}
+              {location.city && location.country ? ', ' : ''}
+              {location.country}
+            </div>
+          )}
           <span className="asset-item-info__address-label">Asset address</span>
           <span className="asset-item-info__address">{assetId}</span>
           <button type="button" onClick={copyId}>

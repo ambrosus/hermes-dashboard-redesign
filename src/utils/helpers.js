@@ -13,7 +13,7 @@ export const formattingGroup = (type) => {
     case '28d':
       return 'DD-MM';
     case '12m':
-      return 'MMMM';
+      return 'MMM';
     default:
       return 'Y-MM-DD-HH';
   }

@@ -30,7 +30,7 @@ const PackageListItem = ({ onclick, selected, assetData }) => {
 
   const date = moment
     .unix(assetData.content.idData.timestamp)
-    .format('DD.MM.YYYY');
+    .format('DD MMM YYYY');
 
   return (
     <div

@@ -98,6 +98,8 @@ const CreateAssetModal = ({
     latitude: '',
     longitude: '',
     accessLevel: 0,
+    city: '',
+    country: '',
   });
   const [jsonData, setJsonData] = useState('');
 
@@ -263,7 +265,10 @@ const CreateAssetModal = ({
     dispatch(
       handleModal({
         name: 'createResult',
-        data: submitFunc,
+        data: {
+          submitFunc,
+          isEvent: isCreateEvent || !isEmptyObj(bulkEventData),
+        },
       }),
     );
 
@@ -676,7 +681,14 @@ const CreateAssetModal = ({
               {isLocationOpened && (
                 <>
                   <div className="create-asset-form__map">
-                    <Map getMarkerPosition={handleMapCoords} />
+                    <Map
+                      isInCreate
+                      getMarkerPosition={handleMapCoords}
+                      coordinates={{
+                        lat: formData.latitude,
+                        lng: formData.longitude,
+                      }}
+                    />
                   </div>
                   <div
                     className="form-semicolon-wrapper"

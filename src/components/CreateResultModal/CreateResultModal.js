@@ -11,7 +11,7 @@ import DetailsItem from './DetailsItem';
 const CreateResultModal = () => {
   const dispatch = useDispatch();
 
-  const applyFunc = useSelector((state) => state.modal.openedModal.data);
+  const modalData = useSelector((state) => state.modal.openedModal.data);
 
   const { percentsComplete, resultData } = useSelector(
     (state) => state.assets.createResult,
@@ -51,9 +51,15 @@ const CreateResultModal = () => {
 
   useEffect(() => {
     if (modalStep === 2) {
-      dispatch(applyFunc());
+      dispatch(modalData.submitFunc());
     }
   }, [modalStep]);
+
+  if (!modalData) {
+    return null;
+  }
+
+  const { isEvent } = modalData;
 
   const handleApply = () => {
     setModalStep(2);
@@ -74,7 +80,8 @@ const CreateResultModal = () => {
       {modalStep === 1 && (
         <>
           <p className="create-result-modal__title">
-            You want proceed editing this asset?
+            You want proceed editing this
+            {isEvent ? ' event ' : ' asset '}?
           </p>
           <div className="create-result-modal__actions">
             <UiButton type="secondary" onclick={closeModal}>
@@ -88,7 +95,10 @@ const CreateResultModal = () => {
       )}
       {modalStep === 2 && (
         <>
-          <p className="create-result-modal__title">Creating asset</p>
+          <p className="create-result-modal__title">
+            Creating
+            {isEvent ? ' event' : ' asset'}
+          </p>
           <div className="create-result-modal__wait-block">Please wait...</div>
           <div className="create-result-modal__progress">
             <div
@@ -103,12 +113,14 @@ const CreateResultModal = () => {
           {isAllSuccess ? (
             <p className="create-result-modal__title">
               <CheckedIcon />
-              Asset created successfully
+              {isEvent ? ' Event ' : ' Asset '}
+              created successfully
             </p>
           ) : (
             <p className="create-result-modal__title">
               <ErrorIcon />
-              There were problems while creating the asset
+              There were problems while creating the
+              {isEvent ? ' event' : ' asset'}
             </p>
           )}
           <UiButton

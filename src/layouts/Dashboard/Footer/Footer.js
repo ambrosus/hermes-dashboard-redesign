@@ -16,10 +16,21 @@ const Footer = () => (
       support@ambrosus.io
     </a>
     <div className="footer__social">
-      <MediumIcon />
-      <GithubIcon />
-      <LinkedinIcon />
-      <TwitterIcon />
+      <a href="https://blog.ambrosus.io/" target="_blank">
+        <MediumIcon />
+      </a>
+      <a href="https://github.com/ambrosus" target="_blank">
+        <GithubIcon />
+      </a>
+      <a
+        href="https://www.linkedin.com/company/ambrosus-ecosystem"
+        target="_blank"
+      >
+        <LinkedinIcon />
+      </a>
+      <a href="https://twitter.com/AMB_Ecosystem" target="_blank">
+        <TwitterIcon />
+      </a>
     </div>
   </footer>
 );

@@ -133,6 +133,7 @@ export const getFile = (event) => {
 export const createInvites = async (email) => {
   const url = `${apiExtended}/organization/invite`;
   const invites = await axios.post(url, email);
+
   if (invites.error) {
     throw invites.error;
   }

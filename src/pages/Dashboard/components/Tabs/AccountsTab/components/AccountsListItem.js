@@ -241,6 +241,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
       <div className="top">
         {renderStatus(info)}
         <div className="top__name">{isNodePage ? info.title : info.email}</div>
+        <span className="top__created-on">{info.createdOn}</span>
       </div>
       <div className="options">
         {isNodePage ? (

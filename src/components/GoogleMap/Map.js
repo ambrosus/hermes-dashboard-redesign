@@ -24,7 +24,7 @@ const options = {
 
 Geocode.setApiKey('AIzaSyAiefOqIuYCfafKYdZRGkGt_7TqLn4n2Ng');
 
-const Map = ({ coordinates = {}, getMarkerPosition = () => {} }) => {
+const Map = ({ coordinates = {}, getMarkerPosition = () => {}, isInCreate }) => {
   const [center, setCenter] = useState({
     lat: coordinates.lat || 50.487279,
     lng: coordinates.lng || 30.452726,
@@ -86,7 +86,7 @@ const Map = ({ coordinates = {}, getMarkerPosition = () => {} }) => {
       mapContainerStyle={{ width: '100%', height: 400 }}
       center={center}
       zoom={8}
-      onClick={isEmptyObj(coordinates) ? handleClick : () => {}}
+      onClick={isInCreate ? handleClick : () => {}}
       options={options}
     >
       {!isEmptyObj(marker) && (
@@ -100,7 +100,7 @@ const Map = ({ coordinates = {}, getMarkerPosition = () => {} }) => {
           </div>
         </InfoWindow>
       )}
-      {isEmptyObj(coordinates) && <Search handleSelect={handleSelect} />}
+      {isInCreate && <Search handleSelect={handleSelect} />}
     </GoogleMap>
   );
 };
@@ -108,6 +108,7 @@ const Map = ({ coordinates = {}, getMarkerPosition = () => {} }) => {
 Map.propTypes = {
   coordinates: PropTypes.object,
   getMarkerPosition: PropTypes.func,
+  isInCreate: PropTypes.bool,
 };
 
 export default Map;

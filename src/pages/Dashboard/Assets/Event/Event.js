@@ -11,6 +11,8 @@ import CreateAssetModal from '../../../../components/CreateAssetModal';
 import UiModal from '../../../../components/UiModal';
 import assetInfoTransform from '../../../../utils/assetInfoTransform';
 import { handleModal } from '../../../../store/modules/modal';
+import { ReactComponent as VisibilityOffSvg } from '../../../../assets/svg/visibility_off.svg';
+import { ReactComponent as VisibilitySvg } from '../../../../assets/svg/visibility.svg';
 
 const Event = () => {
   const { assetId, eventId } = useParams();
@@ -63,14 +65,29 @@ const Event = () => {
             alt="asset"
           />
         )}
-        <UiButton
-          type="secondary"
-          className="event-page__similar-event"
-          styles={{ width: 160, height: 48 }}
-          onclick={handleOpenSimilarEventModal}
-        >
-          Add similar event
-        </UiButton>
+        <div className="event-page__top-block">
+          <div className="asset-page__type">
+            {currentEvent.content.idData.accessLevel === 1 ? (
+              <>
+                <VisibilityOffSvg />
+                Private
+              </>
+            ) : (
+              <>
+                <VisibilitySvg />
+                Public
+              </>
+            )}
+          </div>
+          <UiButton
+            type="secondary"
+            className="event-page__similar-event"
+            styles={{ width: 160, height: 48 }}
+            onclick={handleOpenSimilarEventModal}
+          >
+            Add similar event
+          </UiButton>
+        </div>
         <AssetItem isOnAssetPage assetData={currentEvent} />
         <PageMainContent data={currentEvent} location={location} />
         <Link to={`/dashboard/assets/${assetId}`}>

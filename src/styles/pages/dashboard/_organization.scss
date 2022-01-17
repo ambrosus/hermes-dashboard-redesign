@@ -233,6 +233,13 @@
               color: #FFFFFF;
             }
 
+            &__created-on {
+              margin-left: auto;
+              font-size: 12px;
+              font-weight: 400;
+              color: $color-gray-light;
+            }
+
             &__name {
               font-style: normal;
               font-weight: 500;

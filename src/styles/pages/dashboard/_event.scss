@@ -15,4 +15,9 @@
     margin-top: 60px;
     background: $color-gray;
   }
+
+  &__top-block {
+    display: flex;
+    justify-content: space-between;
+  }
 }

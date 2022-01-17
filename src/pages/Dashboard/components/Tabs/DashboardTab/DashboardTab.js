@@ -92,7 +92,7 @@ const DashboardTab = () => {
           datasets: [
             {
               data: Ddata,
-              backgroundColor: '#4A38AE',
+              backgroundColor: '#BFC9E0',
               hoverBackgroundColor: '#bed0ef',
             },
           ],
@@ -136,8 +136,11 @@ const DashboardTab = () => {
         setPeriod={setGroupBy}
       />
       <div className="space-25" />
-      <div className="total-for-period">
-        Total for the selected period: {total}
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <p style={{ fontWeight: 700 }}>{display === 'asset' ? 'Assets' : 'Events'} created</p>
+        <div className="total-for-period">
+          Total for the selected period: {total}
+        </div>
       </div>
       <div className="space-10" />
       {data && (

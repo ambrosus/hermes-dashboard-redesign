@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
@@ -29,6 +29,15 @@ const SearchModal = () => {
   });
 
   const [identifiersFields, setIdentifiersFields] = useState([0]);
+
+  useEffect(() => {
+    const body = document.querySelector('body');
+    body.style.overflow = 'hidden';
+
+    return () => {
+      body.style.overflow = 'auto';
+    };
+  }, []);
 
   const handleSetFormData = (keyValue) =>
     setFormData({ ...formData, ...keyValue });
@@ -196,7 +205,7 @@ const SearchModal = () => {
         Add identifier
       </button>
       <hr style={{ margin: '24px 0' }} />
-      <h2 className="search-modal__section-title">Date</h2>
+      <h2 className="search-modal__section-title">Location</h2>
       <div className="form-semicolon-wrapper">
         <UiInput
           label="City"

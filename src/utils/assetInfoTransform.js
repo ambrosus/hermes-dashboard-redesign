@@ -1,13 +1,15 @@
 import { isEmptyObj } from './isEmptyObj';
 import getPropertiesAndGroups from './getPropertiesAndGroups';
-
+/* eslint-disable */
 const assetInfoTransform = (assetInfo, isEvent) => {
-  const info = assetInfo.content.data.find(
-    (el) => el.type === 'ambrosus.asset.info',
-  );
+  const info =
+    assetInfo.content.data.find((el) => el.type === 'ambrosus.asset.info') ||
+    assetInfo.content.data[0];
+
   const identifiers = assetInfo.content.data.find(
     (el) => el.type === 'ambrosus.asset.identifiers',
   );
+
   const { name, assetType: customType, images, description, type } = info;
 
   const transformedImages = [];
@@ -82,7 +84,7 @@ const assetInfoTransform = (assetInfo, isEvent) => {
     });
   }
 
-  return {
+  const transformedData = {
     formData: {
       name,
       customType: isEvent ? type : customType,
@@ -98,6 +100,18 @@ const assetInfoTransform = (assetInfo, isEvent) => {
     groupFields,
     additionalFields,
   };
+
+  const location = assetInfo.content.data.find(
+    (el) => el.type === 'ambrosus.event.location',
+  );
+
+  if (location) {
+    transformedData.formData.latitude = location.location.geometry.coordinates[0];
+    transformedData.formData.longitude = location.location.geometry.coordinates[1];
+    transformedData.formData.city = location.city;
+    transformedData.formData.country = location.country;
+  }
+  return transformedData;
 };
 
 export default assetInfoTransform;
