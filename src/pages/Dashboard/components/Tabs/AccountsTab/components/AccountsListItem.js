@@ -55,7 +55,15 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
   };
 
   const resendInviteHandler = async (email) => {
-    await resendInvites({ email: [`${email}`] });
+    try {
+      await resendInvites({ email: [`${email}`] });
+      NotificationManager.success(
+        `Invite for ${email} was resend successfully`,
+        'Resend success',
+      );
+    } catch (e) {
+      NotificationManager.error(e.toString());
+    }
   };
 
   const revokeInviteHandler = async (inviteId) => {

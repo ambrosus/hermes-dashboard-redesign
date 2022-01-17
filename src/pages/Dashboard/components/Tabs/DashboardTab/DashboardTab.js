@@ -136,8 +136,13 @@ const DashboardTab = () => {
         setPeriod={setGroupBy}
       />
       <div className="space-25" />
-      <div className="total-for-period">
-        Total for the selected period: {total}
+      <div className="grapfic-header">
+        <div className="title">
+          <span style={{ textTransform: 'capitalize' }}>{display}s </span>&nbsp; created
+        </div>
+        <div className="total-for-period">
+          Total for the selected period: {total}
+        </div>
       </div>
       <div className="space-10" />
       {data && (

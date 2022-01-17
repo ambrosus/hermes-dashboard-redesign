@@ -180,6 +180,15 @@ export const modifyOrganization = async (organizationId, body) => {
   return organization.data;
 };
 
+export const getOrganization = async (organizationId) => {
+  const url = `${apiExtended}/organization/${organizationId}`;
+  const organization = await axios.get(url);
+  if (organization.error) {
+    throw organization.error;
+  }
+  return organization.data.data;
+};
+
 export const modifyAccount = async (address, body) => {
   const url = `${apiExtended}/account2/modify/${address}`;
   const account = await axios.post(url, body);
@@ -188,6 +197,7 @@ export const modifyAccount = async (address, body) => {
   }
   return account.data;
 };
+
 export default {
   getFile,
   backupJSON,
