@@ -14,9 +14,17 @@ const UiInput = ({
   onImageClick,
   disabled,
   name,
+  onEnterPress = () => {},
 }) => {
   const handleInput = ({ target }) =>
     onChange(name ? { [name]: target.value } : target.value);
+
+  const handleEnterPress = (event) => {
+    console.log(event);
+    if (event.charCode === 13) {
+      onEnterPress();
+    }
+  };
 
   return (
     <div
@@ -35,6 +43,7 @@ const UiInput = ({
         value={value}
         disabled={disabled}
         onChange={handleInput}
+        onKeyPress={handleEnterPress}
       />
       {imgSrc && (
         <img
@@ -62,6 +71,7 @@ UiInput.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string,
   disabled: PropTypes.bool,
+  onEnterPress: PropTypes.func,
 };
 
 export default UiInput;

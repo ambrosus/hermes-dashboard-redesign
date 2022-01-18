@@ -29,7 +29,7 @@ const Main = () => {
   return (
     <Layout>
       <RenderRoutes routes={routes} />
-      <UiModal contentStyles={{ padding: 0 }} modalName="createResult">
+      <UiModal isFullWindow contentStyles={{ padding: 0 }} modalName="createResult">
         <CreateResultModal />
       </UiModal>
       <UiModal modalName="secureKeys">
@@ -93,17 +93,7 @@ const Main = () => {
           <UiButton onclick={closeModal}>Close</UiButton>
         </div>
       </UiModal>
-      <UiModal
-        modalName="searchModal"
-        contentStyles={{
-          width: '100%',
-          height: '100%',
-        }}
-        overlayStyles={{
-          paddingTop: 60,
-          background: 'transparent',
-        }}
-      >
+      <UiModal modalName="searchModal" isFullWindow>
         <SearchModal />
       </UiModal>
       <NotificationContainer />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
@@ -29,15 +29,6 @@ const SearchModal = () => {
   });
 
   const [identifiersFields, setIdentifiersFields] = useState([0]);
-
-  useEffect(() => {
-    const body = document.querySelector('body');
-    body.style.overflow = 'hidden';
-
-    return () => {
-      body.style.overflow = 'auto';
-    };
-  }, []);
 
   const handleSetFormData = (keyValue) =>
     setFormData({ ...formData, ...keyValue });

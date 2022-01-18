@@ -96,7 +96,7 @@ const Event = () => {
           </UiButton>
         </Link>
       </div>
-      <UiModal modalName="similarEvent">
+      <UiModal isFullWindow modalName="similarEvent">
         <CreateAssetModal
           isCreateEvent
           modalType="similarEvent"

@@ -141,14 +141,14 @@ const Asset = () => {
         )}
       </div>
       <AssetPageTabs assetId={assetId} />
-      <UiModal modalName="createEvent">
+      <UiModal isFullWindow modalName="createEvent">
         <CreateAssetModal
           isCreateEvent
           modalType="createEvent"
           assetId={assetId}
         />
       </UiModal>
-      <UiModal modalName="editAsset">
+      <UiModal isFullWindow modalName="editAsset">
         <CreateAssetModal />
       </UiModal>
     </div>

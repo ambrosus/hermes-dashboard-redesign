@@ -87,10 +87,10 @@ const Assets = () => {
           ))}
         </InfiniteScroll>
       </div>
-      <UiModal modalName="createAsset">
+      <UiModal isFullWindow modalName="createAsset">
         <CreateAssetModal modalType="createAsset" />
       </UiModal>
-      <UiModal modalName="bulkEvent">
+      <UiModal isFullWindow modalName="bulkEvent">
         <CreateAssetModal
           modalType="bulkEvent"
           bulkEventData={

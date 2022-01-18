@@ -4,17 +4,37 @@ import Modal from 'react-modal';
 import PropTypes from 'prop-types';
 import { handleModal } from '../../store/modules/modal';
 
-const UiModal = ({ children, modalName, contentStyles, overlayStyles }) => {
+const UiModal = ({
+  children,
+  modalName,
+  contentStyles,
+  overlayStyles,
+  isFullWindow,
+}) => {
   const dispatch = useDispatch();
 
   const openedModalName = useSelector((state) => state.modal.openedModal.name);
   const isOpen = modalName === openedModalName;
 
-  const closeModal = () => dispatch(handleModal({ name: '' }));
+  const closeModal = () => {
+    if (isFullWindow) {
+      const body = document.querySelector('body');
+      body.style.overflow = 'auto';
+    }
+    dispatch(handleModal({ name: '' }));
+  };
+
+  const afterOpen = () => {
+    if (isFullWindow) {
+      const body = document.querySelector('body');
+      body.style.overflow = 'hidden';
+    }
+  };
 
   return (
     <Modal
       isOpen={isOpen}
+      onAfterOpen={afterOpen}
       onRequestClose={closeModal}
       style={{
         content: {
@@ -27,10 +47,12 @@ const UiModal = ({ children, modalName, contentStyles, overlayStyles }) => {
           boxShadow: '0px 4px 12px rgba(55, 29, 199, 0.15)',
           border: 0,
           padding: 40,
+          ...(isFullWindow && { width: '100%', height: '100%' }),
           ...contentStyles,
         },
         overlay: {
           backgroundColor: '#333333e6',
+          ...(isFullWindow && { paddingTop: 60, background: 'transparent' }),
           ...overlayStyles,
         },
       }}
@@ -45,6 +67,7 @@ UiModal.propTypes = {
   modalName: PropTypes.string,
   contentStyles: PropTypes.object,
   overlayStyles: PropTypes.object,
+  isFullWindow: PropTypes.bool,
 };
 
 export default UiModal;
