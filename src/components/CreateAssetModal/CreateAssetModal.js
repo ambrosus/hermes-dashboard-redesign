@@ -267,9 +267,6 @@ const CreateAssetModal = ({
     if (isCreateEvent) {
       submitFunc = () => createEvent(assetId, formData);
     }
-    if (modalType === 'editAsset') {
-      submitFunc = () => createEvent(assetId, formData, true, false, true);
-    }
     if (!isEmptyObj(bulkEventData)) {
       submitFunc = () => bulkEvents(bulkEventData.assetsIds, formData);
     }

@@ -149,7 +149,7 @@ const Asset = () => {
         />
       </UiModal>
       <UiModal modalName="editAsset">
-        <CreateAssetModal modalType="editAsset" assetId={assetId} />
+        <CreateAssetModal />
       </UiModal>
     </div>
   );

@@ -95,7 +95,7 @@ const assetInfoTransform = (assetInfo, isEvent) => {
       accessLevel: assetInfo.content.idData.accessLevel,
       propertiesItems: properties,
       ...transformedGroups,
-      rows: raws,
+      rows: raws || [],
     },
     groupFields,
     additionalFields,

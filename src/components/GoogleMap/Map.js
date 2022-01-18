@@ -34,6 +34,7 @@ const Map = ({ coordinates = {}, getMarkerPosition = () => {}, isInCreate }) => 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: 'AIzaSyAiefOqIuYCfafKYdZRGkGt_7TqLn4n2Ng',
     libraries,
+    language: 'en',
   });
 
   const handleClick = (e) => {

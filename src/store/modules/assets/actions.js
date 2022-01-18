@@ -6,9 +6,7 @@ import {
   SET_ASSETS_QUERY_DATA,
   SET_ASSETS_SEARCH_PARAMS,
   SET_CREATE_RESULT,
-  REMOVE_ASSET,
   SET_EVENTS_DATA,
-  UNSHIFT_ASSETS_LIST_DATA,
   UNSHIFT_EVENTS_LIST_DATA,
   SET_ASSET_PAGE_INFO,
   SET_SEARCHED_ASSETS_LIST,
@@ -168,7 +166,7 @@ export const createAsset = (formData, isJSONForm) => (dispatch) => {
 };
 
 export const createEvent =
-  (assetId, formData, isAssetCreating, isBulk, isEdit) => (dispatch) => {
+  (assetId, formData, isAssetCreating, isBulk) => (dispatch) => {
     const privateKey = sessionStorage.getItem('user_private_key');
     const event = generateEvent(
       assetId,
@@ -193,19 +191,12 @@ export const createEvent =
               }),
             );
 
-            if (isEdit) {
+            if (!isAssetCreating) {
               dispatch({
-                type: REMOVE_ASSET,
-                payload: assetId,
+                type: UNSHIFT_EVENTS_LIST_DATA,
+                payload: data.data,
               });
-              dispatch(setAssetPageInfo(data.data));
             }
-            dispatch({
-              type: isAssetCreating
-                ? UNSHIFT_ASSETS_LIST_DATA
-                : UNSHIFT_EVENTS_LIST_DATA,
-              payload: data.data,
-            });
           }
           resolve(data);
         })
