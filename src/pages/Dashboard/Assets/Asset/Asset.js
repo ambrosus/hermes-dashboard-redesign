@@ -53,18 +53,9 @@ const Asset = () => {
   );
 
   const handleEditButton = () => {
-    const dataFromStorage = localStorage.getItem('createAssetData');
-    const data = dataFromStorage ? JSON.parse(dataFromStorage) : {};
-
-    localStorage.setItem(
-      'createAssetData',
-      JSON.stringify({
-        ...data,
-        editAsset: assetInfoTransform(assetData),
-      }),
+    dispatch(
+      handleModal({ name: 'editAsset', data: assetInfoTransform(assetData) }),
     );
-
-    dispatch(handleModal({ name: 'editAsset' }));
   };
 
   return (

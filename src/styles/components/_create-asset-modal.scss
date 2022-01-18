@@ -38,18 +38,12 @@
 
 .create-asset-form {
   &__media-bundle {
-    position: sticky;
-    top: 0;
-    z-index: 111;
-    background: white;
-    padding: 15px 24px;
     font-size: 14px;
     font-weight: 400;
     color: $color-gray;
     width: 100%;
-    text-align: center;
-    border: 1px solid $color-gray-light;
-    margin: 0 auto 44px;
+    text-align: right;
+    margin-bottom: 20px;
 
     span {
       color: $color-primary;
@@ -69,7 +63,6 @@
   }
 
   &__set-cover-img {
-    display: none;
     position: absolute;
     left: 5px;
     top: 5px;
@@ -86,14 +79,6 @@
     path {
       fill: white;
     }
-
-    &--selected {
-      display: block;
-    }
-  }
-
-  &__added-img:hover &__set-cover-img {
-    display: block;
   }
 
   &__added-img {

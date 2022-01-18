@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import NotificationManager from 'react-notifications/lib/NotificationManager';
 import cx from 'classnames';
@@ -74,6 +74,8 @@ const CreateAssetModal = ({
 }) => {
   const dispatch = useDispatch();
 
+  const { data: initialData } = useSelector((state) => state.modal.openedModal);
+
   const [isPropertyOpened, setIsPropertyOpened] = useState(false);
   const [isIdentifiersOpened, setIsIdentifiersOpened] = useState(false);
   const [isLocationOpened, setIsLocationOpened] = useState(false);
@@ -108,6 +110,10 @@ const CreateAssetModal = ({
     let data = dataFromStorage ? JSON.parse(dataFromStorage) : {};
 
     data = data[modalType] || {};
+
+    if (initialData) {
+      data = initialData;
+    }
 
     if (data.additionalFields) {
       setAdditionalFields(data.additionalFields);
@@ -166,6 +172,9 @@ const CreateAssetModal = ({
     const { images } = formData;
 
     if (imgUrl && !images.find((el) => el === imgUrl)) {
+      if (!images.length) {
+        setCoverImg(imgUrl);
+      }
       handleBundleSize(imgUrl.length, () => {
         handleSetFormData({ images: [...images, imgUrl] });
         setImgUrl('');
@@ -174,11 +183,14 @@ const CreateAssetModal = ({
   };
 
   const deleteImg = (url) => {
+    if (formData.coverImgUrl === url) {
+      setCoverImg('');
+    }
     handleSetFormData({ images: formData.images.filter((el) => el !== url) });
   };
 
-  const setCoverImg = (url) => {
-    handleSetFormData({ coverImgUrl: formData.coverImgUrl ? '' : url });
+  const setCoverImg = (url, isRemove) => {
+    handleSetFormData({ coverImgUrl: isRemove ? '' : url });
   };
 
   const addAdditionalField = (itemName) => {
@@ -241,10 +253,10 @@ const CreateAssetModal = ({
   const closeModal = () => dispatch(handleModal(null));
 
   const handleSetFormData = (keyValue) => {
-    setFormData({
-      ...formData,
+    setFormData((state) => ({
+      ...state,
       ...keyValue,
-    });
+    }));
   };
 
   const showResultModal = () => {
@@ -385,6 +397,10 @@ const CreateAssetModal = ({
 
   return (
     <div className="create-asset">
+      <p className="create-asset-form__media-bundle">
+        Media bundle size <span>{mediaBundle} Mb </span>
+        from <span>16 Mb</span>
+      </p>
       <div
         className="create-asset-title"
         style={{ padding: '0 0 20px 0', cursor: 'auto' }}
@@ -473,10 +489,6 @@ const CreateAssetModal = ({
             onChange={handleSetFormData}
           />
           <div className="hr-line" />
-          <div className="create-asset-form__media-bundle">
-            Media bundle size <span>{mediaBundle} Mb </span>
-            from <span>16 Mb</span>
-          </div>
           <UiInput
             placeholder="Enter an image url here"
             label={`${entityName} images`}
@@ -498,13 +510,14 @@ const CreateAssetModal = ({
                       type="button"
                       className={cx(
                         'create-asset-form__set-cover-img',
-                        'create-asset-form__set-cover-img',
                         formData.coverImgUrl === el &&
                           'create-asset-form__set-cover-img--selected',
                       )}
-                      onClick={() => setCoverImg(el)}
+                      onClick={() =>
+                        setCoverImg(el, formData.coverImgUrl === el)
+                      }
                     >
-                      <CheckboxIcon />
+                      {formData.coverImgUrl === el && <CheckboxIcon />}
                     </button>
                     <img src={el} alt="added" />
                     <button

@@ -10,7 +10,7 @@ const assetInfoTransform = (assetInfo, isEvent) => {
     (el) => el.type === 'ambrosus.asset.identifiers',
   );
 
-  const { name, assetType: customType, images, description, type } = info;
+  const { name, assetType: customType, images, description, type, raws } = info;
 
   const transformedImages = [];
   let coverImgUrl = '';
@@ -95,7 +95,7 @@ const assetInfoTransform = (assetInfo, isEvent) => {
       accessLevel: assetInfo.content.idData.accessLevel,
       propertiesItems: properties,
       ...transformedGroups,
-      rows: [],
+      rows: raws,
     },
     groupFields,
     additionalFields,

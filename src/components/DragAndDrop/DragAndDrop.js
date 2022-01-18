@@ -8,7 +8,7 @@ const DragAndDrop = ({ dropped }) => {
   };
 
   const handleDrop = (e) => {
-    dropped(e.dataTransfer.files[0]);
+    dropped([e.dataTransfer.files[0]]);
 
     e.preventDefault();
     e.stopPropagation();
