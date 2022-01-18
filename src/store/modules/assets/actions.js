@@ -7,6 +7,7 @@ import {
   SET_ASSETS_SEARCH_PARAMS,
   SET_CREATE_RESULT,
   SET_EVENTS_DATA,
+  UNSHIFT_ASSETS_LIST_DATA,
   UNSHIFT_EVENTS_LIST_DATA,
   SET_ASSET_PAGE_INFO,
   SET_SEARCHED_ASSETS_LIST,
@@ -124,7 +125,7 @@ export const fetchEventsInfo = (eventId) => (dispatch) => {
     });
 };
 
-export const createAsset = (formData, isJSONForm) => (dispatch) => {
+export const createAsset = (formData, isJSONForm, isEdit) => (dispatch) => {
   const privateKey = sessionStorage.getItem('user_private_key');
   const asset = isJSONForm ? formData : generateAsset(privateKey);
 
@@ -145,6 +146,8 @@ export const createAsset = (formData, isJSONForm) => (dispatch) => {
               type: 'ambrosus.asset.info',
             },
             true,
+            false,
+            isEdit,
           ),
         );
         dispatch(
@@ -190,13 +193,12 @@ export const createEvent =
                 percentsComplete: 100,
               }),
             );
-
-            if (!isAssetCreating) {
-              dispatch({
-                type: UNSHIFT_EVENTS_LIST_DATA,
-                payload: data.data,
-              });
-            }
+            dispatch({
+              type: isAssetCreating
+                ? UNSHIFT_ASSETS_LIST_DATA
+                : UNSHIFT_EVENTS_LIST_DATA,
+              payload: data.data,
+            });
           }
           resolve(data);
         })

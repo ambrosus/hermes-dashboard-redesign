@@ -5,6 +5,7 @@ import {
   SET_ASSETS_SEARCH_PARAMS,
   SET_CREATE_RESULT,
   SET_EVENTS_DATA,
+  UNSHIFT_ASSETS_LIST_DATA,
   UNSHIFT_EVENTS_LIST_DATA,
   SET_ASSET_PAGE_INFO,
   SET_SEARCHED_ASSETS_LIST,
@@ -37,6 +38,8 @@ export default (state = defaultState, { type, payload }) => {
         ...state,
         assetsList: payload.length ? [...state.assetsList, ...payload] : [],
       };
+    case UNSHIFT_ASSETS_LIST_DATA:
+      return { ...state, assetsList: [payload].concat(state.assetsList) };
     case UNSHIFT_EVENTS_LIST_DATA:
       return { ...state, eventsList: [payload].concat(state.eventsList) };
     case SET_EVENTS_DATA:
