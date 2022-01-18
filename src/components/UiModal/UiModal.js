@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
@@ -16,13 +16,14 @@ const UiModal = ({
   const openedModalName = useSelector((state) => state.modal.openedModal.name);
   const isOpen = modalName === openedModalName;
 
-  const closeModal = () => {
-    if (isFullWindow) {
+  useEffect(() => {
+    if (isFullWindow && !openedModalName) {
       const body = document.querySelector('body');
       body.style.overflow = 'auto';
     }
-    dispatch(handleModal({ name: '' }));
-  };
+  }, [openedModalName]);
+
+  const closeModal = () => dispatch(handleModal({ name: '' }));
 
   const afterOpen = () => {
     if (isFullWindow) {
