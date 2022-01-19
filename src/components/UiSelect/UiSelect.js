@@ -22,6 +22,7 @@ const UiSelect = ({
   const selectEl = useRef(null);
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [inputValue, setInputValue] = useState(selectedValue);
+  const [selectedKeyByArrow, setSelectedKeyByArrow] = useState(null);
   const [isOptionsOpened, setIsOptionsOpened] = useDetectOutsideClick(
     selectEl,
     false,
@@ -39,32 +40,31 @@ const UiSelect = ({
   }, [selectedValue]);
 
   useEffect(() => {
-    if (inputValue) {
-      if (filteredOptions.length) {
-        setIsOptionsOpened(true);
-      } else {
-        setIsOptionsOpened(false);
-      }
-    } else {
-      setIsOptionsOpened(false);
-    }
-  }, [inputValue]);
+    const filtered = filterOptions(options, inputValue);
 
-  useEffect(() => {
-    setFilteredOptions(options);
-    setIsOptionsOpened(true);
+    setFilteredOptions(filtered);
+    if (filtered.length) {
+      setIsOptionsOpened(true);
+    }
   }, [options]);
 
   const toggleOptionsVisibility = () => setIsOptionsOpened((isOpen) => !isOpen);
 
   const handleChange = (value) => {
     onChange(name ? { [name]: value } : value);
-    setIsOptionsOpened(false);
     setInputValue(value);
+    setIsOptionsOpened(false);
   };
+
+  const filterOptions = (array, value) =>
+    array.filter(
+      (el) => el && el.label.toLowerCase().includes(value.toLocaleString()),
+    );
 
   const handleSearch = (value) => {
     onSearch(value);
+    setInputValue(value);
+
     if (
       !value ||
       !conditionToOnlyDropdownSelect ||
@@ -72,19 +72,55 @@ const UiSelect = ({
     ) {
       onChange(name ? { [name]: value } : value);
     }
-    setInputValue(value);
+
+    let filtered;
+
     if (searchable) {
-      setFilteredOptions(
-        options.filter(
-          (el) => el && el.label.toLowerCase().includes(value.toLocaleString()),
-        ),
-      );
+      filtered = filterOptions(options, value);
+      setFilteredOptions(filtered);
+    }
+
+    setSelectedKeyByArrow(null);
+
+    if (value) {
+      if (filtered.length) {
+        setIsOptionsOpened(true);
+      } else {
+        setIsOptionsOpened(false);
+      }
+    } else {
+      setIsOptionsOpened(false);
     }
   };
 
   const handleShowDropdown = () => {
     setFilteredOptions(options);
     toggleOptionsVisibility();
+  };
+
+  const handleKeyPress = (event) => {
+    const lastElementIdx = filteredOptions.length - 1;
+
+    if (event.keyCode === 40) {
+      if (
+        selectedKeyByArrow === null ||
+        selectedKeyByArrow === lastElementIdx
+      ) {
+        setSelectedKeyByArrow(0);
+      } else {
+        setSelectedKeyByArrow((key) => key + 1);
+      }
+    } else if (event.keyCode === 38) {
+      if (selectedKeyByArrow === null || selectedKeyByArrow === 0) {
+        setSelectedKeyByArrow(lastElementIdx);
+      } else {
+        setSelectedKeyByArrow((key) => key - 1);
+      }
+    }
+  };
+
+  const selectValueByEnter = () => {
+    handleChange(filteredOptions[selectedKeyByArrow].value);
   };
 
   return (
@@ -97,13 +133,18 @@ const UiSelect = ({
         imgSrc={imgSrc}
         onImageClick={handleShowDropdown}
         rightEl={rightEl}
+        onKeyPress={handleKeyPress}
+        onEnterPress={selectValueByEnter}
       />
       {isOptionsOpened && (
         <ul className="ui-select__options">
-          {filteredOptions.map((el) => (
+          {filteredOptions.map((el, i) => (
             <li key={el.value}>
               <button
-                className="ui-select__option"
+                className={cx(
+                  'ui-select__option',
+                  i === selectedKeyByArrow && 'ui-select__option--selected',
+                )}
                 type="button"
                 onClick={() => handleChange(el.value)}
               >

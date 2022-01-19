@@ -16,14 +16,16 @@ const UiInput = ({
   name,
   onEnterPress = () => {},
   rightEl,
+  onKeyPress,
 }) => {
   const handleInput = ({ target }) =>
     onChange(name ? { [name]: target.value } : target.value);
 
-  const handleEnterPress = (event) => {
-    if (event.charCode === 13) {
+  const handleKeyPress = (event) => {
+    if (event.keyCode === 13) {
       onEnterPress();
     }
+    onKeyPress(event);
   };
 
   return (
@@ -43,7 +45,7 @@ const UiInput = ({
         value={value}
         disabled={disabled}
         onChange={handleInput}
-        onKeyPress={handleEnterPress}
+        onKeyDown={handleKeyPress}
       />
       {imgSrc && (
         <img
@@ -73,6 +75,7 @@ UiInput.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onEnterPress: PropTypes.func,
+  onKeyPress: PropTypes.func,
   rightEl: PropTypes.element,
 };
 

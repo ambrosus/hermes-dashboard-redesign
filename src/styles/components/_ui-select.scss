@@ -23,7 +23,7 @@
     width: 100%;
     text-align: left;
 
-    &:hover {
+    &:hover, &--selected {
       background: $whiteToGray;
     }
   }

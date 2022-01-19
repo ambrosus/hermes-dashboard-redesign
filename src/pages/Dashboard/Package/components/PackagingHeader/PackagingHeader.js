@@ -77,6 +77,12 @@ const PackagingHeader = ({ handleFormData, formData, errorFields }) => {
   );
 
   const setDropdownCondition = (value) => value.length !== 66;
+  const handleAssetsSearch = (value) => {
+    if (!value) {
+      setSearchedAssetsList([]);
+    }
+    setAssetSearchValue(value);
+  };
 
   return (
     <div className="packaging-header">
@@ -102,7 +108,7 @@ const PackagingHeader = ({ handleFormData, formData, errorFields }) => {
         selectedValue={formData.assetId}
         styles={{ marginBottom: 15 }}
         conditionToOnlyDropdownSelect={setDropdownCondition}
-        onSearch={setAssetSearchValue}
+        onSearch={handleAssetsSearch}
         rightEl={isLoading ? <div className="loader" /> : null}
       />
       {errorFields.assetName && (
