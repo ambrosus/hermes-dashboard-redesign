@@ -84,7 +84,7 @@ const Assets = () => {
       dispatch(
         handleModal({
           name: 'createResult',
-          data: () => bulkEvents(selectedPackages, packageData),
+          data: { submitFunc: () => bulkEvents(selectedPackages, packageData) },
         }),
       );
 
