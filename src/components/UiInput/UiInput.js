@@ -16,7 +16,7 @@ const UiInput = ({
   name,
   onEnterPress = () => {},
   rightEl,
-  onKeyPress,
+  onKeyPress = () => {},
 }) => {
   const handleInput = ({ target }) =>
     onChange(name ? { [name]: target.value } : target.value);
