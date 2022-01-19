@@ -36,9 +36,14 @@ const Header = () => {
       ];
 
   const showSearchBar = () => dispatch(handleModal({ name: 'searchModal' }));
+  const closeModals = () => {
+    if (openedModalName) {
+      dispatch(handleModal({ name: '' }));
+    }
+  };
 
   return (
-    <header className="header">
+    <header role="presentation" className="header" onClick={closeModals}>
       <div className="header__logo">
         <Link to="/dashboard/assets">
           <ReactSVG src={logoIcon} wrapper="span" />
