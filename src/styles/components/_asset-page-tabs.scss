@@ -2,7 +2,7 @@
   &__btn {
     padding-bottom: 20px;
     color: $color-gray;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 21px;
     margin-right: 55px;
 
@@ -35,7 +35,7 @@
 
 .asset-tab-title {
   font-size: 21px;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .event-tab-item {
@@ -70,7 +70,7 @@
   }
 
   &__type-name {
-    font-weight: 500;
+    font-weight: 700;
     text-align: center;
     margin: 5px 0;
 
@@ -89,7 +89,7 @@
 
   &__title {
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 700;
     margin-bottom: 4px;
     display: -webkit-box;
     max-width: 560px;
@@ -107,7 +107,7 @@
 
   &__when {
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 700;
     color: $color-gray;
     margin-right: 13px;
   }
@@ -170,7 +170,7 @@
   }
 
   &__title {
-    font-weight: 500;
+    font-weight: 700;
   }
 
   &__date {
@@ -187,7 +187,7 @@
 
 .asset-tab-select-btn {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 700;
   color: $color-gray;
   margin-right: 18px;
   margin-bottom: 28px;
@@ -223,6 +223,6 @@
 
   &__title {
     color: #333333;
-    font-weight: 500;
+    font-weight: 700;
   }
 }

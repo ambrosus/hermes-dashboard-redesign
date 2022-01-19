@@ -1,40 +1,56 @@
 @font-face {
-  font-family: 'Rubik';
+  font-family: 'Proxima Nova';
+  src: url('../../assets/fonts/ProximaNova-Regular.eot');
+  src: local('Proxima Nova Regular'), local('../../assets/fonts/ProximaNova-Regular'),
+  url('../../assets/fonts/ProximaNova-Regular.eot?#iefix') format('embedded-opentype'),
+  url('../../assets/fonts/ProximaNova-Regular.woff') format('woff'),
+  url('../../assets/fonts/ProximaNova-Regular.ttf') format('truetype');
+  font-weight: normal;
   font-style: normal;
-  font-weight: 400;
-  src: url('../../assets/fonts/rubik-v14-latin-regular.eot'); /* IE9 Compat Modes */
-  src: local(''),
-  url('../../assets/fonts/rubik-v14-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('../../assets/fonts/rubik-v14-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
-  url('../../assets/fonts/rubik-v14-latin-regular.woff') format('woff'), /* Modern Browsers */
-  url('../../assets/fonts/rubik-v14-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-  url('../../assets/fonts/rubik-v14-latin-regular.svg#Rubik') format('svg'); /* Legacy iOS */
 }
 
-/* rubik-500 - latin */
 @font-face {
-  font-family: 'Rubik';
+  font-family: 'Proxima Nova';
+  src: url('../../assets/fonts/ProximaNova-Semibold.eot');
+  src: local('Proxima Nova Semibold'), local('../../assets/fonts/ProximaNova-Semibold'),
+  url('../../assets/fonts/ProximaNova-Semibold.eot?#iefix') format('embedded-opentype'),
+  url('../../assets/fonts/ProximaNova-Semibold.woff') format('woff'),
+  url('../../assets/fonts/ProximaNova-Semibold.ttf') format('truetype');
+  font-weight: 600;
   font-style: normal;
-  font-weight: 500;
-  src: url('../../assets/fonts/rubik-v14-latin-500.eot'); /* IE9 Compat Modes */
-  src: local(''),
-  url('../../assets/fonts/rubik-v14-latin-500.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('../../assets/fonts/rubik-v14-latin-500.woff2') format('woff2'), /* Super Modern Browsers */
-  url('../../assets/fonts/rubik-v14-latin-500.woff') format('woff'), /* Modern Browsers */
-  url('../../assets/fonts/rubik-v14-latin-500.ttf') format('truetype'), /* Safari, Android, iOS */
-  url('../../assets/fonts/rubik-v14-latin-500.svg#Rubik') format('svg'); /* Legacy iOS */
 }
 
-/* rubik-700 - latin */
+
 @font-face {
-  font-family: 'Rubik';
+  font-family: 'Proxima Nova';
+  src: url('../../assets/fonts/ProximaNova-Extrabld.eot');
+  src: local('Proxima Nova Extrabold'), local('../../assets/fonts/ProximaNova-Extrabld'),
+  url('../../assets/fonts/ProximaNova-Extrabld.eot?#iefix') format('embedded-opentype'),
+  url('../../assets/fonts/ProximaNova-Extrabld.woff') format('woff'),
+  url('../../assets/fonts/ProximaNova-Extrabld.ttf') format('truetype');
+  font-weight: 800;
   font-style: normal;
-  font-weight: 700;
-  src: url('../../assets/fonts/rubik-v14-latin-700.eot'); /* IE9 Compat Modes */
-  src: local(''),
-  url('../../assets/fonts/rubik-v14-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('../../assets/fonts/rubik-v14-latin-700.woff2') format('woff2'), /* Super Modern Browsers */
-  url('../../assets/fonts/rubik-v14-latin-700.woff') format('woff'), /* Modern Browsers */
-  url('../../assets/fonts/rubik-v14-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */
-  url('../../assets/fonts/rubik-v14-latin-700.svg#Rubik') format('svg'); /* Legacy iOS */
+}
+
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('../../assets/fonts/ProximaNova-Bold.eot');
+  src: local('Proxima Nova Bold'), local('../../assets/fonts/ProximaNova-Bold'),
+  url('../../assets/fonts/ProximaNova-Bold.eot?#iefix') format('embedded-opentype'),
+  url('../../assets/fonts/ProximaNova-Bold.woff') format('woff'),
+  url('../../assets/fonts/ProximaNova-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('../../assets/fonts/ProximaNova-Light.eot');
+  src: local('Proxima Nova Light'), local('../../assets/fonts/ProximaNova-Light'),
+  url('../../assets/fonts/ProximaNova-Light.eot?#iefix') format('embedded-opentype'),
+  url('../../assets/fonts/ProximaNova-Light.woff') format('woff'),
+  url('../../assets/fonts/ProximaNova-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
 }

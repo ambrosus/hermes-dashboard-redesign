@@ -51,7 +51,7 @@ button {
 }
 
 p, span, button, label, h1, h2, h3, a, input, textarea, div {
-  font-family: Rubik, sans-serif;
+  font-family: "Proxima Nova", sans-serif;
 }
 
 .form-semicolon-wrapper {
@@ -108,7 +108,7 @@ h4 {
   margin-bottom: 10px;
   margin-top: 20px;
   color: $color-gray;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .page-images-wrapper__image {
@@ -167,7 +167,7 @@ h4 {
 
 .add-form-item-btn {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   color: $color-primary;
   display: flex;
   align-items: center;
@@ -178,7 +178,7 @@ h4 {
 }
 
 .select-all-btn {
-  font-weight: 500;
+  font-weight: 700;
   font-size: 12px;
   color: $color-primary;
 
@@ -189,7 +189,7 @@ h4 {
 
 .error-message {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 700;
   color: red;
   margin-top: -5px;
   margin-bottom: 10px;
