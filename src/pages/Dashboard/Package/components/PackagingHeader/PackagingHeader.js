@@ -37,10 +37,13 @@ const PackagingHeader = ({ handleFormData, formData, errorFields }) => {
 
   const [searchedAssetsList, setSearchedAssetsList] = useState([]);
   const [assetSearchValue, setAssetSearchValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useDebouncedEffect(
     () => {
       if (assetSearchValue && assetSearchValue.length !== 66) {
+        setIsLoading(true);
+
         dispatch(
           searchAssets([
             {
@@ -49,7 +52,10 @@ const PackagingHeader = ({ handleFormData, formData, errorFields }) => {
               value: assetSearchValue,
             },
           ]),
-        ).then((res) => setSearchedAssetsList(res));
+        ).then((res) => {
+          setSearchedAssetsList(res);
+          setIsLoading(false);
+        });
       }
     },
     [assetSearchValue],
@@ -97,6 +103,7 @@ const PackagingHeader = ({ handleFormData, formData, errorFields }) => {
         styles={{ marginBottom: 15 }}
         conditionToOnlyDropdownSelect={setDropdownCondition}
         onSearch={setAssetSearchValue}
+        rightEl={isLoading ? <div className="loader" /> : null}
       />
       {errorFields.assetName && (
         <p className="error-message">

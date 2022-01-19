@@ -473,7 +473,6 @@ const CreateAssetModal = ({
                   onChange={handleSetFormData}
                   selectedValue={formData.customType}
                   imgSrc={chevronImg}
-                  searchable={false}
                 />
                 <UiToggle
                   label="Access level"

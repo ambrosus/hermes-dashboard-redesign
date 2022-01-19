@@ -38,4 +38,10 @@
     display: block;
     font-weight: 500;
   }
+
+  &__el {
+    position: absolute;
+    right: 10px;
+    bottom: 6px;
+  }
 }

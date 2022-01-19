@@ -15,12 +15,12 @@ const UiInput = ({
   disabled,
   name,
   onEnterPress = () => {},
+  rightEl,
 }) => {
   const handleInput = ({ target }) =>
     onChange(name ? { [name]: target.value } : target.value);
 
   const handleEnterPress = (event) => {
-    console.log(event);
     if (event.charCode === 13) {
       onEnterPress();
     }
@@ -55,6 +55,7 @@ const UiInput = ({
           className="ui-input__icon"
         />
       )}
+      {rightEl && <div className="ui-input__el">{rightEl}</div>}
     </div>
   );
 };
@@ -72,6 +73,7 @@ UiInput.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onEnterPress: PropTypes.func,
+  rightEl: PropTypes.element,
 };
 
 export default UiInput;

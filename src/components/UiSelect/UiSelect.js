@@ -17,6 +17,7 @@ const UiSelect = ({
   onSearch = () => {},
   imgSrc,
   className,
+  rightEl,
 }) => {
   const selectEl = useRef(null);
   const [filteredOptions, setFilteredOptions] = useState(options);
@@ -38,10 +39,23 @@ const UiSelect = ({
   }, [selectedValue]);
 
   useEffect(() => {
+    if (inputValue) {
+      if (filteredOptions.length) {
+        setIsOptionsOpened(true);
+      } else {
+        setIsOptionsOpened(false);
+      }
+    } else {
+      setIsOptionsOpened(false);
+    }
+  }, [inputValue]);
+
+  useEffect(() => {
     setFilteredOptions(options);
+    setIsOptionsOpened(true);
   }, [options]);
 
-  const toggleOptionsVisibility = () => setIsOptionsOpened(!isOptionsOpened);
+  const toggleOptionsVisibility = () => setIsOptionsOpened((isOpen) => !isOpen);
 
   const handleChange = (value) => {
     onChange(name ? { [name]: value } : value);
@@ -59,7 +73,6 @@ const UiSelect = ({
       onChange(name ? { [name]: value } : value);
     }
     setInputValue(value);
-    setIsOptionsOpened(true);
     if (searchable) {
       setFilteredOptions(
         options.filter(
@@ -69,6 +82,11 @@ const UiSelect = ({
     }
   };
 
+  const handleShowDropdown = () => {
+    setFilteredOptions(options);
+    toggleOptionsVisibility();
+  };
+
   return (
     <div className={cx('ui-select', className)} style={styles} ref={selectEl}>
       <UiInput
@@ -76,8 +94,9 @@ const UiSelect = ({
         placeholder={placeholder}
         onChange={handleSearch}
         label={label}
-        onclick={toggleOptionsVisibility}
         imgSrc={imgSrc}
+        onImageClick={handleShowDropdown}
+        rightEl={rightEl}
       />
       {isOptionsOpened && (
         <ul className="ui-select__options">
@@ -111,6 +130,7 @@ UiSelect.propTypes = {
   searchable: PropTypes.bool,
   conditionToOnlyDropdownSelect: PropTypes.func,
   styles: PropTypes.object,
+  rightEl: PropTypes.element,
 };
 
 export default UiSelect;
