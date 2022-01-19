@@ -81,14 +81,13 @@ const Assets = () => {
         customType: 'ambrosus.event.pack',
         accessLevel,
       };
-
       dispatch(
         handleModal({
           name: 'createResult',
           data: () => bulkEvents(selectedPackages, packageData),
         }),
       );
-      console.log(1);
+
       unselectAll();
       setFormData({
         assetId: '',

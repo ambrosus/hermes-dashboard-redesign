@@ -48,6 +48,10 @@ const UiSelect = ({
     }
   }, [options]);
 
+  useEffect(() => {
+    setIsOptionsOpened(false);
+  }, []);
+
   const toggleOptionsVisibility = () => setIsOptionsOpened((isOpen) => !isOpen);
 
   const handleChange = (value) => {

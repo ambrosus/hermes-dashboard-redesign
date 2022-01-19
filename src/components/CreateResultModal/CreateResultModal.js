@@ -51,7 +51,7 @@ const CreateResultModal = () => {
 
   useEffect(() => {
     if (modalStep === 2) {
-      dispatch(modalData.submitFunc());
+      dispatch(modalData());
     }
   }, [modalStep]);
 
