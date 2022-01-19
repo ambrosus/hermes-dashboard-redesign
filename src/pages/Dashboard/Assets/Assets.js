@@ -53,11 +53,7 @@ const Assets = () => {
     setSelectedAssets(assetsList.map((el) => el.content.idData.assetId));
   };
 
-  const unselectAll = () => {
-    setSelectedAssets([]);
-  };
-
-  const cancelSelected = () => setSelectedAssets([]);
+  const unselectAll = () => setSelectedAssets([]);
 
   return (
     <div className="dashboard-container">
@@ -92,15 +88,14 @@ const Assets = () => {
       </UiModal>
       <UiModal isFullWindow modalName="bulkEvent">
         <CreateAssetModal
+          submitCallback={unselectAll}
           modalType="bulkEvent"
           bulkEventData={
             selectedAssets.length ? { assetsIds: selectedAssets } : {}
           }
         />
       </UiModal>
-      {!!selectedAssets.length && (
-        <BulkEvent assetsIds={selectedAssets} cancelSelected={cancelSelected} />
-      )}
+      {!!selectedAssets.length && <BulkEvent />}
     </div>
   );
 };

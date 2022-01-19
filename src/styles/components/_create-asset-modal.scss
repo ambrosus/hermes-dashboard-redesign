@@ -1,6 +1,7 @@
 .create-asset {
   overflow-x: auto;
-  height: calc(100vh - 190px);
+  height: calc(100vh - 150px);
+  padding-top: 20px;
 
   &__scroll {
     max-width: 600px;

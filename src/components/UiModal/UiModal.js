@@ -16,10 +16,20 @@ const UiModal = ({
   const openedModalName = useSelector((state) => state.modal.openedModal.name);
   const isOpen = modalName === openedModalName;
 
+  useEffect(
+    () => () => {
+      if (openedModalName) {
+        dispatch(handleModal({ name: '' }));
+      }
+    },
+    [],
+  );
+
   useEffect(() => {
     if (isFullWindow && !openedModalName) {
       const body = document.querySelector('body');
       body.style.overflow = 'auto';
+      body.style.position = 'static';
     }
   }, [openedModalName]);
 
@@ -29,6 +39,7 @@ const UiModal = ({
     if (isFullWindow) {
       const body = document.querySelector('body');
       body.style.overflow = 'hidden';
+      body.style.position = 'fixed';
     }
   };
 
@@ -48,7 +59,7 @@ const UiModal = ({
           boxShadow: '0px 4px 12px rgba(55, 29, 199, 0.15)',
           border: 0,
           padding: 40,
-          ...(isFullWindow && { width: '100%', height: '100%' }),
+          ...(isFullWindow && { width: '100%', height: '100%', padding: '0' }),
           ...contentStyles,
         },
         overlay: {

@@ -33,7 +33,7 @@ const SettingsTab = () => {
       )
       .catch(() => NotificationManager.error('Error while editing account'));
   };
-  console.log('formData', formData);
+
   return (
     organization !== null && (
       <div className="settings-tab">
@@ -62,7 +62,7 @@ const SettingsTab = () => {
             </button>
           </div>
           <div className="timestamp">
-            Created {moment.unix(organization.createdOn).format('DD ddd YYYY')}
+            Created {moment.unix(organization.createdOn).format('DD MMM YYYY')}
           </div>
         </div>
         <div className="space-25" />
@@ -81,11 +81,11 @@ const SettingsTab = () => {
             placeholder={organization.title}
           />
           <UiInput
-            name="legalAddress"
+            name="email"
             onChange={handleSetFormData}
-            value={organization.legalAddress}
-            label="Legal address"
-            placeholder={organization.legalAddress}
+            value={organization.email}
+            label="Email"
+            placeholder={organization.email}
           />
           <div className="bottom-label">
             <UiButton className="save-account" onclick={editData}>

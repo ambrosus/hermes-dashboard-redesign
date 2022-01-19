@@ -23,8 +23,8 @@ const EventTabItem = ({ data }) => {
   const date = moment.unix(timestamp);
 
   let eventTypeText = contentData.type;
-  let eventTypeImg = truckSvg;
-  let eventTypeColor = '#FF9E57';
+  let eventTypeImg = '';
+  let eventTypeColor = '#c9c9c9';
 
   if (contentData.type === 'ambrosus.asset.info') {
     eventTypeText = 'info';
@@ -40,14 +40,18 @@ const EventTabItem = ({ data }) => {
     eventTypeColor = '#1ACD8C';
   } else if (contentData.type === 'transfer') {
     eventTypeImg = truckSvg;
+    eventTypeColor = '#FF9E57';
   }
 
-  const passedHours = moment().diff(date, 'hours');
+  const passedMinutes = moment().diff(date, 'minutes');
+  let passedTime = `${passedMinutes} minutes`;
 
-  const passedTime =
-    passedHours > 24
-      ? `${moment().add(1, 'day').diff(date, 'days')} days`
-      : `${passedHours} hours`;
+  if (passedMinutes >= 60) {
+    passedTime = `${moment().diff(date, 'hours')} hours`;
+  }
+  if (passedMinutes >= 60 * 24) {
+    passedTime = `${moment().add(1, 'day').diff(date, 'days')} days`;
+  }
 
   return (
     <div className="event-tab-item">
@@ -55,7 +59,7 @@ const EventTabItem = ({ data }) => {
         className="event-tab-item__type"
         style={{ background: eventTypeColor }}
       >
-        <img src={eventTypeImg} alt={eventTypeText} />
+        {eventTypeImg && <img src={eventTypeImg} alt={eventTypeText} />}
         <span className="event-tab-item__type-name">{eventTypeText}</span>
         <span>{date.format('DD MMM YYYY')}</span>
       </div>

@@ -8,7 +8,6 @@ import UiButton from '../../../../../../components/UiButton';
 import UiModal from '../../../../../../components/UiModal';
 import UiInput from '../../../../../../components/UiInput';
 import lockIcon from '../../../../../../assets/svg/lock.svg';
-import UiSelect from '../../../../../../components/UiSelect';
 import AuthCheckbox from '../../../../../../components/auth/AuthCheckbox';
 import {
   backupJSON,
@@ -265,35 +264,14 @@ const MemberDetailsModal = () => {
               name="title"
               value={modifyOrg?.title || ''}
             />
-            <UiInput
-              label="Legal address"
-              placeholder={modalData?.legalAddress}
-              name="legalAddress"
-              onChange={handleModifyOrg}
-              value={modifyOrg?.legalAddress || ''}
-            />
           </>
         )}
-        <div className="form-semicolon-wrapper">
-          {/*todo modifyOrg?.email ==> modifyAcc.email*/}
-          <UiInput
-            label="Email"
-            name="email"
-            onChange={isNodePage ? handleModifyOrg : handleModifyAccount}
-            value={isNodePage ? modifyOrg?.email : modifyAcc?.email}
-          />
-          <UiSelect
-            options={[
-              { value: '1', label: 'GTM' },
-              { value: '2', label: 'GTM +2' },
-              { value: '3', label: 'GTM +3' },
-            ]}
-            label="Time zone"
-            name="Time zone"
-            onChange={handleSetFormData}
-            selectedValue={formData.type}
-          />
-        </div>
+        <UiInput
+          label="Email"
+          name="email"
+          onChange={isNodePage ? handleModifyOrg : handleModifyAccount}
+          value={isNodePage ? modifyOrg?.email : modifyAcc?.email}
+        />
         {!isNodePage && (
           <>
             <div className="hr-line" />

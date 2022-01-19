@@ -64,6 +64,7 @@ const eventTypes = [
   { value: 'location', label: 'Location' },
   { value: 'media', label: 'Media' },
   { value: 'ambrosus.event.pack', label: 'Package' },
+  { value: 'ambrosus.event.unpack', label: 'Unpack' },
 ];
 
 const CreateAssetModal = ({
@@ -71,6 +72,7 @@ const CreateAssetModal = ({
   bulkEventData = {},
   assetId,
   modalType,
+  submitCallback,
 }) => {
   const dispatch = useDispatch();
 
@@ -269,6 +271,7 @@ const CreateAssetModal = ({
     }
     if (!isEmptyObj(bulkEventData)) {
       submitFunc = () => bulkEvents(bulkEventData.assetsIds, formData);
+      submitCallback();
     }
 
     dispatch(
@@ -393,7 +396,7 @@ const CreateAssetModal = ({
   };
 
   return (
-    <div className="create-asset-wrapper">
+    <div>
       <div className="create-asset">
         <div className="create-asset__scroll">
           <p className="create-asset-form__media-bundle">
@@ -775,6 +778,7 @@ CreateAssetModal.propTypes = {
   bulkEventData: PropTypes.object,
   assetId: PropTypes.string,
   modalType: PropTypes.string,
+  submitCallback: PropTypes.func,
 };
 
 export default CreateAssetModal;

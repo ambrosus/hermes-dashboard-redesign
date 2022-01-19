@@ -29,7 +29,7 @@ const Main = () => {
   return (
     <Layout>
       <RenderRoutes routes={routes} />
-      <UiModal isFullWindow contentStyles={{ padding: 0 }} modalName="createResult">
+      <UiModal contentStyles={{ padding: 0 }} modalName="createResult">
         <CreateResultModal />
       </UiModal>
       <UiModal modalName="secureKeys">
