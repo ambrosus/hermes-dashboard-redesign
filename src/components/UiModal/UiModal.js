@@ -65,9 +65,8 @@ const UiModal = ({
         overlay: {
           backgroundColor: '#333333e6',
           ...(isFullWindow && {
-            paddingTop: 60,
             background: 'transparent',
-            pointerEvents: 'none',
+            marginTop: 60,
           }),
           ...overlayStyles,
         },
