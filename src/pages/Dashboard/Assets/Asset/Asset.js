@@ -12,6 +12,7 @@ import {
   fetchAssetsInfo,
   fetchEventsInfo,
   setAssetPageInfo,
+  setEventsData,
 } from '../../../../store/modules/assets/actions';
 import PageMainContent from '../../../../components/PageMainContent';
 import CreateAssetModal from '../../../../components/CreateAssetModal';
@@ -33,7 +34,10 @@ const Asset = () => {
     dispatch(fetchEventsInfo(assetId));
     dispatch(fetchAssetsInfo([assetId], true));
 
-    return () => dispatch(setAssetPageInfo(null));
+    return () => {
+      dispatch(setAssetPageInfo(null));
+      dispatch(setEventsData({ data: [], pagination: {} }));
+    };
   }, []);
 
   const assetDataFromList = assetsList.find(
@@ -135,7 +139,6 @@ const Asset = () => {
         ) : (
           <AssetItem isOnAssetPage assetData={assetData} />
         )}
-
         {!!assetData && (
           <PageMainContent data={assetData} filesLoading={!assetPageInfo} />
         )}

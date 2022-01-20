@@ -8,6 +8,7 @@
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
+  position: relative;
 
   &__menu {
     display: flex;
@@ -77,6 +78,27 @@
     height: 32px;
     padding-right: 3px;
     margin-right: 18px;
+  }
+
+  &__user-menu {
+    position: absolute;
+    right: 40px;
+    bottom: -65px;
+    background: white;
+    border: 1px solid $color-primary;
+  }
+
+  &__user-menu-item {
+    padding: 10px 20px;
+    cursor: pointer;
+
+    &:first-child {
+      border-bottom: 1px solid $color-primary;
+    }
+
+    &:hover {
+      background: $whiteToGray;
+    }
   }
 }
 

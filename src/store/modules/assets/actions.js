@@ -101,29 +101,40 @@ export const setAssetsListData = (list) => ({
   payload: list,
 });
 
-export const fetchEventsInfo = (eventId) => (dispatch) => {
-  const params = {
-    next: '',
-    query: [
-      {
-        field: 'content.idData.assetId',
-        operator: 'equal',
-        value: eventId,
-      },
-    ],
+export const fetchEventsInfo =
+  (assetId, next = '') =>
+  (dispatch, getState) => {
+    const params = {
+      next,
+      query: [
+        {
+          field: 'content.idData.assetId',
+          operator: 'equal',
+          value: assetId,
+        },
+      ],
+    };
+
+    const { assets } = getState();
+
+    axios
+      .post('https://vitalii427-hermes.ambrosus-test.io/event2/query', params)
+      .then(({ data }) => {
+        if (data.data) {
+          dispatch(
+            setEventsData({
+              data: [...assets.eventsList, ...data.data],
+              pagination: data.pagination,
+            }),
+          );
+        }
+      });
   };
 
-  axios
-    .post('https://vitalii427-hermes.ambrosus-test.io/event2/query', params)
-    .then(({ data }) => {
-      if (data.data) {
-        dispatch({
-          type: SET_EVENTS_DATA,
-          payload: data.data,
-        });
-      }
-    });
-};
+export const setEventsData = (data) => ({
+  type: SET_EVENTS_DATA,
+  payload: data,
+});
 
 export const createAsset = (formData, isJSONForm, isEdit) => (dispatch) => {
   const privateKey = sessionStorage.getItem('user_private_key');

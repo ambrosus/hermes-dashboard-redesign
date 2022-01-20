@@ -1,21 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import UiButton from '../UiButton';
 import EventTabItem from './EventTabItem';
-import { isEmptyObj } from '../../utils/isEmptyObj';
 import { handleModal } from '../../store/modules/modal';
+import InfiniteScroll from '../InfiniteScroll';
+import { fetchEventsInfo } from '../../store/modules/assets/actions';
 
-const EventTab = () => {
+const EventTab = ({ assetId }) => {
   const dispatch = useDispatch();
-  const events = useSelector((state) => state.assets.eventsList);
+
+  const { eventsList, eventPagination } = useSelector((state) => state.assets);
   const { userInfo } = useSelector((state) => state.auth);
-  if (isEmptyObj(events)) {
-    return null;
-  }
 
   const openCreateEventModal = () =>
     dispatch(handleModal({ name: 'createEvent' }));
 
+  const showMore = () => {
+    if (eventPagination.hasNext) {
+      dispatch(fetchEventsInfo(assetId, eventPagination.next));
+    }
+  };
   return (
     <div className="event-tab">
       <div className="asset-tab-title-wrapper">
@@ -30,13 +35,21 @@ const EventTab = () => {
           </UiButton>
         )}
       </div>
-      {events ? (
-        events.map((el) => <EventTabItem key={el.eventId} data={el} />)
+      {eventsList.length ? (
+        <InfiniteScroll handleObserver={showMore}>
+          {eventsList.map((el) => (
+            <EventTabItem key={el.eventId} data={el} />
+          ))}
+        </InfiniteScroll>
       ) : (
         <span>There are no events in this asset</span>
       )}
     </div>
   );
+};
+
+EventTab.propTypes = {
+  assetId: PropTypes.object,
 };
 
 export default EventTab;

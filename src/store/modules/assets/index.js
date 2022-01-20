@@ -18,7 +18,8 @@ const defaultState = {
     data: [],
     pagination: {},
   },
-  eventsList: {},
+  eventsList: [],
+  eventPagination: {},
   createResult: {
     resultData: [],
     percentsComplete: 0,
@@ -43,7 +44,11 @@ export default (state = defaultState, { type, payload }) => {
     case UNSHIFT_EVENTS_LIST_DATA:
       return { ...state, eventsList: [payload].concat(state.eventsList) };
     case SET_EVENTS_DATA:
-      return { ...state, eventsList: payload };
+      return {
+        ...state,
+        eventsList: payload.data,
+        eventPagination: payload.pagination,
+      };
     case SET_CREATE_RESULT:
       return {
         ...state,

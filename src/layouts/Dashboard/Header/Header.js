@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactSVG } from 'react-svg';
@@ -7,13 +7,20 @@ import { ReactComponent as SearchIcon } from '../../../assets/svg/search.svg';
 import { ReactComponent as UserIcon } from '../../../assets/svg/person.svg';
 import UiButton from '../../../components/UiButton';
 import { handleModal } from '../../../store/modules/modal';
+import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick';
 
 const Header = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
+  const ref = useRef(null);
 
   const { userInfo } = useSelector((state) => state.auth);
   const openedModalName = useSelector((state) => state.modal.openedModal.name);
+
+  const [isUserMenuOpened, setIsUserMenuOpened] = useDetectOutsideClick(
+    ref,
+    false,
+  );
 
   const isSuperAccount = userInfo.permissions?.includes('super_account');
 
@@ -42,6 +49,8 @@ const Header = () => {
     }
   };
 
+  const toggleMenuVisibility = () => setIsUserMenuOpened((isOpen) => !isOpen);
+
   return (
     <header role="presentation" className="header" onClick={closeModals}>
       <div className="header__logo">
@@ -69,9 +78,15 @@ const Header = () => {
             <SearchIcon />
           </UiButton>
         )}
-        <UiButton type="icon">
+        <UiButton onclick={toggleMenuVisibility} type="icon">
           <UserIcon />
         </UiButton>
+        {isUserMenuOpened && (
+          <ul className="header__user-menu" ref={ref}>
+            <li className="header__user-menu-item">Settings</li>
+            <li className="header__user-menu-item">Logout</li>
+          </ul>
+        )}
       </div>
     </header>
   );
