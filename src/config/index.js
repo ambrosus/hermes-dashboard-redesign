@@ -1,5 +1,3 @@
-export const DASHBOARD_TAB = 'DASHBOARD_TAB';
-export const ACCOUNTS_TAB = 'ACCOUNTS_TAB';
-export const SETTINGS_TAB = 'SETTINGS_TAB';
-export const NODE_ORGANIZATION_TAB = 'NODE_ORGANIZATION_TAB';
-export const NODE_DASHBOARD_TAB = 'NODE_DASHBOARD_TAB';
+export const DASHBOARD_TAB = 'dashboard';
+export const ACCOUNTS_TAB = 'accounts';
+export const SETTINGS_TAB = 'settings';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DashboardTab, AccountsTab, SettingsTab } from '../components/Tabs';
 import Sidebar from '../components/Sidebar';
@@ -17,7 +17,17 @@ const Organization = () => {
   const [tab, setTab] = useState(() => <DashboardTab />);
   const { data, name } = useSelector((state) => state.modal.openedModal);
 
+  useEffect(() => {
+    if (window.location.hash) {
+      viewActiveTab(window.location.hash.replace('#', ''));
+    }
+  }, []);
+
   const viewActiveTab = (tabType) => {
+    console.log(window.location);
+    const { origin, pathname } = window.location;
+    window.history.pushState(null, '', `${origin + pathname}#${tabType}`);
+
     switch (tabType) {
       case DASHBOARD_TAB:
         return setTab(<DashboardTab />);

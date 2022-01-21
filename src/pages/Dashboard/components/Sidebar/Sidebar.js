@@ -6,7 +6,7 @@ import cx from 'classnames';
 
 const Sidebar = ({ setActiveTab, menuStructure }) => {
   const [activeMenuTab, setActiveMenuTab] = useState(
-    () => menuStructure[0].tabIdentifier,
+    () => window.location.hash.replace('#', '') || menuStructure[0].tabIdentifier,
   );
   const setActiveMenuHandler = (tabName) => {
     setActiveMenuTab(tabName);

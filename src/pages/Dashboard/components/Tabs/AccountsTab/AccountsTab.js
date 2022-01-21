@@ -120,11 +120,9 @@ const AccountsTab = () => {
           fetchOrganizations={fetchOrganizations}
         />
       ) : (
-        <progress
-          style={{
-            width: '100%',
-            height: 20,
-          }}
+        <div
+          className="loader"
+          style={{ display: 'block', margin: '0 auto' }}
         />
       )}
       <AccountInviteModal />

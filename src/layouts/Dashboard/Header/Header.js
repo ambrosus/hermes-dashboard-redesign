@@ -50,6 +50,13 @@ const Header = () => {
   };
 
   const toggleMenuVisibility = () => setIsUserMenuOpened((isOpen) => !isOpen);
+  const logout = () => {
+    sessionStorage.removeItem('user_private_key');
+    sessionStorage.removeItem('user_account');
+    localStorage.removeItem('createAssetData');
+
+    window.location.reload();
+  };
 
   return (
     <header role="presentation" className="header" onClick={closeModals}>
@@ -83,8 +90,21 @@ const Header = () => {
         </UiButton>
         {isUserMenuOpened && (
           <ul className="header__user-menu" ref={ref}>
-            <li className="header__user-menu-item">Settings</li>
-            <li className="header__user-menu-item">Logout</li>
+            {!isSuperAccount && (
+              <Link
+                to="/dashboard/organization#settings"
+                className="header__user-menu-item"
+              >
+                Settings
+              </Link>
+            )}
+            <li
+              className="header__user-menu-item"
+              onClick={logout}
+              role="presentation"
+            >
+              Logout
+            </li>
           </ul>
         )}
       </div>

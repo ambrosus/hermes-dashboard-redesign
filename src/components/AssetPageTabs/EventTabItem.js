@@ -32,6 +32,10 @@ const EventTabItem = ({ data }) => {
     eventTypeColor = '#8A8DF3';
     eventTypeImg = packSvg;
     eventTypeText = 'package';
+  } else if (contentData.type === 'ambrosus.event.unpack') {
+    eventTypeColor = '#545697';
+    eventTypeImg = packSvg;
+    eventTypeText = 'unpack';
   } else if (contentData.type === 'media') {
     eventTypeImg = mediaSvg;
     eventTypeColor = '#22DED5';

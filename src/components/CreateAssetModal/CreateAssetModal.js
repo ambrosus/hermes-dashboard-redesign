@@ -688,7 +688,7 @@ const CreateAssetModal = ({
                   <div
                     className={cx(
                       'create-asset-title',
-                      isPropertyOpened && 'create-asset-title--opened',
+                      isLocationOpened && 'create-asset-title--opened',
                     )}
                     onClick={handleLocationOpen}
                     role="presentation"

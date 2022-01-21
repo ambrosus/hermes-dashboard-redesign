@@ -70,12 +70,12 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
   if (images && images.length) {
     info.images = {};
 
-    images.forEach((el) => {
+    images.forEach((el, i) => {
       if (el === coverImgUrl) {
         info.images.default = { url: el };
       } else {
         info.images[
-          el.substring(el.length - 10, el.length - 1).replace('.', '')
+          el.substring(el.length - 10, el.length - 1).replace('.', '') + i
         ] = { url: el };
       }
     });

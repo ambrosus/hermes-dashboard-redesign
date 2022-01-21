@@ -15,23 +15,12 @@
     button {
       padding: 8px 16px!important;
       width: min-content;
+      font-size: 14px!important;
+      font-weight: 500!important;
 
       &:hover {
         box-shadow: 0 4px 4px 0 #49494926;
       }
-    }
-
-    .cancelBtn {
-      border: 1px solid $color-primary;
-      background: transparent;
-      color: #333333;
-      margin-left: auto;
-      margin-right: 20px;
-    }
-
-    .applyBtn {
-      border: 1px solid white;
-      padding: 0 24px;
     }
   }
 
@@ -48,4 +37,16 @@
     color: $color-primary;
     background: $whiteToGray;
   }
+}
+
+.cancelBtn {
+  border: 1px solid $color-primary;
+  background: transparent;
+  color: #333333;
+  margin-left: auto!important;
+}
+
+.applyBtn {
+  border: 1px solid white;
+  padding: 0 24px;
 }
