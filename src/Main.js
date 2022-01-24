@@ -13,12 +13,12 @@ import CreateResultModal from './components/CreateResultModal';
 import UiButton from './components/UiButton';
 import { handleModal } from './store/modules/modal';
 import SearchModal from './components/SearchModal';
+
 const Main = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const privateKeyFromSession = sessionStorage.getItem('user_private_key');
-
     if (privateKeyFromSession) {
       dispatch(signIn(privateKeyFromSession));
     }

@@ -123,7 +123,7 @@ export const fetchEventsInfo =
         if (data.data) {
           dispatch(
             setEventsData({
-              data: [...assets.eventsList, ...data.data],
+              data: next ? [...assets.eventsList, ...data.data] : data.data,
               pagination: data.pagination,
             }),
           );
@@ -208,7 +208,7 @@ export const createEvent =
               type: isAssetCreating
                 ? UNSHIFT_ASSETS_LIST_DATA
                 : UNSHIFT_EVENTS_LIST_DATA,
-              payload: data.data,
+              payload: { ...event, metadata: {} },
             });
           }
           resolve(data);

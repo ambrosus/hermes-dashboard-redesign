@@ -14,6 +14,7 @@ const Sorting = ({ selectAll, unselectAll }) => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
+  const { isAssetsLoading } = useSelector((state) => state.assets);
 
   const [currentTimeFilter, setCurrentTimeFilter] = useState('');
   const [isDateRangeSelected, setIsDateRangeSelected] = useState(false);
@@ -83,6 +84,7 @@ const Sorting = ({ selectAll, unselectAll }) => {
             key={el}
             type="plain"
             selected={el === currentTimeFilter}
+            disabled={isAssetsLoading}
             onclick={() => handleCurrentTimeFilter(el)}
           >
             {el}

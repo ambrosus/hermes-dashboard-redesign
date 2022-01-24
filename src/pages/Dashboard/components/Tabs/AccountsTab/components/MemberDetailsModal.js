@@ -51,9 +51,6 @@ const MemberDetailsModal = () => {
   const [userAccessLevel, setUserAccessLevel] = useState(accessLevel);
   const [modifyOrg, setModifyOrg] = useState({});
   const [modifyAcc, setModifyAcc] = useState({});
-  const [formData, setFormData] = useState({
-    type: '',
-  });
 
   const handleCheckbox = useCallback(
     (isChecked, permissionKey) => {
@@ -72,13 +69,6 @@ const MemberDetailsModal = () => {
       modifyAccount(modalData?.address, { permissions: userPermissions });
     }
   }, [userPermissions]);
-
-  const handleSetFormData = (keyValue) => {
-    setFormData({
-      ...formData,
-      ...keyValue,
-    });
-  };
 
   const closeModal = () => dispatch(handleModal({ name: null }));
 
@@ -101,16 +91,6 @@ const MemberDetailsModal = () => {
     }
   };
 
-  const modifyAccountHandler = async (...args) => {
-    const { address, data } = args[0];
-    try {
-      await modifyAccount(address, data);
-      NotificationManager.success(`Modifier ${address} success`);
-    } catch (error) {
-      NotificationManager.success(error.toString());
-    }
-  };
-
   const saveHandler = async () => {
     try {
       isNodePage
@@ -128,7 +108,6 @@ const MemberDetailsModal = () => {
 
   function handleModifyAccount(keyValue) {
     setModifyAcc({ ...modifyAcc, ...keyValue });
-    console.log({ ...modifyAcc, ...keyValue });
   }
   return (
     <UiModal
@@ -167,23 +146,32 @@ const MemberDetailsModal = () => {
           <div className="space-10" />
           <div className="buttons-options">
             <div className="buttons">
-              <button
-                style={{ backgroundColor: '#1ACD8C' }}
-                type="button"
-                onClick={() =>
-                  isNodePage
-                    ? modifyOrganizationHandler({
-                        id: modalData?.organizationId,
-                        data: { active: true },
-                      })
-                    : modifyAccountHandler({
-                        address: modalData?.address,
-                        data: { active: false },
-                      })
-                }
-              >
-                <p>Activate</p>
-              </button>
+              {modalData.active ? (
+                <button
+                  type="button"
+                  onClick={() =>
+                    modifyOrganizationHandler({
+                      id: modalData?.organization || modalData?.organizationId,
+                      data: { active: false },
+                    })
+                  }
+                >
+                  <p>Disable</p>
+                </button>
+              ) : (
+                <button
+                  style={{ backgroundColor: '#1ACD8C' }}
+                  type="button"
+                  onClick={() =>
+                    modifyOrganizationHandler({
+                      id: modalData?.organization || modalData?.organizationId,
+                      data: { active: true },
+                    })
+                  }
+                >
+                  <p>Activate</p>
+                </button>
+              )}
               {isNodePage && (
                 <button
                   type="button"
@@ -196,22 +184,6 @@ const MemberDetailsModal = () => {
                   <p>Backup</p>
                 </button>
               )}
-              <button
-                type="button"
-                onClick={() =>
-                  isNodePage
-                    ? modifyOrganizationHandler({
-                        id: modalData?.organizationId,
-                        data: { active: false },
-                      })
-                    : modifyAccountHandler({
-                        address: modalData?.address,
-                        data: { active: false },
-                      })
-                }
-              >
-                <p>Disable</p>
-              </button>
             </div>
             {isNodePage && (
               <div className="options">

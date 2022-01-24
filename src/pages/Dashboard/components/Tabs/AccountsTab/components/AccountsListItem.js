@@ -92,7 +92,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
 
       NotificationManager.success('Organization modified');
     } catch (error) {
-      NotificationManager.error(error);
+      NotificationManager.error(error.toString());
     }
   };
 

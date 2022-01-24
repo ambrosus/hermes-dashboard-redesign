@@ -220,4 +220,8 @@
   .form-semicolon-wrapper .primary {
     height: 48px;
   }
+
+  .form-semicolon-wrapper:not(:first-child) input[placeholder~="Description"] {
+    padding-right: 40px;
+  }
 }
