@@ -21,6 +21,7 @@ const Event = () => {
 
   useEffect(() => {
     dispatch(fetchEventsInfo(assetId));
+    window.scrollTo(0, 0);
   }, []);
 
   if (isEmptyObj(events)) {

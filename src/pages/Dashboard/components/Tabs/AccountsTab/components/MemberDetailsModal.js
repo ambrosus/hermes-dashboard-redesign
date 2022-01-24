@@ -195,7 +195,7 @@ const MemberDetailsModal = () => {
                 {modalData?.modifiedOn && (
                   <div className="createdAt">
                     <span className="created">Modified</span>{' '}
-                    {moment.unix(modalData.modifiedOn).format('DD ddd YYYY')}
+                    {moment.unix(modalData.modifiedOn).format('DD MMM YYYY')}
                   </div>
                 )}
               </div>

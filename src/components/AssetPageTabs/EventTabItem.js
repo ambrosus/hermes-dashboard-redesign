@@ -8,6 +8,7 @@ import truckSvg from '../../assets/svg/truck.svg';
 import eventLocationSvg from '../../assets/svg/eventLocation.svg';
 import mediaSvg from '../../assets/svg/eventMedia.svg';
 import packSvg from '../../assets/svg/eventPack.svg';
+import unpackSvg from '../../assets/svg/unpack.svg';
 
 const EventTabItem = ({ data }) => {
   const { location } = useHistory();
@@ -34,7 +35,7 @@ const EventTabItem = ({ data }) => {
     eventTypeText = 'package';
   } else if (contentData.type === 'ambrosus.event.unpack') {
     eventTypeColor = '#545697';
-    eventTypeImg = packSvg;
+    eventTypeImg = unpackSvg;
     eventTypeText = 'unpack';
   } else if (contentData.type === 'media') {
     eventTypeImg = mediaSvg;

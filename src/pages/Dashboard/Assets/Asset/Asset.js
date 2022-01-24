@@ -33,6 +33,7 @@ const Asset = () => {
   useEffect(() => {
     dispatch(fetchEventsInfo(assetId));
     dispatch(fetchAssetsInfo([assetId], true));
+    window.scrollTo(0, 0);
 
     return () => {
       dispatch(setAssetPageInfo(null));
