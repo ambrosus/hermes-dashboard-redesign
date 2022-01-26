@@ -14,8 +14,6 @@
     "bootstrap-daterangepicker": "^3.1.0",
     "chart.js": "^3.6.2",
     "classnames": "^2.3.1",
-    "ethereumjs-utils": "^5.2.5",
-    "ethereumjs-wallet": "^1.0.2",
     "jquery": "^3.6.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",

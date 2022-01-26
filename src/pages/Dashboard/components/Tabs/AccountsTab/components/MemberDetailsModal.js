@@ -114,9 +114,10 @@ const MemberDetailsModal = ({ handleUserActive }) => {
     ? (modifyOrg.title === modalData.title &&
       modifyOrg.legalAddress === modalData.legalAddress) ||
       (!modifyOrg.title || !modifyOrg.legalAddress)
-    : (modifyAcc.email === modalData.email &&
+    : ((modifyAcc.email === modalData.email &&
       modifyAcc.fullName === modalData.fullName) ||
-      (!modifyAcc.email || !modifyAcc.fullName);
+      (!modifyAcc.email || !modifyAcc.fullName)) &&
+      permissions.length === userPermissions.length;
 
   return (
     <UiModal
