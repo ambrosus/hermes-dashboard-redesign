@@ -111,6 +111,11 @@ const DashboardTab = () => {
                 {
                   ticks: {
                     beginAtZero: true,
+                    callback: (value) => {
+                      if (value % 1 === 0) {
+                        return value;
+                      }
+                    },
                   },
                   gridLines: {
                     display: false,

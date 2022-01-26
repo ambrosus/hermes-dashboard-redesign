@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
+import NotificationManager from 'react-notifications/lib/NotificationManager';
 import AuthInput from '../../../components/auth/AuthInput';
 import AuthTextarea from '../../../components/auth/AuthTextarea';
 import AuthCheckbox from '../../../components/auth/AuthCheckbox';
@@ -45,6 +46,11 @@ const Request = () => {
       .then(({ data }) => {
         if (data.meta && data.meta.code === 201) {
           setIsRegisterSuccess(true);
+        }
+      })
+      .catch((err) => {
+        if (err.response && err.response.data) {
+          NotificationManager.error(err.response.data.meta.message);
         }
       });
   };

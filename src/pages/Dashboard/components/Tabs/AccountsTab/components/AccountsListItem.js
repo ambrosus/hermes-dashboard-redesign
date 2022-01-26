@@ -2,6 +2,7 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import moment from 'moment';
 import NotificationManager from 'react-notifications/lib/NotificationManager';
 import { handleModal } from '../../../../../../store/modules/modal';
 import {
@@ -11,6 +12,7 @@ import {
   modifyOrganization,
   resendInvites,
 } from '../../../../../../utils/organizationService';
+import dateFormatter from '../../../../../../utils/dateFormatter';
 
 const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
   const dispatch = useDispatch();
@@ -27,7 +29,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
     }
     if (obj && obj.refused) {
       return (
-        <div className="top__status" style={{ backgroundColor: '#D9E0EF' }}>
+        <div className="top__status" style={{ backgroundColor: '#BFC9E0' }}>
           Declined
         </div>
       );
@@ -39,7 +41,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
       !(!obj.active && !obj.owner && !obj.organizationId && !obj.refused)
     ) {
       return (
-        <div className="top__status" style={{ backgroundColor: '#BFC9E0' }}>
+        <div className="top__status" style={{ backgroundColor: '#D9E0EF' }}>
           Disabled
         </div>
       );
@@ -250,7 +252,11 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
       <div className="top">
         {renderStatus(info)}
         <div className="top__name">{isNodePage ? info.title : info.email}</div>
-        <span className="top__created-on">{info.createdOn}</span>
+        <span className="top__created-on">
+          {Number.isInteger(+info.createdOn)
+            ? `${dateFormatter(moment.unix(info.createdOn))} ago`
+            : info.createdOn}
+        </span>
       </div>
       <div className="options">
         {isNodePage ? (

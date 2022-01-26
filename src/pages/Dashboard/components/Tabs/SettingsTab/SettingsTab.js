@@ -11,6 +11,7 @@ import {
   getOrganization,
   modifyOrganization,
 } from '../../../../../utils/organizationService';
+import { isEmptyObj } from '../../../../../utils/isEmptyObj';
 
 const SettingsTab = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -18,8 +19,12 @@ const SettingsTab = () => {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    getOrganization(userInfo.organization).then((org) => setOrganization(org));
-  }, []);
+    if (!isEmptyObj(userInfo)) {
+      getOrganization(userInfo.organization).then((org) => {
+        setOrganization(org);
+      });
+    }
+  }, [userInfo]);
 
   const handleSetFormData = (keyValue) => {
     setOrganization({ ...organization, ...keyValue });
@@ -41,7 +46,7 @@ const SettingsTab = () => {
           My account settings
         </div>
         <div className="settings-tab__secondary">
-          <ReactSVG src={personIcon} /> {organization.title}
+          <ReactSVG src={personIcon} /> {organization?.title}
         </div>
         <div className="space-25" />
         <div className="settings-tab__switch">

@@ -9,6 +9,7 @@ import eventLocationSvg from '../../assets/svg/eventLocation.svg';
 import mediaSvg from '../../assets/svg/eventMedia.svg';
 import packSvg from '../../assets/svg/eventPack.svg';
 import unpackSvg from '../../assets/svg/unpack.svg';
+import dateFormatter from '../../utils/dateFormatter';
 
 const EventTabItem = ({ data }) => {
   const { location } = useHistory();
@@ -48,16 +49,6 @@ const EventTabItem = ({ data }) => {
     eventTypeColor = '#FF9E57';
   }
 
-  const passedMinutes = moment().diff(date, 'minutes');
-  let passedTime = `${passedMinutes} minutes`;
-
-  if (passedMinutes >= 60) {
-    passedTime = `${moment().diff(date, 'hours')} hours`;
-  }
-  if (passedMinutes >= 60 * 24) {
-    passedTime = `${moment().add(1, 'day').diff(date, 'days')} days`;
-  }
-
   return (
     <div className="event-tab-item">
       <div
@@ -73,7 +64,9 @@ const EventTabItem = ({ data }) => {
           <p className="event-tab-item__title">{contentData.name}</p>
         </Link>
         <div className="event-tab-item__sub-info">
-          <span className="event-tab-item__when">{passedTime} ago</span>
+          <span className="event-tab-item__when">
+            {dateFormatter(date)} ago
+          </span>
           {locationData && locationData.city && (
             <span className="event-tab-item__where">
               <LocationSvg />

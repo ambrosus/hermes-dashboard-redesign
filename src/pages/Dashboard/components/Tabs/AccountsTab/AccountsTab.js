@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import StatusBar from './components/StatusBar';
 import AccountsList from './components/AccountsList';
 import {
@@ -11,8 +11,13 @@ import {
 import { handleModal } from '../../../../../store/modules/modal';
 import UiButton from '../../../../../components/UiButton';
 import AccountInviteModal from './components/AccountInviteModal';
+import MemberDetailsModal from './components/MemberDetailsModal';
 
 const AccountsTab = () => {
+  const { data: modalData, name } = useSelector(
+    (state) => state.modal.openedModal,
+  );
+
   const [display, setDisplay] = useState('all');
   const [accounts, setAccounts] = useState({
     all: [],
@@ -126,6 +131,9 @@ const AccountsTab = () => {
         />
       )}
       <AccountInviteModal />
+      {name === 'memberDetailsModal' && modalData && (
+        <MemberDetailsModal handleUserActive={handleAccounts} />
+      )}
     </div>
   );
 };

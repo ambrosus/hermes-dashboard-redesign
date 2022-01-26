@@ -62,7 +62,7 @@ const UiSelect = ({
 
   const filterOptions = (array, value) =>
     array.filter(
-      (el) => el && el.label.toLowerCase().includes(value.toLocaleString()),
+      (el) => el && el.label.toLowerCase().includes(value.toLowerCase()),
     );
 
   const handleSearch = (value) => {

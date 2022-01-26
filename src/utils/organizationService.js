@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
+import NotificationManager from 'react-notifications/lib/NotificationManager';
 import { generateToken } from './generateToken';
 import { download } from './download';
 
@@ -174,29 +175,47 @@ export const handleOrganizationRequest = async (
 
 export const modifyOrganization = async (organizationId, body) => {
   const url = `${apiExtended}/organization/${organizationId}`;
-  const organization = await axios.put(url, body);
-  if (organization.error) {
+  const organization = await axios
+    .put(url, body)
+    .then(() => {
+      NotificationManager.success(`Changes was save successfully`);
+    })
+    .catch((err) => {
+      NotificationManager.error(err.response.data.meta.message);
+    });
+
+  if (organization?.error) {
     throw organization.error;
   }
-  return organization.data;
+  return organization?.data?.data;
 };
 
 export const getOrganization = async (organizationId) => {
   const url = `${apiExtended}/organization/${organizationId}`;
   const organization = await axios.get(url);
-  if (organization.error) {
+
+  if (organization?.error) {
     throw organization.error;
   }
-  return organization.data.data;
+  return organization?.data?.data;
 };
 
 export const modifyAccount = async (address, body) => {
   const url = `${apiExtended}/account2/modify/${address}`;
-  const account = await axios.post(url, body);
-  if (account.error) {
+  const account = await axios
+    .post(url, body)
+    .then(() => {
+      console.log(1);
+      NotificationManager.success(`Changes was save successfully`);
+    })
+    .catch((err) => {
+      NotificationManager.error(err.response.data.meta.message);
+    });
+
+  if (account?.error) {
     throw account.error;
   }
-  return account.data;
+  return account?.data;
 };
 
 export default {

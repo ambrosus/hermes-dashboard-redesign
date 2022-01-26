@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import NotificationManager from 'react-notifications/lib/NotificationManager';
 import moment from 'moment';
 import { useLocation } from 'react-router-dom';
@@ -39,7 +40,7 @@ const permissionsArray = [
   },
 ];
 
-const MemberDetailsModal = () => {
+const MemberDetailsModal = ({ handleUserActive }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const isNodePage = pathname === '/dashboard/node';
@@ -49,8 +50,15 @@ const MemberDetailsModal = () => {
   const modalData = useSelector((state) => state.modal.openedModal.data);
   const [userPermissions, setUserPermissions] = useState(permissions);
   const [userAccessLevel, setUserAccessLevel] = useState(accessLevel);
-  const [modifyOrg, setModifyOrg] = useState({});
-  const [modifyAcc, setModifyAcc] = useState({});
+  const [modifyOrg, setModifyOrg] = useState({
+    title: modalData.title,
+    legalAddress: modalData.legalAddress,
+  });
+  const [modifyAcc, setModifyAcc] = useState({
+    fullName: modalData.fullName,
+    email: modalData.email,
+  });
+  const [isActive, setIsActive] = useState(modalData.active);
 
   const handleCheckbox = useCallback(
     (isChecked, permissionKey) => {
@@ -64,11 +72,6 @@ const MemberDetailsModal = () => {
     },
     [userPermissions, setUserPermissions],
   );
-  useEffect(() => {
-    if (userPermissions) {
-      modifyAccount(modalData?.address, { permissions: userPermissions });
-    }
-  }, [userPermissions]);
 
   const closeModal = () => dispatch(handleModal({ name: null }));
 
@@ -85,21 +88,18 @@ const MemberDetailsModal = () => {
     const { id, data } = args[0];
     try {
       await modifyOrganization(id, data);
-      NotificationManager.success(`Organization ${id} modified`);
+
+      handleUserActive(id, data.active);
+      setIsActive(data.active);
     } catch (error) {
       NotificationManager.error(error.toString());
     }
   };
 
   const saveHandler = async () => {
-    try {
-      isNodePage
-        ? await modifyOrganization(modalData.organizationId, modifyOrg)
-        : await modifyAccount(modalData?.address, modifyAcc);
-      NotificationManager.success(`Changes was save successfully`);
-    } catch (error) {
-      NotificationManager.success(error.toString());
-    }
+    isNodePage
+      ? await modifyOrganization(modalData.organizationId, modifyOrg)
+      : await modifyAccount(modalData?.address, { ...modifyAcc, permissions: userPermissions });
   };
 
   const handleModifyOrg = (keyValue) => {
@@ -109,6 +109,15 @@ const MemberDetailsModal = () => {
   function handleModifyAccount(keyValue) {
     setModifyAcc({ ...modifyAcc, ...keyValue });
   }
+
+  const isDisabled = isNodePage
+    ? (modifyOrg.title === modalData.title &&
+      modifyOrg.legalAddress === modalData.legalAddress) ||
+      (!modifyOrg.title || !modifyOrg.legalAddress)
+    : (modifyAcc.email === modalData.email &&
+      modifyAcc.fullName === modalData.fullName) ||
+      (!modifyAcc.email || !modifyAcc.fullName);
+
   return (
     <UiModal
       modalName="memberDetailsModal"
@@ -146,7 +155,7 @@ const MemberDetailsModal = () => {
           <div className="space-10" />
           <div className="buttons-options">
             <div className="buttons">
-              {modalData.active ? (
+              {isActive ? (
                 <button
                   type="button"
                   onClick={() =>
@@ -220,6 +229,12 @@ const MemberDetailsModal = () => {
               onChange={handleModifyAccount}
               value={modifyAcc?.fullName || ''}
             />
+            <UiInput
+              label="Email"
+              name="email"
+              onChange={handleModifyAccount}
+              value={modifyAcc?.email || ''}
+            />
           </>
         ) : (
           <>
@@ -227,23 +242,23 @@ const MemberDetailsModal = () => {
               imgSrc={lockIcon}
               label="Owner"
               disabled
+              onChange={handleModifyOrg}
               placeholder={modalData?.owner}
             />
             <UiInput
               label="Title"
-              placeholder={modalData?.title}
               onChange={handleModifyOrg}
               name="title"
-              value={modifyOrg?.title || ''}
+              value={modifyOrg.title || ''}
+            />
+            <UiInput
+              label="Legal address"
+              name="legalAddress"
+              onChange={handleModifyOrg}
+              value={modifyOrg.legalAddress}
             />
           </>
         )}
-        <UiInput
-          label="Email"
-          name="email"
-          onChange={isNodePage ? handleModifyOrg : handleModifyAccount}
-          value={isNodePage ? modifyOrg?.email : modifyAcc?.email}
-        />
         {!isNodePage && (
           <>
             <div className="hr-line" />
@@ -294,7 +309,7 @@ const MemberDetailsModal = () => {
           <UiButton onclick={closeModal} type="secondary">
             Cancel
           </UiButton>
-          <UiButton type="primary" onclick={saveHandler}>
+          <UiButton type="primary" disabled={isDisabled} onclick={saveHandler}>
             Save
           </UiButton>
         </div>
@@ -302,5 +317,9 @@ const MemberDetailsModal = () => {
     </UiModal>
   );
 };
+
+MemberDetailsModal.propTypes = {
+  handleUserActive: PropTypes.func,
+}
 
 export default React.memo(MemberDetailsModal);

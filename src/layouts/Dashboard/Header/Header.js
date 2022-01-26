@@ -2,9 +2,12 @@ import React, { useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactSVG } from 'react-svg';
+import cx from 'classnames';
 import logoIcon from '../../../assets/svg/logo.svg';
 import { ReactComponent as SearchIcon } from '../../../assets/svg/search.svg';
 import { ReactComponent as UserIcon } from '../../../assets/svg/person.svg';
+import { ReactComponent as SettingsIcon } from '../../../assets/svg/settings.svg';
+import { ReactComponent as LogoutIcon } from '../../../assets/svg/logout.svg';
 import UiButton from '../../../components/UiButton';
 import { handleModal } from '../../../store/modules/modal';
 import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick';
@@ -85,27 +88,35 @@ const Header = () => {
             <SearchIcon />
           </UiButton>
         )}
-        <UiButton onclick={toggleMenuVisibility} type="icon">
+        <UiButton
+          className={cx(isUserMenuOpened && 'header-icon-active')}
+          onclick={toggleMenuVisibility}
+          type="icon"
+        >
           <UserIcon />
         </UiButton>
         {isUserMenuOpened && (
-          <ul className="header__user-menu" ref={ref}>
+          <div className="header-menu" ref={ref}>
+            {userInfo.fullName && (
+              <p className="header-menu__name">{userInfo.fullName}</p>
+            )}
+            {userInfo.email && (
+              <p className="header-menu__name">{userInfo.email}</p>
+            )}
             {!isSuperAccount && (
               <Link
                 to="/dashboard/organization#settings"
-                className="header__user-menu-item"
+                className="header-menu__btn"
               >
+                <SettingsIcon />
                 Settings
               </Link>
             )}
-            <li
-              className="header__user-menu-item"
-              onClick={logout}
-              role="presentation"
-            >
+            <button type="button" className="header-menu__btn" onClick={logout}>
+              <LogoutIcon />
               Logout
-            </li>
-          </ul>
+            </button>
+          </div>
         )}
       </div>
     </header>
