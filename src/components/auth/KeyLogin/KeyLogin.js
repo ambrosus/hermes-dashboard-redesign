@@ -1,6 +1,7 @@
 /*eslint-disable*/
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import cx from 'classnames';
 import { useHistory } from 'react-router';
 import { NotificationManager } from 'react-notifications';
 import AuthInput from '../AuthInput';
@@ -8,9 +9,13 @@ import AuthButton from '../AuthButton';
 import { signIn } from '../../../store/modules/auth/actions';
 import { Link } from 'react-router-dom';
 import Tooltip from 'react-simple-tooltip';
+import axios from 'axios';
+import decryptPrivateKey from '../../../utils/decryptPassword';
 
-// const EMAIL_ADDRESS = 'Email address';
+const EMAIL_ADDRESS = 'Email address';
 const PRIVATE_KEY = 'Private key';
+const mailFormat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+
 const KeyLogin = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -19,6 +24,7 @@ const KeyLogin = () => {
   const [privateKey, setPrivateKey] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   useEffect(() => {
     if (isAuth) {
       if (userInfo.permissions?.includes('super_account')) {
@@ -38,10 +44,23 @@ const KeyLogin = () => {
         NotificationManager.error('Incorrect key');
       }
     } else {
-      alert(
-        `logic for email auth your EMAIL : ${email} |  YOUR PASS : ${password}`,
-      );
-      // TODO logic for email auth
+      axios.post(' https://vitalii427-hermes.ambrosus-test.io/account/secret', { email })
+        .then((response) => {
+          console.log(response.data.data.token);
+          const [address, privateKey] = decryptPrivateKey(
+            JSON.parse(atob(response.data.data.token)),
+            password,
+          );
+
+          if (!address) {
+            NotificationManager.error('Incorrect password');
+          } else {
+            dispatch(signIn(privateKey));
+          }
+        })
+        .catch((err) => {
+          NotificationManager.error(err.response?.data?.meta?.message);
+        })
     }
   };
 
@@ -52,7 +71,6 @@ const KeyLogin = () => {
         {' '}
         Welcome back! Sign in with your email address. mail or private key
       </p>
-      {/*
       <div className="controls-auth">
         <button
           className={cx(authMethod === EMAIL_ADDRESS && 'active')}
@@ -67,7 +85,6 @@ const KeyLogin = () => {
           {PRIVATE_KEY}
         </button>
       </div>
-      */}
       <form className="key-login" onSubmit={signInUser}>
         {authMethod === PRIVATE_KEY ? (
           <AuthInput
@@ -146,9 +163,18 @@ const KeyLogin = () => {
                 </svg>
               }
             />
+            {email && !mailFormat.test(email) && (
+              <span
+                className="error-message"
+                style={{ color: 'red', marginTop: 5, display: 'block' }}
+              >
+                Incorrect email
+              </span>
+            )}
             <AuthInput
               onChange={setPassword}
               label="Password"
+              type="password"
               className="key-login__input"
               placeholder="Password"
               rightEl={
@@ -182,7 +208,12 @@ const KeyLogin = () => {
             />
           </>
         )}
-        <AuthButton type="submit">Log in</AuthButton>
+        <AuthButton
+          type="submit"
+          disabled={!email || !mailFormat.test(email) || !password}
+        >
+          Log in
+        </AuthButton>
       </form>
       <p className="have-account-text">
         I don&apos;t have an account&nbsp;&nbsp;
