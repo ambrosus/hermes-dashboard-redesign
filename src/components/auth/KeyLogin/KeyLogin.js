@@ -1,7 +1,6 @@
 /*eslint-disable*/
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import cx from 'classnames';
 import { useHistory } from 'react-router';
 import { NotificationManager } from 'react-notifications';
 import cx from 'classnames';
