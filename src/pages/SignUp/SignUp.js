@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import { ReactSVG } from 'react-svg';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import key from '../../assets/raster/auth-key.png';
-import keyGen from '../../assets/raster/auth-key-generate.png';
-import AuthButton from '../../components/auth/AuthButton';
 import { setInviteAddress } from '../../store/modules/auth/actions';
+import generateMyKeyIcon from '../../assets/svg/generate-my-key.svg';
+import regMyKeyIcon from '../../assets/svg/reg-my-key.svg';
 
 const SignUp = () => {
   const history = useHistory();
@@ -27,7 +27,7 @@ const SignUp = () => {
 
   return (
     <div className="sign-up">
-      <h1>Registration</h1>
+      <h1 className="sign-up__heading">Registration</h1>
       <p>
         Public/private key pair is required to access the blockchain and
         complete transactions.
@@ -38,27 +38,37 @@ const SignUp = () => {
         Don’t worry, in either case, <b>we do not store your private key</b>.
       </p>
       <div className="sign-up-choose">
-        <div className="sign-up-choose__key">
-          <img src={key} alt="key" className="sign-up-choose__img" />
-          <Link to="/dashboard/signup/own-key">
-            <AuthButton>Register my own key</AuthButton>
-          </Link>
-        </div>
-        <span className="sign-up-choose__separator">or</span>
-        <div className="sign-up-choose__key">
-          <img
-            src={keyGen}
-            alt="key generator"
-            className="sign-up-choose__img"
-          />
-          <Link to="/dashboard/signup/generated-key">
-            <AuthButton plain>Generate keys for me</AuthButton>
-          </Link>
-        </div>
+        <Link to="/dashboard/signup/own-key">
+          <div className="sign-up-choose__key">
+            <div className="circle" />
+            <div className="text">
+              <div className="primary"> Register your public key</div>
+              <div className="secondary">
+                {' '}
+                We will register your public key (also known as address)
+              </div>
+            </div>
+            <div className="icon">
+              <ReactSVG src={regMyKeyIcon} wrapper="span" />{' '}
+            </div>
+          </div>
+        </Link>
+        <Link to="/dashboard/signup/generated-key">
+          <div className="sign-up-choose__key">
+            <div className="circle" />
+            <div className="text">
+              <div className="primary"> Generate new keys</div>
+              <div className="secondary">
+                {' '}
+                Keys will be generated locally on your device/browser.
+              </div>
+            </div>
+            <div className="icon">
+              <ReactSVG src={generateMyKeyIcon} wrapper="span" />{' '}
+            </div>
+          </div>
+        </Link>
       </div>
-      <Link to="/dashboard/login" className="auth-page__link">
-        Already a user?
-      </Link>
     </div>
   );
 };

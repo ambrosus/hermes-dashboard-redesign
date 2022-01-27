@@ -99,7 +99,10 @@ const MemberDetailsModal = ({ handleUserActive }) => {
   const saveHandler = async () => {
     isNodePage
       ? await modifyOrganization(modalData.organizationId, modifyOrg)
-      : await modifyAccount(modalData?.address, { ...modifyAcc, permissions: userPermissions });
+      : await modifyAccount(modalData?.address, {
+          ...modifyAcc,
+          permissions: userPermissions,
+        });
   };
 
   const handleModifyOrg = (keyValue) => {
@@ -110,13 +113,13 @@ const MemberDetailsModal = ({ handleUserActive }) => {
     setModifyAcc({ ...modifyAcc, ...keyValue });
   }
 
-  const handleAccountStatus = async(status) => {
+  const handleAccountStatus = async (status) => {
     try {
       if (isNodePage) {
         await modifyOrganizationHandler({
           id: modalData?.organization || modalData?.organizationId,
           data: { active: false },
-        })
+        });
       } else {
         await modifyAccount(modalData.address, { active: status });
       }
@@ -136,11 +139,13 @@ const MemberDetailsModal = ({ handleUserActive }) => {
 
   const isDisabled = isNodePage
     ? (modifyOrg.title === modalData.title &&
-      modifyOrg.legalAddress === modalData.legalAddress) ||
-      (!modifyOrg.title || !modifyOrg.legalAddress)
+        modifyOrg.legalAddress === modalData.legalAddress) ||
+      !modifyOrg.title ||
+      !modifyOrg.legalAddress
     : ((modifyAcc.email === modalData.email &&
-      modifyAcc.fullName === modalData.fullName) ||
-      (!modifyAcc.email || !modifyAcc.fullName)) &&
+        modifyAcc.fullName === modalData.fullName) ||
+        !modifyAcc.email ||
+        !modifyAcc.fullName) &&
       permissions.length === userPermissions.length;
 
   return (
@@ -335,6 +340,6 @@ const MemberDetailsModal = ({ handleUserActive }) => {
 
 MemberDetailsModal.propTypes = {
   handleUserActive: PropTypes.func,
-}
+};
 
 export default React.memo(MemberDetailsModal);

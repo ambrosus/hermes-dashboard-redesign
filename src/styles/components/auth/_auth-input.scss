@@ -2,23 +2,37 @@
   position: relative;
 
   &__input {
-    border: 1px solid $color-gray;
-    background: transparent;
-    padding: 12px 25px 12px 16px;
+    textarea{
+      padding: 10px !important;
+    }
+    border: 0;
+    background: #EFF2F5;
+    padding: 12px 45px 12px 46px;
     width: 100%;
-
+    height: 48px;
+    font-family: Proxima Nova, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    color: #05060F;
     &--error {
       border-color: #d64040;
     }
   }
 
   &__label {
-    display: block;
-    text-transform: uppercase;
-    font-size: 11px;
-    font-weight: 700;
-    margin-bottom: 10px;
-
+    margin-bottom: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    font-family: Proxima Nova, serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+    line-height: 16px !important;
+    color: #58667E !important;
     &--error {
       color: #d64040!important;
     }
@@ -29,8 +43,17 @@
     right: 15px;
     bottom: 8px;
   }
+  &__left-el {
+    position: absolute;
+    left: 15px;
+    bottom: 8px;
+  }
+
 
   &__error-message {
+    position: absolute;
+    bottom: -15px;
+    left: 0;
     color: #d64040!important;
     font-size: 11px;
   }

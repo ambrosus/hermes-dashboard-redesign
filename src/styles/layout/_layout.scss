@@ -19,12 +19,11 @@
   }
 
   &--auth {
-    background: linear-gradient(#4f299b,#122283 50%,#0c1656);
+    background: white;
     background-size: 100% 200%;
-    padding: 25px;
 
     p, span, label, a, input, textarea, div {
-      color: $color-gray;
+      color: #212121;
     }
 
     h1 {
@@ -35,11 +34,17 @@
     }
 
     .auth-page__link {
-      font-size: 13px;
-      color: #00b7f9!important;
+      font-family: Proxima Nova, sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 24px;
+      text-align: center;
+      color: #15D378;
     }
 
     .page > div:not(.notification-container) {
+      min-height: 85vh;
       display: flex;
       align-items: center;
       flex-direction: column;

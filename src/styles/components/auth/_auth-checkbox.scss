@@ -2,29 +2,33 @@
   display: block;
 
   &__checkmark {
-    width: 22px;
-    height: 22px;
-    border: 2px solid white;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #CFD6E4;
+    box-sizing: border-box;
+    border-radius: 8px;
     display: inline-block;
     position: relative;
-    border-radius: 6px;
     top: 7px;
     margin-right: 15px;
     margin-left: 7px;
   }
 
   &__input {
+    border: 1px solid #CFD6E4;
+    box-sizing: border-box;
+    border-radius: 8px;
     display: none;
   }
 
   &__input:checked + &__checkmark:after {
     content: '';
-    width: 14px;
-    height: 14px;
+    width: 20px;
+    height: 20px;
     display: inline-block;
     position: absolute;
-    left: 4px;
-    top: 5px;
+    left: 6px;
+    top: 7px;
     background-image: url("../../../assets/raster/success.svg");
     background-size: 11px;
     background-repeat: no-repeat;

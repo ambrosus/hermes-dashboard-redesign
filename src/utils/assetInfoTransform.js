@@ -106,8 +106,10 @@ const assetInfoTransform = (assetInfo, isEvent) => {
   );
 
   if (location) {
-    transformedData.formData.latitude = location.location.geometry.coordinates[0];
-    transformedData.formData.longitude = location.location.geometry.coordinates[1];
+    transformedData.formData.latitude =
+      location.location.geometry.coordinates[0];
+    transformedData.formData.longitude =
+      location.location.geometry.coordinates[1];
     transformedData.formData.city = location.city;
     transformedData.formData.country = location.country;
   }

@@ -11,7 +11,7 @@
     font-size: 16px;
     font-weight: 400;
   }
-  
+
   &__social {
     width: 208px;
     display: flex;
@@ -26,11 +26,14 @@
 
 .footer-auth {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
   background: transparent;
-  margin-top: 70px;
   font-size: 11px;
+  padding: 32px;
+  max-height: 70px;
+  height: 70px;
 
   &__to-help {
     font-size: 13px;

@@ -1,13 +1,37 @@
 .own-key {
+  margin: 0 auto;
+  min-width: 490px;
+  max-width: 490px;
+
+  &__heading {
+    font-family: Proxima Nova, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 32px !important;
+    line-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    color: #212121 !important;
+  }
+
+  &__secondary {
+    font-family: Proxima Nova, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+    line-height: 18px !important;
+    color: #58667E !important;
+  }
+
   &__form {
-    margin-top: 60px;
+    margin-top: 24px;
   }
 
   &__submit-btn {
-    margin-top: 40px;
+    margin-top: 32px;
   }
 
   &__input {
-    width: 624px
+    width: 100%;
   }
 }
