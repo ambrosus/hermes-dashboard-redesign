@@ -24,7 +24,11 @@ const options = {
 
 Geocode.setApiKey('AIzaSyAiefOqIuYCfafKYdZRGkGt_7TqLn4n2Ng');
 
-const Map = ({ coordinates = {}, getMarkerPosition = () => {}, isInCreate }) => {
+const Map = ({
+  coordinates = {},
+  getMarkerPosition = () => {},
+  isInCreate,
+}) => {
   const [center, setCenter] = useState({
     lat: coordinates.lat || 50.487279,
     lng: coordinates.lng || 30.452726,

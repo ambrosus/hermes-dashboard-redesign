@@ -7,7 +7,9 @@ const AuthInput = ({
   onChange,
   label,
   value,
+  placeholder,
   rightEl,
+  leftEl,
   type = 'text',
   errorMessage,
 }) => {
@@ -26,6 +28,7 @@ const AuthInput = ({
         </label>
       )}
       <input
+        placeholder={placeholder}
         className={cx(
           'auth-input__input',
           errorMessage && 'auth-input__input--error',
@@ -35,6 +38,7 @@ const AuthInput = ({
         value={value}
       />
       <div className="auth-input__right-el">{rightEl}</div>
+      <div className="auth-input__left-el">{leftEl}</div>
       {errorMessage && (
         <span className="auth-input__error-message">{errorMessage}</span>
       )}
@@ -44,9 +48,11 @@ const AuthInput = ({
 
 AuthInput.propTypes = {
   onChange: PropTypes.func,
+  placeholder: PropTypes.string,
   label: PropTypes.string,
   value: PropTypes.string,
   rightEl: PropTypes.element,
+  leftEl: PropTypes.element,
   type: PropTypes.string,
   className: PropTypes.string,
   errorMessage: PropTypes.string,

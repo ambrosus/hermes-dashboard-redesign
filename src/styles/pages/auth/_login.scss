@@ -1,9 +1,15 @@
 .auth-page {
+  height: 100%;
   &__choose-text {
     margin: 65px 0 25px;
     font-weight: 400;
   }
-
+.have-account-text{
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
   &__tabs-btn {
     min-width: 204px;
     padding: 12px 20px;

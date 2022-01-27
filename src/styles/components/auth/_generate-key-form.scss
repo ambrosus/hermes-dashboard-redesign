@@ -1,68 +1,176 @@
 .generate-key-form {
-  width: 100%;
-  text-align: center;
-  max-width: 624px;
+  text-align: left;
+  min-width: 490px;
+  max-width: 490px;
 
   &__title {
-    color: #40D685 !important;
+    font-family: Proxima Nova, serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 32px !important;
+    line-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    color: #212121 !important;
   }
 
-  &__secure {
-    text-align: right;
+  &__secondary {
+    margin-bottom: 8px;
+    font-family: Proxima Nova, serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+    line-height: 18px !important;
+    color: #58667E !important;
   }
 
   &__checkbox {
-    margin: 40px 0 45px;
-    .auth-checkbox__checkmark{
+    margin-top: 10px;
+
+    .auth-checkbox__checkmark {
+      font-family: Proxima Nova, sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 24px;
+      color: #3e78da !important;
       margin-left: 0;
     }
   }
 }
 
-.generate-key-main {
+.generated {
   width: 100%;
-  background: #fff;
-  border-radius: 8px;
-  margin: 50px 0 20px;
-  padding: 35px 25px 25px;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  word-wrap: break-word;
 
-  &__label {
-    color: #00b7f9!important;
-    margin-bottom: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-
-  &__key {
-    margin-bottom: 40px;
-    font-weight: 700;
-    font-size: 14px;
-    word-break: break-all;
-    color: #333333!important;
-  }
-
-  &__download {
+  .label {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-family: Proxima Nova, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
     display: flex;
     align-items: center;
-    text-transform: uppercase;
-    color: #00b7f9!important;
-    font-weight: 700;
-    width: fit-content;
-    margin-left: auto;
+    color: #58667E;
+
+  }
+
+  .key-container {
+    width: 100%;
+    min-height: 49px;
+    padding: 0 50px;
+    background: #EFF2F5;
+    text-align: left;
+    white-space: pre-line;
+    word-wrap: break-word;
+    position: relative;
+
+    .generate-key-main__key {
+      padding: 12px 0;
+      word-wrap: break-word !important;
+      white-space: pre-line !important;
+      width: 100%;
+      text-align: left !important;
+      font-size: 14px !important;
+      line-height: 24px !important;
+      font-family: Proxima Nova, sans-serif !important;
+      font-style: normal !important;
+      font-weight: normal !important;
+      color: #05060F !important;
+    }
+
+    .right-icon {
+      cursor: pointer;
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 14px;
+      margin-left: auto;
+    }
+
+    .left-icon {
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding: 14px;
+      margin-right: auto;
+    }
+
+  }
+
+}
+
+.generate-key-main {
+  margin-top: 16px;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+
+  &__download {
+    font-family: Proxima Nova, sans-serif !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    line-height: 24px !important;
+    color: #15D378 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  &__secure {
+    text-align: right;
+    font-family: Proxima Nova, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    color: #58667E;
   }
 
   p {
-    font-size: 14px!important;
+    font-size: 14px !important;
   }
 }
 
 .success-registration {
+  margin: 0 auto;
+  max-width: 490px;
   margin-top: 50px;
   text-align: center;
 
+  &__heading {
+    font-family: Proxima Nova, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 32px !important;
+    line-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    text-align: center !important;
+    color: #212121 !important;
+  }
+
+  &__secondary {
+    font-family: Proxima Nova, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+    line-height: 18px !important;
+    text-align: center !important;
+    color: #58667E !important;
+  }
+
   &__img {
-    width: 30px;
+    width: 88px;
   }
 }
 

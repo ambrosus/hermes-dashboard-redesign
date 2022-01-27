@@ -1,5 +1,37 @@
 .auth-request {
+  margin: 0 auto;
+  max-width: 490px;
+  min-width: 490px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  &__heading{
+    width: 100%;
+    text-align: left;
+    font-family: Proxima Nova, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 32px !important;
+    line-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    color: #212121 !important;
+    margin-bottom: 8px;
+  }
+
+  &__secondary{
+    width: 100%;
+    text-align: left;
+    font-family: Proxima Nova, sans-serif !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+    line-height: 18px !important;
+    color: #58667E !important;
+  }
+
   &__form {
+    width: 100%;
     margin-top: 30px;
   }
 
@@ -12,7 +44,7 @@
   }
 
   .auth-input {
-    margin-top: 25px;
-    width: 410px;
+    margin-bottom: 16px;
+    width: 100%;
   }
 }
