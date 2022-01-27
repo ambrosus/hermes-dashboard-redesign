@@ -1,4 +1,5 @@
 import axios from 'axios';
+/* eslint-disable */
 import moment from 'moment';
 import {
   SET_ASSETS_LIST_DATA,
@@ -12,7 +13,7 @@ import {
   SET_ASSET_PAGE_INFO,
   SET_SEARCHED_ASSETS_LIST,
 } from './constants';
-import { generateAsset, generateEvent } from '../../../utils/generateToken';
+import { generateAsset, generateEvent, generateToken } from '../../../utils/generateToken';
 import createAssetNormalizer from '../../../utils/createAssetNormalizer';
 
 export const fetchAssets =
@@ -178,7 +179,6 @@ export const createAsset = (formData, isJSONForm, isEdit) => (dispatch) => {
       );
     });
 };
-
 export const createEvent =
   (assetId, formData, isAssetCreating, isBulk) => (dispatch) => {
     const privateKey = sessionStorage.getItem('user_private_key');
@@ -188,43 +188,52 @@ export const createEvent =
       privateKey,
       formData.accessLevel,
     );
-    return new Promise((resolve, reject) => {
-      axios
-        .post(
-          `https://vitalii427-hermes.ambrosus-test.io/event2/create/${event.eventId}`,
-          event,
-        )
-        .then((response) => {
-          const { data } = response;
 
-          if (data.meta && data.meta.code === 200 && !isBulk) {
-            dispatch(
-              setCreateResult({
-                resultData: { ...data, isSuccess: true },
-                percentsComplete: 100,
-              }),
-            );
-            dispatch({
-              type: isAssetCreating
-                ? UNSHIFT_ASSETS_LIST_DATA
-                : UNSHIFT_EVENTS_LIST_DATA,
-              payload: { ...event, metadata: {} },
-            });
-          }
-          resolve(data);
-        })
-        .catch((err) => {
-          if (!isBulk) {
-            dispatch(
-              setCreateResult({
-                resultData: { data: err.response.data, isSuccess: false },
-                percentsComplete: 100,
-              }),
-            );
-          }
-          reject(err);
-        });
-    });
+    const key = sessionStorage.getItem('user_private_key');
+    const token = generateToken(key);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", `https://vitalii427-hermes.ambrosus-test.io/event2/create/${event.eventId}`, true);
+    xhr.setRequestHeader('Authorization', `AMB_TOKEN ${token}`);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('accept', 'application/json');
+    xhr.send(JSON.stringify(event));
+    // return new Promise((resolve, reject) => {
+    //   axios
+    //     .post(
+    //       `https://vitalii427-hermes.ambrosus-test.io/event2/create/${event.eventId}`,
+    //       event,
+    //     )
+    //     .then((response) => {
+    //       const { data } = response;
+    //
+    //       if (data.meta && data.meta.code === 200 && !isBulk) {
+    //         dispatch(
+    //           setCreateResult({
+    //             resultData: { ...data, isSuccess: true },
+    //             percentsComplete: 100,
+    //           }),
+    //         );
+    //         dispatch({
+    //           type: isAssetCreating
+    //             ? UNSHIFT_ASSETS_LIST_DATA
+    //             : UNSHIFT_EVENTS_LIST_DATA,
+    //           payload: { ...event, metadata: {} },
+    //         });
+    //       }
+    //       resolve(data);
+    //     })
+    //     .catch((err) => {
+    //       if (!isBulk) {
+    //         dispatch(
+    //           setCreateResult({
+    //             resultData: { data: err.response.data, isSuccess: false },
+    //             percentsComplete: 100,
+    //           }),
+    //         );
+    //       }
+    //       reject(err);
+    //     });
+    // });
   };
 
 export const bulkEvents = (assetsIds, formData) => (dispatch) => {

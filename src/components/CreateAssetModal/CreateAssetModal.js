@@ -438,14 +438,15 @@ const CreateAssetModal = ({
                 value={jsonData}
                 onChange={setJsonData}
               />
-              <div className="form-semicolon-wrapper">
-                <UiButton
-                  onclick={closeModal}
-                  styles={{ background: '#9198BB', padding: 12 }}
-                >
+              <div className="form-semicolon-wrapper create-asset-btns">
+                <UiButton type="secondary" onclick={closeModal}>
                   Cancel
                 </UiButton>
-                <UiButton styles={{ padding: 12 }} onclick={showResultModal}>
+                <UiButton
+                  type="primary"
+                  disabled={!jsonData.length}
+                  onclick={showResultModal}
+                >
                   Create {entityName}
                 </UiButton>
               </div>
@@ -752,22 +753,24 @@ const CreateAssetModal = ({
           )}
         </div>
       </div>
-      <div className="form-semicolon-wrapper create-asset-btns">
-        <UiButton type="secondary" onclick={closeModal}>
-          Cancel
-        </UiButton>
-        <UiButton
-          onclick={showResultModal}
-          type="primary"
-          disabled={!formData.name || !formData.customType}
-        >
-          {!isEmptyObj(bulkEventData) ? (
-            'Bulk Event'
-          ) : (
-            <span>Create {isCreateEvent ? 'Event' : 'Asset'}</span>
-          )}
-        </UiButton>
-      </div>
+      {!isJSONForm && (
+        <div className="form-semicolon-wrapper create-asset-btns">
+          <UiButton type="secondary" onclick={closeModal}>
+            Cancel
+          </UiButton>
+          <UiButton
+            onclick={showResultModal}
+            type="primary"
+            disabled={!formData.name || !formData.customType}
+          >
+            {!isEmptyObj(bulkEventData) ? (
+              'Bulk Event'
+            ) : (
+              <span>Create {isCreateEvent ? 'Event' : 'Asset'}</span>
+            )}
+          </UiButton>
+        </div>
+      )}
     </div>
   );
 };
