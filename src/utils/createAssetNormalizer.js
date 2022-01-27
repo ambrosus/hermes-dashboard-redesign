@@ -28,7 +28,7 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
     });
   }
 
-  info = { name };
+  info = {};
 
   if (description) {
     info.description = description;
@@ -36,11 +36,12 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
 
   if (isAssetCreating) {
     info.type = 'ambrosus.asset.info';
+    info.name = name;
     info.assetType = customType;
   } else {
     info.type = customType;
+    info.name = name;
   }
-
   if (rows && rows.length) {
     info.raws = rows;
   }

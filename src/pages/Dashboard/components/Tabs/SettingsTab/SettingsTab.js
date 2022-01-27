@@ -8,21 +8,31 @@ import personIcon from '../../../../../assets/svg/person.svg';
 import UiButton from '../../../../../components/UiButton';
 import {
   getOrganization,
+  modifyAccount,
   modifyOrganization,
 } from '../../../../../utils/organizationService';
 import { isEmptyObj } from '../../../../../utils/isEmptyObj';
+import eyeIcon from '../../../../../assets/svg/eye.svg';
 
 const SettingsTab = () => {
   const { userInfo } = useSelector((state) => state.auth);
+
   const [organization, setOrganization] = useState({});
-  const [formData, setFormData] = useState({});
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordConfVisible, setIsPasswordConfVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    fullName: '',
+    password: '',
+    confirmPassword: '',
+  });
 
   useEffect(() => {
     if (!isEmptyObj(userInfo)) {
       getOrganization(userInfo.organization).then((org) => {
         setOrganization(org);
         setFormData({
-          title: org.title,
+          email: userInfo.email,
           fullName: org.fullName,
         });
       });
@@ -34,9 +44,19 @@ const SettingsTab = () => {
   };
 
   const editData = async () => {
-    const { title, legalAddress } = formData;
-    await modifyOrganization(userInfo.organization, {
-      ...(formData.title !== organization.title && { title }),
+    const { email, legalAddress } = formData;
+    await modifyAccount(userInfo.address, {
+      ...(formData.password && {
+        token: btoa(
+          JSON.stringify(
+            window.web3.eth.accounts.encrypt(
+              sessionStorage.getItem('user_private_key'),
+              formData.password,
+            ),
+          ),
+        ),
+      }),
+      ...(formData.email !== organization.email && { email }),
       ...(formData.fullName !== organization.fullName && {
         legalAddress,
       }),
@@ -53,15 +73,25 @@ const SettingsTab = () => {
     window.location.reload();
   };
 
+  const handlePasswordVisible = () => setIsPasswordVisible((state) => !state);
+  const handlePasswordConfVisible = () =>
+    setIsPasswordConfVisible((state) => !state);
+
+  const passwordPattern = /^((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,}))/;
+
+  const isPasswordMatch = !passwordPattern.test(formData.password);
+  const isConfirmMatch = formData.password !== formData.confirmPassword;
+
   const isDisabled =
-    formData.title === organization.title &&
-    formData.fullName === organization.fullName;
+    formData.email === userInfo.email &&
+    formData.fullName === organization.fullName &&
+    (!(!isConfirmMatch && formData.confirmPassword) || isPasswordMatch);
 
   return (
     <div className="settings-tab">
       <div className="organization-container__heading">My account settings</div>
       <div className="settings-tab__secondary">
-        <ReactSVG src={personIcon} /> {organization.title}
+        <ReactSVG src={personIcon} /> {organization.email}
       </div>
       <div className="space-25" />
       <div className="settings-tab__switch">
@@ -83,11 +113,11 @@ const SettingsTab = () => {
           placeholder={organization.owner}
         />
         <UiInput
-          name="title"
+          name="email"
           onChange={handleSetFormData}
-          value={formData.title}
-          label="Title"
-          placeholder={organization.title}
+          value={formData.email}
+          label="Email"
+          placeholder={organization.email}
         />
         <UiInput
           name="fullName"
@@ -96,6 +126,33 @@ const SettingsTab = () => {
           label="Full name"
           placeholder={organization.fullName}
         />
+        <UiInput
+          name="password"
+          onChange={handleSetFormData}
+          value={formData.password}
+          label="Password"
+          imgSrc={eyeIcon}
+          onImageClick={handlePasswordVisible}
+          type={isPasswordVisible ? 'text' : 'password'}
+        />
+        {formData.password && isPasswordMatch && (
+          <span className="error-message">
+            Password is weak. Use at least 8 characters, one lowercase, one
+            uppercase letter and a number.
+          </span>
+        )}
+        <UiInput
+          name="confirmPassword"
+          onChange={handleSetFormData}
+          value={formData.confirmPassword}
+          label="Confirm password"
+          imgSrc={eyeIcon}
+          onImageClick={handlePasswordConfVisible}
+          type={isPasswordConfVisible ? 'text' : 'password'}
+        />
+        {formData.confirmPassword && isConfirmMatch && (
+          <span className="error-message">Passwords do not match</span>
+        )}
         <div className="bottom-label">
           <UiButton
             className="save-account"
