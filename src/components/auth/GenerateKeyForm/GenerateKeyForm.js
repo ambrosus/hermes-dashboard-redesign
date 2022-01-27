@@ -33,8 +33,9 @@ const GenerateKeyForm = () => {
         .then(() => {
           history.push('/dashboard/login');
         });
+    } else {
+      history.push('/dashboard/signup/request');
     }
-    history.push('/dashboard/signup/request');
   };
 
   const downloadKeysUrl = `data:text/json;charset=utf-8,${encodeURIComponent(

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import key from '../../assets/raster/auth-key.png';
@@ -14,7 +15,12 @@ const SignUp = () => {
       const splittedQuery = history.location.search.split('=');
 
       if (splittedQuery[0].includes('inviteId')) {
-        dispatch(setInviteAddress(splittedQuery[1]));
+        axios
+          .get(
+            `https://vitalii427-hermes.ambrosus-test.io/organization/invite/${splittedQuery[1]}/exists`,
+          )
+          .then(() => dispatch(setInviteAddress(splittedQuery[1])))
+          .catch(() => history.push('/dashboard/login'));
       }
     }
   });
