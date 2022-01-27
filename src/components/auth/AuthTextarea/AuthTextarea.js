@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const AuthTextarea = ({ label, onChange, value }) => {
+const AuthTextarea = ({ label, placeholder, onChange, value }) => {
   const handleChange = ({ target }) => onChange(target.value);
 
   return (
     <div className="auth-input">
       {label && <label className="auth-input__label">{label}</label>}
       <textarea
+        style={{ padding: 10 }}
+        placeholder={placeholder}
         className="auth-input__input"
         value={value}
         onChange={handleChange}
@@ -19,6 +21,7 @@ const AuthTextarea = ({ label, onChange, value }) => {
 
 AuthTextarea.propTypes = {
   label: PropTypes.string,
+  placeholder: PropTypes.string,
   onChange: PropTypes.func,
   value: PropTypes.string,
 };

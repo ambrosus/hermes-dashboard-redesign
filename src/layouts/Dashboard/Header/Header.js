@@ -16,6 +16,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const ref = useRef(null);
+  const isAuth = useSelector((state) => state.auth.isAuth);
 
   const { userInfo } = useSelector((state) => state.auth);
   const openedModalName = useSelector((state) => state.modal.openedModal.name);
@@ -66,63 +67,82 @@ const Header = () => {
   };
 
   return (
-    <header role="presentation" className="header" onClick={closeModals}>
+    <header
+      role="presentation"
+      className="header"
+      onClick={closeModals}
+      style={{ padding: !isAuth && '0 150px' }}
+    >
       <div className="header__logo">
         <Link to={isSuperAccount ? '/dashboard/node' : '/dashboard/assets'}>
           <ReactSVG src={logoIcon} wrapper="span" />
         </Link>
       </div>
       <div className="header__menu">
-        {headerConfig.map(({ link, text }) => (
-          <div key={text} className="header__menu-link">
-            {pathname.includes(link) && (
-              <div className="header__menu-link--active" />
-            )}
-            <Link to={link}>{text}</Link>
-          </div>
-        ))}
+        {!isAuth ? (
+          <>
+            <Link to="/dashboard/help" style={{ color: 'white' }}>
+              Help
+            </Link>
+          </>
+        ) : (
+          headerConfig.map(({ link, text }) => (
+            <div key={text} className="header__menu-link">
+              {pathname.includes(link) && (
+                <div className="header__menu-link--active" />
+              )}
+              <Link to={link}>{text}</Link>
+            </div>
+          ))
+        )}
       </div>
-      <div className="header__setting">
-        {!isSuperAccount && openedModalName !== 'searchModal' && (
+      {isAuth && (
+        <div className="header__setting">
+          {!isSuperAccount && openedModalName !== 'searchModal' && (
+            <UiButton
+              type="icon"
+              styles={{ marginRight: 20 }}
+              onclick={showSearchBar}
+            >
+              <SearchIcon />
+            </UiButton>
+          )}
           <UiButton
+            className={cx(isUserMenuOpened && 'header-icon-active')}
+            onclick={toggleMenuVisibility}
             type="icon"
-            styles={{ marginRight: 20 }}
-            onclick={showSearchBar}
           >
-            <SearchIcon />
+            <UserIcon />
           </UiButton>
-        )}
-        <UiButton
-          className={cx(isUserMenuOpened && 'header-icon-active')}
-          onclick={toggleMenuVisibility}
-          type="icon"
-        >
-          <UserIcon />
-        </UiButton>
-        {isUserMenuOpened && (
-          <div className="header-menu" ref={ref}>
-            {userInfo.fullName && (
-              <p className="header-menu__name">{userInfo.fullName}</p>
-            )}
-            {userInfo.email && (
-              <p className="header-menu__name">{userInfo.email}</p>
-            )}
-            {!isSuperAccount && (
-              <Link
-                to="/dashboard/organization#settings"
+          {isUserMenuOpened && (
+            <div className="header-menu" ref={ref}>
+              {userInfo.fullName && (
+                <p className="header-menu__name">{userInfo.fullName}</p>
+              )}
+              {userInfo.email && (
+                <p className="header-menu__name">{userInfo.email}</p>
+              )}
+              {!isSuperAccount && (
+                <Link
+                  to="/dashboard/organization#settings"
+                  className="header-menu__btn"
+                >
+                  <SettingsIcon />
+                  Settings
+                </Link>
+              )}
+              <button
+                type="button"
                 className="header-menu__btn"
+                onClick={logout}
               >
-                <SettingsIcon />
-                Settings
-              </Link>
-            )}
-            <button type="button" className="header-menu__btn" onClick={logout}>
-              <LogoutIcon />
-              Logout
-            </button>
-          </div>
-        )}
-      </div>
+                <LogoutIcon />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </header>
   );
 };
