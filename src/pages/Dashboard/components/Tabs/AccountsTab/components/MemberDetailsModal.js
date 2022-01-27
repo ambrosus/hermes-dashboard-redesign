@@ -113,13 +113,13 @@ const MemberDetailsModal = ({ handleUserActive }) => {
     setModifyAcc({ ...modifyAcc, ...keyValue });
   }
 
-  const handleAccountStatus = async(status) => {
+  const handleAccountStatus = async (status) => {
     try {
       if (isNodePage) {
         await modifyOrganizationHandler({
           id: modalData?.organization || modalData?.organizationId,
           data: { active: false },
-        })
+        });
       } else {
         await modifyAccount(modalData.address, { active: status });
       }
