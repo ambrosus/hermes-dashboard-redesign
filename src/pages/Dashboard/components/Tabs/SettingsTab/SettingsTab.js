@@ -23,7 +23,7 @@ const SettingsTab = () => {
         setOrganization(org);
         setFormData({
           title: org.title,
-          legalAddress: org.legalAddress,
+          fullName: org.fullName,
         });
       });
     }
@@ -37,7 +37,7 @@ const SettingsTab = () => {
     const { title, legalAddress } = formData;
     await modifyOrganization(userInfo.organization, {
       ...(formData.title !== organization.title && { title }),
-      ...(formData.legalAddress !== organization.legalAddress && {
+      ...(formData.fullName !== organization.fullName && {
         legalAddress,
       }),
     });
@@ -55,7 +55,7 @@ const SettingsTab = () => {
 
   const isDisabled =
     formData.title === organization.title &&
-    formData.legalAddress === organization.legalAddress;
+    formData.fullName === organization.fullName;
 
   return (
     <div className="settings-tab">
@@ -90,11 +90,11 @@ const SettingsTab = () => {
           placeholder={organization.title}
         />
         <UiInput
-          name="legalAddress"
+          name="fullName"
           onChange={handleSetFormData}
-          value={formData.legalAddress}
-          label="Legal address"
-          placeholder={organization.legalAddress}
+          value={formData.fullName}
+          label="Full name"
+          placeholder={organization.fullName}
         />
         <div className="bottom-label">
           <UiButton

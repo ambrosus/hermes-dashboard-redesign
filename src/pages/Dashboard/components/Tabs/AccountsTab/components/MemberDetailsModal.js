@@ -238,7 +238,7 @@ const MemberDetailsModal = ({ handleUserActive }) => {
               disabled
             />
             <UiInput
-              label="Name"
+              label="Full name"
               placeholder={modalData?.fullName}
               name="fullName"
               onChange={handleModifyAccount}
