@@ -10,7 +10,7 @@ import { ReactComponent as LinkedinIcon } from '../../../assets/svg/linkedin.svg
 
 const Footer = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  const isSuperAccount = userInfo.permissions.includes('super_account');
+  const isSuperAccount = userInfo.permissions?.includes('super_account');
   return (
     <footer className="footer">
       <Link
