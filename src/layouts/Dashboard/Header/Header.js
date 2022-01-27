@@ -25,7 +25,7 @@ const Header = () => {
     false,
   );
 
-  const headerConfig = [
+  let headerConfig = [
     {
       link: '/dashboard/assets',
       text: 'Assets',
@@ -41,10 +41,12 @@ const Header = () => {
     });
   }
   if (isSuperAccount) {
-    headerConfig.unshift({
-      link: '/dashboard/node',
-      text: 'Node',
-    });
+    headerConfig = [
+      {
+        link: '/dashboard/node',
+        text: 'Node',
+      },
+    ];
   }
 
   const showSearchBar = () => dispatch(handleModal({ name: 'searchModal' }));
@@ -66,7 +68,7 @@ const Header = () => {
   return (
     <header role="presentation" className="header" onClick={closeModals}>
       <div className="header__logo">
-        <Link to="/dashboard/assets">
+        <Link to={isSuperAccount ? '/dashboard/node' : '/dashboard/assets'}>
           <ReactSVG src={logoIcon} wrapper="span" />
         </Link>
       </div>
