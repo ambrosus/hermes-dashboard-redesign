@@ -26,25 +26,29 @@ const Header = () => {
     false,
   );
 
+  let headerConfig = [
+    {
+      link: '/dashboard/assets',
+      text: 'Assets',
+    },
+  ];
+
   const isSuperAccount = userInfo.permissions?.includes('super_account');
 
-  const headerConfig = isSuperAccount
-    ? [
-        {
-          link: '/dashboard/node',
-          text: 'Node',
-        },
-      ]
-    : [
-        {
-          link: '/dashboard/organization',
-          text: 'Organization',
-        },
-        {
-          link: '/dashboard/assets',
-          text: 'Assets',
-        },
-      ];
+  if (userInfo.permissions?.includes('manage_accounts')) {
+    headerConfig.unshift({
+      link: '/dashboard/organization',
+      text: 'Organization',
+    });
+  }
+  if (isSuperAccount) {
+    headerConfig = [
+      {
+        link: '/dashboard/node',
+        text: 'Node',
+      },
+    ];
+  }
 
   const showSearchBar = () => dispatch(handleModal({ name: 'searchModal' }));
   const closeModals = () => {
@@ -70,7 +74,7 @@ const Header = () => {
       style={{ padding: !isAuth && '0 150px' }}
     >
       <div className="header__logo">
-        <Link to="/dashboard/assets">
+        <Link to={isSuperAccount ? '/dashboard/node' : '/dashboard/assets'}>
           <ReactSVG src={logoIcon} wrapper="span" />
         </Link>
       </div>

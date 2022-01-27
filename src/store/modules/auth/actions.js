@@ -1,6 +1,6 @@
 import axios from 'axios';
 import NotificationManager from 'react-notifications/lib/NotificationManager';
-import { SET_ETH_ADDRESS, SIGN_IN } from './constants';
+import { SET_ETH_ADDRESS, SET_INVITE_ADDRESS, SIGN_IN } from './constants';
 import { generateToken } from '../../../utils/generateToken';
 
 export const setEthAddress = () => {
@@ -49,3 +49,8 @@ export const signIn = (privateKey) => (dispatch) => {
       NotificationManager.error('Sign in error');
     });
 };
+
+export const setInviteAddress = (payload) => ({
+  type: SET_INVITE_ADDRESS,
+  payload,
+});

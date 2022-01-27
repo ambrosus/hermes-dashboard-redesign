@@ -205,7 +205,6 @@ export const modifyAccount = async (address, body) => {
   const account = await axios
     .post(url, body)
     .then(() => {
-      console.log(1);
       NotificationManager.success(`Changes was save successfully`);
     })
     .catch((err) => {

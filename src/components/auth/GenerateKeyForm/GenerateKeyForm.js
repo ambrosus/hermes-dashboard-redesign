@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ReactSVG } from 'react-svg';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import { NotificationManager } from 'react-notifications';
 import { useHistory } from 'react-router';
 import { copyToClipboard } from '../../../utils/copyToClipboard';
@@ -14,6 +15,7 @@ import copyIcon from '../../../assets/svg/fi_copy.svg';
 
 const GenerateKeyForm = () => {
   const ethAddress = useSelector((state) => state.auth.etherAddress);
+  const { inviteAddress } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -28,7 +30,18 @@ const GenerateKeyForm = () => {
   };
 
   const handleClick = () => {
-    history.push('/dashboard/signup/request');
+    if (inviteAddress) {
+      axios
+        .post(
+          `https://vitalii427-hermes.ambrosus-test.io/organization/invite/${inviteAddress}/accept`,
+          { address: ethAddress.publicKey },
+        )
+        .then(() => {
+          history.push('/dashboard/login');
+        });
+    } else {
+      history.push('/dashboard/signup/request');
+    }
   };
 
   const copyKey = (text) => {
