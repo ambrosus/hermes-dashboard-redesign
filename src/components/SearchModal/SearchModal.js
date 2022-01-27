@@ -109,11 +109,13 @@ const SearchModal = () => {
 
     if (!isEmptyObj(identifiers)) {
       Object.keys(identifiers).forEach((el) => {
-        query.push({
-          field: `content.data.identifiers.${identifiers[el].name}`,
-          operator: 'inrange',
-          value: identifiers[el].description,
-        });
+        if (identifiers[el].name && identifiers[el].description) {
+          query.push({
+            field: `content.data.identifiers.${identifiers[el].name}`,
+            operator: 'inrange',
+            value: identifiers[el].description,
+          });
+        }
       });
     }
 
