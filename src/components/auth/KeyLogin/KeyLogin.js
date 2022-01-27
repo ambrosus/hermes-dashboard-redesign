@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { NotificationManager } from 'react-notifications';
+import cx from 'classnames';
 import AuthInput from '../AuthInput';
 import AuthButton from '../AuthButton';
 import { signIn } from '../../../store/modules/auth/actions';
 import { Link } from 'react-router-dom';
 import Tooltip from 'react-simple-tooltip';
 
-// const EMAIL_ADDRESS = 'Email address';
+const EMAIL_ADDRESS = 'Email address';
 const PRIVATE_KEY = 'Private key';
 const KeyLogin = () => {
   const dispatch = useDispatch();
@@ -52,7 +53,6 @@ const KeyLogin = () => {
         {' '}
         Welcome back! Sign in with your email address. mail or private key
       </p>
-      {/*
       <div className="controls-auth">
         <button
           className={cx(authMethod === EMAIL_ADDRESS && 'active')}
@@ -67,7 +67,6 @@ const KeyLogin = () => {
           {PRIVATE_KEY}
         </button>
       </div>
-      */}
       <form className="key-login" onSubmit={signInUser}>
         {authMethod === PRIVATE_KEY ? (
           <AuthInput
