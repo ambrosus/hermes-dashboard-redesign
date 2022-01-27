@@ -92,7 +92,7 @@ const MemberDetailsModal = ({ handleUserActive }) => {
       handleUserActive(id, data.active);
       setIsActive(data.active);
     } catch (error) {
-      NotificationManager.error(error.toString());
+      console.log(error);
     }
   };
 
@@ -109,6 +109,30 @@ const MemberDetailsModal = ({ handleUserActive }) => {
   function handleModifyAccount(keyValue) {
     setModifyAcc({ ...modifyAcc, ...keyValue });
   }
+
+  const handleAccountStatus = async(status) => {
+    try {
+      if (isNodePage) {
+        await modifyOrganizationHandler({
+          id: modalData?.organization || modalData?.organizationId,
+          data: { active: false },
+        })
+      } else {
+        await modifyAccount(modalData.address, { active: status });
+      }
+
+      handleUserActive(
+        isNodePage
+          ? modalData?.organization || modalData?.organizationId
+          : modalData.address,
+        status,
+        !isNodePage,
+      );
+      setIsActive(status);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const isDisabled = isNodePage
     ? (modifyOrg.title === modalData.title &&
@@ -159,12 +183,7 @@ const MemberDetailsModal = ({ handleUserActive }) => {
               {isActive ? (
                 <button
                   type="button"
-                  onClick={() =>
-                    modifyOrganizationHandler({
-                      id: modalData?.organization || modalData?.organizationId,
-                      data: { active: false },
-                    })
-                  }
+                  onClick={() => handleAccountStatus(false)}
                 >
                   <p>Disable</p>
                 </button>
@@ -172,12 +191,7 @@ const MemberDetailsModal = ({ handleUserActive }) => {
                 <button
                   style={{ backgroundColor: '#1ACD8C' }}
                   type="button"
-                  onClick={() =>
-                    modifyOrganizationHandler({
-                      id: modalData?.organization || modalData?.organizationId,
-                      data: { active: true },
-                    })
-                  }
+                  onClick={() => handleAccountStatus(true)}
                 >
                   <p>Activate</p>
                 </button>

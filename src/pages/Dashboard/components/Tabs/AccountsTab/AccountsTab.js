@@ -58,16 +58,16 @@ const AccountsTab = () => {
     inputFile.click();
   }
 
-  const handleAccounts = (id, isActive) => {
+  const handleAccounts = (id, isActive, isAccountEdit) => {
     const accountsKey = isActive ? 'disabled' : 'active';
 
     setAccounts((state) => ({
       ...state,
       [accountsKey]: state[accountsKey].filter(
-        ({ organizationId }) => organizationId !== id,
+        (el) => el[isAccountEdit ? 'address' : 'organizationId'] !== id,
       ),
       all: state.all.map((el) => {
-        if (el.organizationId === id) {
+        if (el[isAccountEdit ? 'address' : 'organizationId'] === id) {
           return {
             ...el,
             active: isActive,

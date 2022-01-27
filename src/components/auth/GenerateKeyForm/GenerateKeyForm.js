@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import { useHistory } from 'react-router';
 import AuthCheckbox from '../AuthCheckbox';
 import AuthButton from '../AuthButton';
@@ -8,6 +9,7 @@ import { handleModal } from '../../../store/modules/modal';
 
 const GenerateKeyForm = () => {
   const ethAddress = useSelector((state) => state.auth.etherAddress);
+  const { inviteAddress } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -22,6 +24,16 @@ const GenerateKeyForm = () => {
   };
 
   const handleClick = () => {
+    if (inviteAddress) {
+      axios
+        .post(
+          `https://vitalii427-hermes.ambrosus-test.io/organization/invite/${inviteAddress}/accept`,
+          { address: ethAddress.publicKey },
+        )
+        .then(() => {
+          history.push('/dashboard/login');
+        });
+    }
     history.push('/dashboard/signup/request');
   };
 

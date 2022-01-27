@@ -1,4 +1,4 @@
-import { SET_ETH_ADDRESS, SIGN_IN } from './constants';
+import { SET_ETH_ADDRESS, SET_INVITE_ADDRESS, SIGN_IN } from './constants';
 
 const defaultState = {
   isAuth: !!sessionStorage.getItem('user_private_key'),
@@ -7,6 +7,7 @@ const defaultState = {
     publicKey: '',
   },
   userInfo: {},
+  inviteAddress: '',
 };
 
 export default (state = defaultState, { type, payload }) => {
@@ -15,6 +16,8 @@ export default (state = defaultState, { type, payload }) => {
       return { ...state, etherAddress: payload };
     case SIGN_IN:
       return { ...state, isAuth: true, userInfo: payload };
+    case SET_INVITE_ADDRESS:
+      return { ...state, inviteAddress: payload };
     default:
       return state;
   }

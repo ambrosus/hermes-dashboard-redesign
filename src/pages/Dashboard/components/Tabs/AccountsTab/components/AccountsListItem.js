@@ -1,7 +1,7 @@
 import React from 'react';
 import * as PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import NotificationManager from 'react-notifications/lib/NotificationManager';
 import { handleModal } from '../../../../../../store/modules/modal';
@@ -9,6 +9,7 @@ import {
   backupJSON,
   deleteInvite,
   handleOrganizationRequest,
+  modifyAccount,
   modifyOrganization,
   resendInvites,
 } from '../../../../../../utils/organizationService';
@@ -17,6 +18,9 @@ import dateFormatter from '../../../../../../utils/dateFormatter';
 const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
   const isNodePage = pathname === '/dashboard/node';
 
   const renderStatus = (obj) => {
@@ -34,12 +38,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
         </div>
       );
     }
-    if (
-      (obj.accessLevel === 1 ||
-        (!obj.active && obj.modifiedOn) ||
-        !obj.active) &&
-      !(!obj.active && !obj.owner && !obj.organizationId && !obj.refused)
-    ) {
+    if (!obj.active && obj.createdBy) {
       return (
         <div className="top__status" style={{ backgroundColor: '#D9E0EF' }}>
           Disabled
@@ -90,11 +89,9 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
     try {
       await modifyOrganization(id, data);
 
-      handleAccounts(id, data.active);
-
-      NotificationManager.success('Organization modified');
+      handleAccounts(id, data.active, !isNodePage);
     } catch (error) {
-      NotificationManager.error(error.toString());
+      console.log(error);
     }
   };
 
@@ -116,14 +113,15 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
       handleModal({
         name: 'deleteAccount',
         data: async () => {
-          await modifyOrganizationHandler({
-            id: info.organizationId || info.organization,
-            data: { active: false },
-          });
+          await modifyAccount(info.address, { active: false });
+          handleAccounts(info.address, false, true);
 
-          sessionStorage.removeItem('user_private_key');
-          sessionStorage.removeItem('user_account');
-          window.location.reload();
+          if (userInfo.address === info.address) {
+            sessionStorage.removeItem('user_private_key');
+            sessionStorage.removeItem('user_account');
+            window.location.reload();
+          }
+          dispatch(handleModal({ name: '' }));
         },
       }),
     );
@@ -213,7 +211,6 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
             <button
               type="button"
               onClick={() => resendInviteHandler(info.email)}
-              style={{ backgroundColor: '#4A38AE' }}
             >
               <p>Resend</p>
             </button>
@@ -231,12 +228,10 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
             ) : (
               <button
                 type="button"
-                onClick={() =>
-                  modifyOrganizationHandler({
-                    id: info.organizationId,
-                    data: { active: true },
-                  })
-                }
+                onClick={async () => {
+                  await modifyAccount(info.address, { active: true });
+                  handleAccounts(info.address, true, true);
+                }}
               >
                 <p>Activate</p>
               </button>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { DashboardTab, AccountsTab, SettingsTab } from '../components/Tabs';
 import Sidebar from '../components/Sidebar';
 import diagramIcon from '../../../assets/svg/leaderboard.svg';
@@ -12,6 +13,8 @@ const tabMenu = [
   { tabIdentifier: SETTINGS_TAB, name: 'Settings', icon: settingsIcon },
 ];
 const Organization = () => {
+  const { userInfo } = useSelector((state) => state.auth);
+
   const [tab, setTab] = useState(() => <DashboardTab />);
 
   useEffect(() => {
@@ -38,9 +41,11 @@ const Organization = () => {
 
   return (
     <div className="organization-container">
-      <div className="sidebar">
-        <Sidebar menuStructure={tabMenu} setActiveTab={viewActiveTab} />
-      </div>
+      {userInfo.permissions?.includes('manage_accounts') && (
+        <div className="sidebar">
+          <Sidebar menuStructure={tabMenu} setActiveTab={viewActiveTab} />
+        </div>
+      )}
       <div className="content">{tab}</div>
     </div>
   );

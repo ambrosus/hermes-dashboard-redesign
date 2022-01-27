@@ -25,25 +25,27 @@ const Header = () => {
     false,
   );
 
+  const headerConfig = [
+    {
+      link: '/dashboard/assets',
+      text: 'Assets',
+    },
+  ];
+
   const isSuperAccount = userInfo.permissions?.includes('super_account');
 
-  const headerConfig = isSuperAccount
-    ? [
-        {
-          link: '/dashboard/node',
-          text: 'Node',
-        },
-      ]
-    : [
-        {
-          link: '/dashboard/organization',
-          text: 'Organization',
-        },
-        {
-          link: '/dashboard/assets',
-          text: 'Assets',
-        },
-      ];
+  if (userInfo.permissions?.includes('manage_accounts')) {
+    headerConfig.unshift({
+      link: '/dashboard/organization',
+      text: 'Organization',
+    });
+  }
+  if (isSuperAccount) {
+    headerConfig.unshift({
+      link: '/dashboard/node',
+      text: 'Node',
+    });
+  }
 
   const showSearchBar = () => dispatch(handleModal({ name: 'searchModal' }));
   const closeModals = () => {
