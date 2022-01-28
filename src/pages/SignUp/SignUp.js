@@ -59,19 +59,21 @@ const SignUp = () => {
               </div>
             </div>
           </Link>
-          <div role="presentation" onClick={showImportantInfo}>
-            <div className="sign-up-choose__key">
-              <div className="circle" />
-              <div className="text">
-                <div className="primary"> Generate new keys</div>
-                <div className="secondary">
-                  {' '}
-                  Keys will be generated locally on your device/browser.
-                </div>
+          <div
+            className="sign-up-choose__key"
+            role="presentation"
+            onClick={showImportantInfo}
+          >
+            <div className="circle" />
+            <div className="text">
+              <div className="primary"> Generate new keys</div>
+              <div className="secondary">
+                {' '}
+                Keys will be generated locally on your device/browser.
               </div>
-              <div className="icon">
-                <ReactSVG src={generateMyKeyIcon} wrapper="span" />{' '}
-              </div>
+            </div>
+            <div className="icon">
+              <ReactSVG src={generateMyKeyIcon} wrapper="span" />{' '}
             </div>
           </div>
         </div>
