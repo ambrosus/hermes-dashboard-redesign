@@ -22,6 +22,8 @@ const Assets = () => {
     assetName: false,
     eventName: false,
   });
+  const [allSelected, setAllSelected] = useState(false);
+
   const { userInfo } = useSelector((state) => state.auth);
 
   const { assetsQueryData, assetsList, isAssetsLoading } = useSelector(
@@ -37,6 +39,12 @@ const Assets = () => {
       dispatch(fetchAssets());
     }
   }, [userInfo]);
+
+  useEffect(() => {
+    if (allSelected) {
+      selectAll();
+    }
+  }, [assetsList]);
 
   const handleSetFormData = (keyValue) => {
     setFormData({ ...formData, ...keyValue });
@@ -56,10 +64,12 @@ const Assets = () => {
   };
 
   const selectAll = () => {
+    setAllSelected(true);
     setSelectedPackages(assetsList.map((el) => el.content.idData.assetId));
   };
 
   const unselectAll = () => {
+    setAllSelected(false);
     setSelectedPackages([]);
   };
 

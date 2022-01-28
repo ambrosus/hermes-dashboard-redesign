@@ -58,8 +58,10 @@ const Sorting = ({ selectAll, unselectAll }) => {
   };
 
   const cancelDateRangeFilter = () => {
-    setIsDateRangeSelected(false);
-    dispatch(handleAssetsListSearch([]));
+    if (isDateRangeSelected) {
+      setIsDateRangeSelected(false);
+      dispatch(handleAssetsListSearch([]));
+    }
   };
 
   return (

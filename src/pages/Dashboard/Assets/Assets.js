@@ -16,6 +16,8 @@ const Assets = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [selectedAssets, setSelectedAssets] = useState([]);
+  const [allSelected, setAllSelected] = useState(false);
+
   const { assetsList, assetsQueryData, isAssetsLoading } = useSelector(
     (state) => state.assets,
   );
@@ -31,6 +33,12 @@ const Assets = () => {
       dispatch(fetchAssets());
     }
   }, [userInfo]);
+
+  useEffect(() => {
+    if (allSelected) {
+      selectAll();
+    }
+  }, [assetsList]);
 
   const openCreateModal = () => dispatch(handleModal({ name: 'createAsset' }));
   const showMore = () => {
@@ -50,10 +58,14 @@ const Assets = () => {
   };
 
   const selectAll = () => {
+    setAllSelected(true);
     setSelectedAssets(assetsList.map((el) => el.content.idData.assetId));
   };
 
-  const unselectAll = () => setSelectedAssets([]);
+  const unselectAll = () => {
+    setAllSelected(false);
+    setSelectedAssets([]);
+  };
 
   return (
     <div className="dashboard-container">

@@ -38,7 +38,11 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
         </div>
       );
     }
-    if (!obj.active && obj.createdBy) {
+    if (
+      !obj.active &&
+      obj.createdBy &&
+      !Object.prototype.hasOwnProperty.call(obj, 'sent')
+    ) {
       return (
         <div className="top__status" style={{ backgroundColor: '#D9E0EF' }}>
           Disabled
@@ -69,6 +73,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
 
   const revokeInviteHandler = async (inviteId) => {
     await deleteInvite(inviteId);
+    NotificationManager.success('Invite was revoked');
   };
 
   const organisationBackupHandler = async (...args) => {
@@ -81,9 +86,11 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const openMemberDetailsModal = () =>
     dispatch(handleModal({ name: 'memberDetailsModal', data: info }));
 
+  // eslint-disable-next-line no-unused-vars
   const modifyOrganizationHandler = async (...args) => {
     const { id, data } = args[0];
     try {
@@ -108,6 +115,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const openModal = () => {
     dispatch(
       handleModal({
@@ -153,9 +161,9 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
         {((isNodePage && info.owner === null) ||
           (isNodePage && !!info.owner && info.organizationId)) && (
           <>
-            <button type="button" onClick={openMemberDetailsModal}>
+            {/* <button type="button" onClick={openMemberDetailsModal}>
               <p>Edit</p>
-            </button>
+            </button> */}
             <button
               type="button"
               onClick={() =>
@@ -166,7 +174,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
             >
               <p>Backup</p>
             </button>
-            {info.active ? (
+            {/* info.active ? (
               <button
                 type="button"
                 onClick={() =>
@@ -190,7 +198,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
               >
                 <p>Activate</p>
               </button>
-            )}
+            ) */}
           </>
         )}
       </>
@@ -216,7 +224,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
             </button>
           </>
         )}
-        {!info.validUntil && (
+        {/* !info.validUntil && (
           <>
             <button type="button" onClick={openMemberDetailsModal}>
               <p>Edit</p>
@@ -237,7 +245,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
               </button>
             )}
           </>
-        )}
+        ) */}
       </>
     </div>
   );

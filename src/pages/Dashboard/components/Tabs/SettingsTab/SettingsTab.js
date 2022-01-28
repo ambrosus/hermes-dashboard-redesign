@@ -63,6 +63,7 @@ const SettingsTab = () => {
     });
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleDisable = async () => {
     await modifyOrganization(userInfo.organization, { active: false });
 
@@ -91,17 +92,18 @@ const SettingsTab = () => {
     <div className="settings-tab">
       <div className="organization-container__heading">My account settings</div>
       <div className="settings-tab__secondary">
-        <ReactSVG src={personIcon} /> {organization.email}
+        <ReactSVG src={personIcon} /> {organization.title}
       </div>
       <div className="space-25" />
       <div className="settings-tab__switch">
         <div className="buttons">
-          <button type="button" className="disable" onClick={handleDisable}>
+          {/* <button type="button" className="disable" onClick={handleDisable}>
             <p>Disable</p>
-          </button>
+          </button> */}
         </div>
         <div className="timestamp">
-          Created {moment.unix(organization.createdOn).format('DD MMM YYYY')}
+          <span style={{ fontWeight: 700, marginRight: 4 }}>Created</span>
+          {moment.unix(organization.createdOn).format('DD MMM YYYY')}
         </div>
       </div>
       <div className="space-25" />
@@ -111,6 +113,7 @@ const SettingsTab = () => {
           imgSrc={lockIcon}
           label="Owner"
           placeholder={organization.owner}
+          className="settings-tab__owner"
         />
         <UiInput
           name="email"
