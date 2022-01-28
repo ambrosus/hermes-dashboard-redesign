@@ -29,9 +29,13 @@ const UiSelect = ({
   );
 
   useEffect(() => {
-    if (selectedValue && options && options.length) {
+    if (
+      selectedValue &&
+      options &&
+      options.length &&
+      inputValue !== selectedValue
+    ) {
       const selectedItem = options.find((el) => selectedValue === el.value);
-
       setInputValue(selectedItem ? selectedItem.label : selectedValue);
     }
     if (!selectedValue) {
@@ -124,7 +128,9 @@ const UiSelect = ({
   };
 
   const selectValueByEnter = () => {
-    handleChange(filteredOptions[selectedKeyByArrow].value);
+    if (filteredOptions[selectedKeyByArrow]) {
+      handleChange(filteredOptions[selectedKeyByArrow].value);
+    }
   };
 
   return (

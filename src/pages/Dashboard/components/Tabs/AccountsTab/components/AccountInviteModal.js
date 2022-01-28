@@ -27,8 +27,10 @@ const AccountInviteModal = () => {
     setEmail([...email, '']);
   };
 
-  const sendInviteHandler = async () => {
-    await createInvites({ email: [`${email}`] });
+  const sendInviteHandler = () => {
+    createInvites({ email: Array.isArray(email) ? email : [email] }, () => {
+      dispatch(handleModal({ name: '' }));
+    });
   };
 
   return (

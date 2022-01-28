@@ -131,14 +131,15 @@ export const getFile = (event) => {
 };
 
 // accountsInvites
-export const createInvites = async (email) => {
+export const createInvites = (email, callback) => {
   const url = `${apiExtended}/organization/invite`;
-  const invites = await axios.post(url, email);
-
-  if (invites.error) {
-    throw invites.error;
-  }
-  return invites.data;
+  axios
+    .post(url, email)
+    .then(() => {
+      NotificationManager.success('Invite was sent');
+      callback();
+    })
+    .catch(() => NotificationManager.error('Invite error'));
 };
 export const resendInvites = async (email) => {
   const url = `${apiExtended}/organization/invite/resend`;

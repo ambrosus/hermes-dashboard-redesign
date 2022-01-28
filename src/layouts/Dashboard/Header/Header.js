@@ -66,6 +66,8 @@ const Header = () => {
     window.location.reload();
   };
 
+  const isOrganizationPage = window.location.href.includes('organization');
+
   return (
     <header
       role="presentation"
@@ -98,15 +100,17 @@ const Header = () => {
       </div>
       {isAuth && (
         <div className="header__setting">
-          {!isSuperAccount && openedModalName !== 'searchModal' && (
-            <UiButton
-              type="icon"
-              styles={{ marginRight: 20 }}
-              onclick={showSearchBar}
-            >
-              <SearchIcon />
-            </UiButton>
-          )}
+          {!isSuperAccount &&
+            !isOrganizationPage &&
+            openedModalName !== 'searchModal' && (
+              <UiButton
+                type="icon"
+                styles={{ marginRight: 20 }}
+                onclick={showSearchBar}
+              >
+                <SearchIcon />
+              </UiButton>
+            )}
           <UiButton
             className={cx(isUserMenuOpened && 'header-icon-active')}
             onclick={toggleMenuVisibility}
