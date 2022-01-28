@@ -65,6 +65,12 @@ const KeyLogin = () => {
     }
   };
 
+  const isLoginDisabled = authMethod === PRIVATE_KEY && !privateKey || (
+    authMethod === EMAIL_ADDRESS && (
+      !email || !mailFormat.test(email) || !password
+    )
+  );
+
   return (
     <div className="key-login-container">
       <p className="key-login-container__heading">Hi, Welcome Back!</p>
@@ -209,10 +215,7 @@ const KeyLogin = () => {
             />
           </>
         )}
-        <AuthButton
-          type="submit"
-          disabled={!email || !mailFormat.test(email) || !password}
-        >
+        <AuthButton type="submit" disabled={isLoginDisabled}>
           Log in
         </AuthButton>
       </form>
