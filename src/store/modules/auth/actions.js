@@ -2,6 +2,7 @@ import axios from 'axios';
 import NotificationManager from 'react-notifications/lib/NotificationManager';
 import { SET_ETH_ADDRESS, SET_INVITE_ADDRESS, SIGN_IN } from './constants';
 import { generateToken } from '../../../utils/generateToken';
+import { environment } from '../../../utils/environment';
 
 export const setEthAddress = () => {
   const address = window.web3.eth.accounts.create();
@@ -32,9 +33,7 @@ export const signIn = (privateKey) => (dispatch) => {
 
   const account = window.web3.eth.accounts.privateKeyToAccount(privateKey);
   axios
-    .get(
-      `https://vitalii427-hermes.ambrosus-test.io/account/${account.address}`,
-    )
+    .get(`${environment.api.extended}/account/${account.address}`)
     .then(({ data }) => {
       if (data.meta && data.meta.code === 200) {
         dispatch({

@@ -14,6 +14,7 @@ import {
 } from './constants';
 import { generateAsset, generateEvent } from '../../../utils/generateToken';
 import createAssetNormalizer from '../../../utils/createAssetNormalizer';
+import { environment } from '../../../utils/environment';
 
 export const fetchAssets =
   (next = '') =>
@@ -36,7 +37,7 @@ export const fetchAssets =
     dispatch(handleAssetsLoading(true));
     return new Promise((res, rej) => {
       axios
-        .post('https://vitalii427-hermes.ambrosus-test.io/asset2/query', params)
+        .post(`${environment.api.extended}/asset2/query`, params)
         .then(({ data }) => {
           if (data.data) {
             const assetsIds = data.data.map((el) => el.assetId);
@@ -73,10 +74,7 @@ export const fetchAssetsInfo = (assetsIds, isAssetPage) => (dispatch) => {
   };
 
   axios
-    .post(
-      'https://vitalii427-hermes.ambrosus-test.io/event2/latest/type',
-      params,
-    )
+    .post(`${environment.api.extended}/event2/latest/type`, params)
     .then(({ data }) => {
       if (data.data) {
         if (isAssetPage) {
@@ -118,7 +116,7 @@ export const fetchEventsInfo =
     const { assets } = getState();
 
     axios
-      .post('https://vitalii427-hermes.ambrosus-test.io/event2/query', params)
+      .post(`${environment.api.extended}/event2/query`, params)
       .then(({ data }) => {
         if (data.data) {
           dispatch(
@@ -141,10 +139,7 @@ export const createAsset = (formData, isJSONForm, isEdit) => (dispatch) => {
   const asset = isJSONForm ? formData : generateAsset(privateKey);
 
   axios
-    .post(
-      `https://vitalii427-hermes.ambrosus-test.io/asset2/create/${asset.assetId}`,
-      asset,
-    )
+    .post(`${environment.api.extended}/asset2/create/${asset.assetId}`, asset)
     .then((response) => {
       const { data } = response;
 
@@ -191,7 +186,7 @@ export const createEvent =
     return new Promise((resolve, reject) => {
       axios
         .post(
-          `https://vitalii427-hermes.ambrosus-test.io/event2/create/${event.eventId}`,
+          `${environment.api.extended}/event2/create/${event.eventId}`,
           event,
         )
         .then((response) => {
@@ -287,15 +282,15 @@ export const searchAssets = (searchQueries) => (dispatch, getState) => {
 
   return new Promise((resolve, reject) => {
     axios
-      .post('https://vitalii427-hermes.ambrosus-test.io/event2/query', params)
+      .post(`${environment.api.extended}/event2/query`, params)
       .then(({ data }) => {
         if (data.meta && data.meta.code === 200) {
           const assetsIds = data.data.map((el) => el.content.idData.assetId);
           axios
-            .post(
-              'https://vitalii427-hermes.ambrosus-test.io/event2/latest/type',
-              { assets: assetsIds, type: 'ambrosus.asset.info' },
-            )
+            .post(`${environment.api.extended}/event2/latest/type`, {
+              assets: assetsIds,
+              type: 'ambrosus.asset.info',
+            })
             .then((res) => {
               if (data.meta && data.meta.code === 200) {
                 resolve(res.data.data);

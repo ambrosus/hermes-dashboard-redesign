@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { NotificationContainer } from 'react-notifications';
@@ -13,10 +12,11 @@ import CreateResultModal from './components/CreateResultModal';
 import UiButton from './components/UiButton';
 import { handleModal } from './store/modules/modal';
 import SearchModal from './components/SearchModal';
+import { environment } from './utils/environment';
 
 const Main = () => {
   const dispatch = useDispatch();
-
+  console.log(environment);
   useEffect(() => {
     const privateKeyFromSession = sessionStorage.getItem('user_private_key');
     if (privateKeyFromSession) {

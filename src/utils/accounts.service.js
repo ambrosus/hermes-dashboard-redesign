@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { environment } from './environment';
 
-const apiExtended = 'https://vitalii427-hermes.ambrosus-test.io';
+const apiExtended = environment.api.extended;
 
 const getAccounts = async (next = '') => {
   const url = `${apiExtended}/account&next=${next}`;

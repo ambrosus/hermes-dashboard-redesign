@@ -1,9 +1,9 @@
 /*eslint-disable*/
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import cx from 'classnames';
 import { useHistory } from 'react-router';
 import { NotificationManager } from 'react-notifications';
+import cx from 'classnames';
 import AuthInput from '../AuthInput';
 import AuthButton from '../AuthButton';
 import { signIn } from '../../../store/modules/auth/actions';
@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import Tooltip from 'react-simple-tooltip';
 import axios from 'axios';
 import decryptPrivateKey from '../../../utils/decryptPassword';
+import { environment } from '../../../utils/environment';
 
 const EMAIL_ADDRESS = 'Email address';
 const PRIVATE_KEY = 'Private key';
@@ -44,7 +45,7 @@ const KeyLogin = () => {
         NotificationManager.error('Incorrect key');
       }
     } else {
-      axios.post(' https://vitalii427-hermes.ambrosus-test.io/account/secret', { email })
+      axios.post(`${environment.api.extended}/account/secret`, { email })
         .then((response) => {
           console.log(response.data.data.token);
           const [address, privateKey] = decryptPrivateKey(
