@@ -8,7 +8,7 @@ COPY . .
 RUN npm run build
 
 FROM busybox
-COPY --from=builder /app/dist /var/www/dashboard
+COPY --from=builder /app/build /var/www/dashboard
 
 VOLUME /var/www/dashboard
 CMD ["sleep", "infinity"]
