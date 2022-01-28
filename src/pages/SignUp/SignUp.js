@@ -6,6 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { setInviteAddress } from '../../store/modules/auth/actions';
 import generateMyKeyIcon from '../../assets/svg/generate-my-key.svg';
 import regMyKeyIcon from '../../assets/svg/reg-my-key.svg';
+import { environment } from '../../utils/environment';
 
 const SignUp = () => {
   const history = useHistory();
@@ -17,7 +18,7 @@ const SignUp = () => {
       if (splittedQuery[0].includes('inviteId')) {
         axios
           .get(
-            `https://vitalii427-hermes.ambrosus-test.io/organization/invite/${splittedQuery[1]}/exists`,
+            `${environment.api.extended}/organization/invite/${splittedQuery[1]}/exists`,
           )
           .then(() => dispatch(setInviteAddress(splittedQuery[1])))
           .catch(() => history.push('/dashboard/login'));

@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { environment } from './environment';
 export const getTimeRangeCount = async (collection, start, end) => {
-  const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${collection}/count/${start}/${end}/total`;
+  const url = `${environment.api.extended}/analytics/${collection}/count/${start}/${end}/total`;
   const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
@@ -14,7 +15,7 @@ export const getTimeRangeCountForOrganization = async (
   start,
   end,
 ) => {
-  const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${organizationId}/${collection}/count/${start}/${end}/total`;
+  const url = `${environment.api.extended}/analytics/${organizationId}/${collection}/count/${start}/${end}/total`;
   const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
@@ -28,7 +29,7 @@ export const getTimeRangeCountAggregate = async (
   end,
   group,
 ) => {
-  const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${collection}/count/${start}/${end}/aggregate/${group}`;
+  const url = `${environment.api.extended}/analytics/${collection}/count/${start}/${end}/aggregate/${group}`;
   const result = await axios.get(url);
   return result.data.data;
 };
@@ -40,7 +41,7 @@ export const getTimeRangeCountAggregateForOrganization = async (
   end,
   group,
 ) => {
-  const url = `https://vitalii427-hermes.ambrosus-test.io/analytics/${organizationId}/${collection}/count/${start}/${end}/aggregate/${group}`;
+  const url = `${environment.api.extended}/analytics/${organizationId}/${collection}/count/${start}/${end}/aggregate/${group}`;
   const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
@@ -49,7 +50,7 @@ export const getTimeRangeCountAggregateForOrganization = async (
 };
 
 export const amb = async () => {
-  const url = `https://vitalii427-hermes.ambrosus-test.io/metrics/amb`;
+  const url = `${environment.api.extended}/metrics/amb`;
   const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
@@ -58,7 +59,7 @@ export const amb = async () => {
 };
 
 export const bundle = async () => {
-  const url = `$https://vitalii427-hermes.ambrosus-test.io/metrics/bundle`;
+  const url = `${environment.api.extended}/metrics/bundle`;
   const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
@@ -67,7 +68,7 @@ export const bundle = async () => {
 };
 
 export const balance = async () => {
-  const url = `https://vitalii427-hermes.ambrosus-test.io/metrics/balance`;
+  const url = `${environment.api.extended}/metrics/balance`;
   const result = await axios.get(url);
   if (result.status !== 200) {
     throw new Error(`${result.status} ${result.statusText}`);
@@ -76,7 +77,7 @@ export const balance = async () => {
 };
 
 export const pushBundle = async () => {
-  const url = `https://vitalii427-hermes.ambrosus-test.io/bundle2/push`;
+  const url = `${environment.api.extended}/bundle2/push`;
   try {
     await axios.post(url);
   } catch (e) {

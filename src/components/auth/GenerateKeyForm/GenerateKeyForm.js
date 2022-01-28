@@ -12,6 +12,7 @@ import { handleModal } from '../../../store/modules/modal';
 
 import fiKeyIcon from '../../../assets/svg/fi_key.svg';
 import copyIcon from '../../../assets/svg/fi_copy.svg';
+import { environment } from '../../../utils/environment';
 
 const GenerateKeyForm = () => {
   const ethAddress = useSelector((state) => state.auth.etherAddress);
@@ -33,7 +34,7 @@ const GenerateKeyForm = () => {
     if (inviteAddress) {
       axios
         .post(
-          `https://vitalii427-hermes.ambrosus-test.io/organization/invite/${inviteAddress}/accept`,
+          `${environment.api.extended}/organization/invite/${inviteAddress}/accept`,
           { address: ethAddress.publicKey },
         )
         .then(() => {

@@ -8,6 +8,7 @@ import AuthTextarea from '../../../components/auth/AuthTextarea';
 import AuthCheckbox from '../../../components/auth/AuthCheckbox';
 import AuthButton from '../../../components/auth/AuthButton';
 import successImg from '../../../assets/svg/success-register.svg';
+import { environment } from '../../../utils/environment';
 
 const Request = () => {
   const history = useHistory();
@@ -39,10 +40,7 @@ const Request = () => {
     e.preventDefault();
 
     axios
-      .post(
-        'https://vitalii427-hermes.ambrosus-test.io/organization/request',
-        formData,
-      )
+      .post(`${environment.api.extended}/organization/request`, formData)
       .then(({ data }) => {
         if (data.meta && data.meta.code === 201) {
           setIsRegisterSuccess(true);

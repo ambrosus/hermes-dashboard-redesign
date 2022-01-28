@@ -3,8 +3,9 @@ import moment from 'moment';
 import NotificationManager from 'react-notifications/lib/NotificationManager';
 import { generateToken } from './generateToken';
 import { download } from './download';
+import { environment } from './environment';
 
-const apiExtended = 'https://vitalii427-hermes.ambrosus-test.io';
+const apiExtended = environment.api.extended;
 
 export const getOrganizationAccounts = async (
   organizationId = 45,
