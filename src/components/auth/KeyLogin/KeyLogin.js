@@ -45,7 +45,8 @@ const KeyLogin = () => {
         NotificationManager.error('Incorrect key');
       }
     } else {
-      axios.post(`${environment.api.extended}/account/secret`, { email })
+      axios
+        .post(`${environment.api.extended}/account/secret`, { email })
         .then((response) => {
           console.log(response.data.data.token);
           const [address, privateKey] = decryptPrivateKey(
@@ -61,15 +62,14 @@ const KeyLogin = () => {
         })
         .catch((err) => {
           NotificationManager.error(err.response?.data?.meta?.message);
-        })
+        });
     }
   };
 
-  const isLoginDisabled = authMethod === PRIVATE_KEY && !privateKey || (
-    authMethod === EMAIL_ADDRESS && (
-      !email || !mailFormat.test(email) || !password
-    )
-  );
+  const isLoginDisabled =
+    (authMethod === PRIVATE_KEY && !privateKey) ||
+    (authMethod === EMAIL_ADDRESS &&
+      (!email || !mailFormat.test(email) || !password));
 
   return (
     <div className="key-login-container">

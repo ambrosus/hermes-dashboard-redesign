@@ -13,6 +13,8 @@ import UiButton from './components/UiButton';
 import { handleModal } from './store/modules/modal';
 import SearchModal from './components/SearchModal';
 import { environment } from './utils/environment';
+import ImportantInfoModal from './components/ImportantInfoModal';
+import { background } from 'stylelint-order/rules/shorthandData';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -95,6 +97,13 @@ const Main = () => {
       </UiModal>
       <UiModal modalName="searchModal" isFullWindow>
         <SearchModal />
+      </UiModal>
+      <UiModal
+        contentStyles={{ background: 'rgba(0, 0, 0, 0.6)' }}
+        modalName="importantInfoModal"
+        isFullWindow
+      >
+        <ImportantInfoModal />
       </UiModal>
       <NotificationContainer />
     </Layout>
