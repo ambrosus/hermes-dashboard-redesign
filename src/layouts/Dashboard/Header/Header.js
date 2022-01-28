@@ -83,9 +83,11 @@ const Header = () => {
       <div className="header__menu">
         {!isAuth ? (
           <>
+            {/*
             <Link to="/dashboard/help" style={{ color: 'white' }}>
-              Help
+            Help
             </Link>
+            */}
           </>
         ) : (
           headerConfig.map(({ link, text }) => (
