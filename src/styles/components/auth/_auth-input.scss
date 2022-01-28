@@ -1,10 +1,16 @@
 .auth-input {
   position: relative;
-
+  input::placeholder {
+    color: #A6B0C3;
+  }
+  textarea::placeholder {
+    color: #A6B0C3;
+  }
   &__input {
     textarea{
       padding: 10px !important;
     }
+
     border: 0;
     background: #EFF2F5;
     padding: 12px 45px 12px 46px;
