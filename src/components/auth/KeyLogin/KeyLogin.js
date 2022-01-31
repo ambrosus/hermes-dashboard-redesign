@@ -184,6 +184,7 @@ const KeyLogin = () => {
               type="password"
               className="key-login__input"
               placeholder="Password"
+              passwordInput
               rightEl={
                 <svg
                   width="24"
