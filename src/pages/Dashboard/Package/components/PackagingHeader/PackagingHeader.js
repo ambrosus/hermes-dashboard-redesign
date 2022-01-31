@@ -127,10 +127,9 @@ const PackagingHeader = ({ handleFormData, formData, errorFields }) => {
         <p className="error-message">Enter event name</p>
       )}
       <p className="packaging-header__description">
-        By clicking on the account icon in the top right corner, you can
-        navigate to “Settings” to review or update your personal details. By
-        clicking on the account icon in the top right corner, you can navigate
-        to “Settings” to review or update your personal details.
+        You can create links between assets and events to pack them together.
+        Specify &quot;Asset name / ID`&quot;` and enter &quot;Event name&quot;
+        to start packing assets below.
       </p>
     </div>
   );
