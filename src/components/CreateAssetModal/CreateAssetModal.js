@@ -262,31 +262,60 @@ const CreateAssetModal = ({
     }));
   };
 
-  const showResultModal = () => {
-    setIsSubmitted(true);
-    const data = isJSONForm ? JSON.parse(jsonData) : formData;
-
-    let submitFunc = () => createAsset(data, isJSONForm);
-
-    if (isCreateEvent) {
-      submitFunc = () => createEvent(assetId, formData);
-    }
-    if (!isEmptyObj(bulkEventData)) {
-      submitFunc = () => bulkEvents(bulkEventData.assetsIds, formData);
-      submitCallback();
-    }
-
-    dispatch(
-      handleModal({
-        name: 'createResult',
-        data: {
-          submitFunc,
-          isEvent: isCreateEvent || !isEmptyObj(bulkEventData),
-        },
-      }),
+  const isFieldsPairFilled = () => {
+    const groupFieldsKeys = Object.keys(formData).filter((el) =>
+      el.includes('groupPropertyItems'),
     );
 
-    localStorage.removeItem('createAssetData');
+    const pairsFieldsNames = [
+      ...groupFieldsKeys,
+      'propertiesItems',
+      'identifiersItems',
+    ];
+
+    let isFilled = true;
+
+    pairsFieldsNames.forEach((item) => {
+      Object.keys(propertiesItems).forEach((el) => {
+        const { name, description } = propertiesItems[el];
+
+        if ((name && !description) || (!name && description)) {
+          isFilled = false;
+        }
+      });
+    });
+
+    return isFilled;
+  };
+
+  const showResultModal = () => {
+    if (isFieldsPairFilled()) {
+      const data = isJSONForm ? JSON.parse(jsonData) : formData;
+
+      let submitFunc = () => createAsset(data, isJSONForm);
+
+      if (isCreateEvent) {
+        submitFunc = () => createEvent(assetId, formData);
+      }
+      if (!isEmptyObj(bulkEventData)) {
+        submitFunc = () => bulkEvents(bulkEventData.assetsIds, formData);
+        submitCallback();
+      }
+
+      dispatch(
+        handleModal({
+          name: 'createResult',
+          data: {
+            submitFunc,
+            isEvent: isCreateEvent || !isEmptyObj(bulkEventData),
+          },
+        }),
+      );
+
+      localStorage.removeItem('createAssetData');
+    } else {
+      setIsSubmitted(true);
+    }
   };
 
   const processFile = (files) => {
