@@ -10,6 +10,7 @@ const AddedField = ({
   itemName,
   placeholder,
   onChange,
+  isSubmitted,
 }) => {
   const handleChange = (el, value) => {
     onChange({
@@ -34,6 +35,9 @@ const AddedField = ({
               placeholder={`${placeholder} name`}
               onChange={(value) => handleChange(el, value)}
               name="name"
+              errorMessage={
+                isSubmitted && !fieldsData[el]?.description && 'Field required'
+              }
             />
             <UiInput
               value={fieldsData[el]?.description}
@@ -41,6 +45,9 @@ const AddedField = ({
               placeholder="Description"
               onChange={(value) => handleChange(el, value)}
               name="description"
+              errorMessage={
+                isSubmitted && !fieldsData[el]?.name && 'Field required'
+              }
             />
             {el !== 0 && (
               <button
@@ -64,6 +71,7 @@ AddedField.propTypes = {
   itemName: PropTypes.string,
   placeholder: PropTypes.string,
   fieldsData: PropTypes.object,
+  isSubmitted: PropTypes.bool,
 };
 
 export default AddedField;

@@ -51,7 +51,7 @@ const Asset = () => {
     return null;
   }
 
-  const assetLink = `https://test.amb.to/${assetId}`;
+  const assetLink = `https://amb.to/${assetId}`;
 
   const assetInfo = assetData.content.data.find(
     (el) => el.type === 'ambrosus.asset.info',

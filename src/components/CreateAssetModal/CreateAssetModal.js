@@ -106,6 +106,7 @@ const CreateAssetModal = ({
     country: '',
   });
   const [jsonData, setJsonData] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     const dataFromStorage = localStorage.getItem('createAssetData');
@@ -262,6 +263,7 @@ const CreateAssetModal = ({
   };
 
   const showResultModal = () => {
+    setIsSubmitted(true);
     const data = isJSONForm ? JSON.parse(jsonData) : formData;
 
     let submitFunc = () => createAsset(data, isJSONForm);
@@ -589,6 +591,7 @@ const CreateAssetModal = ({
                         items={additionalFields.propertiesItems}
                         onChange={handleSetFormData}
                         fieldsData={formData.propertiesItems}
+                        isSubmitted={isSubmitted}
                       />
                       <button
                         onClick={addProperties}
@@ -624,6 +627,7 @@ const CreateAssetModal = ({
                             itemName={`groupPropertyItems${el}`}
                             fieldsData={formData[`groupPropertyItems${el}`]}
                             onChange={handleSetFormData}
+                            isSubmitted={isSubmitted}
                           />
                           <button
                             type="button"
@@ -671,6 +675,7 @@ const CreateAssetModal = ({
                         items={additionalFields.identifiersItems}
                         onChange={handleSetFormData}
                         fieldsData={formData.identifiersItems}
+                        isSubmitted={isSubmitted}
                       />
                       <button
                         onClick={addIdentifier}

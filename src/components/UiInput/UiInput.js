@@ -17,6 +17,7 @@ const UiInput = ({
   onEnterPress = () => {},
   rightEl,
   onKeyPress = () => {},
+  errorMessage,
 }) => {
   const handleInput = ({ target }) =>
     onChange(name ? { [name]: target.value } : target.value);
@@ -58,6 +59,7 @@ const UiInput = ({
         />
       )}
       {rightEl && <div className="ui-input__el">{rightEl}</div>}
+      {errorMessage && <span className="error-message">{errorMessage}</span>}
     </div>
   );
 };
@@ -77,6 +79,7 @@ UiInput.propTypes = {
   onEnterPress: PropTypes.func,
   onKeyPress: PropTypes.func,
   rightEl: PropTypes.element,
+  errorMessage: PropTypes.string,
 };
 
 export default UiInput;
