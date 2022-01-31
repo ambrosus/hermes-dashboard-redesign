@@ -272,12 +272,11 @@ const CreateAssetModal = ({
       'propertiesItems',
       'identifiersItems',
     ];
-
     let isFilled = true;
 
     pairsFieldsNames.forEach((item) => {
-      Object.keys(propertiesItems).forEach((el) => {
-        const { name, description } = propertiesItems[el];
+      Object.keys(formData[item]).forEach((el) => {
+        const { name, description } = formData[item][el];
 
         if ((name && !description) || (!name && description)) {
           isFilled = false;
