@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
@@ -6,6 +6,7 @@ const AuthInput = ({
   className,
   onChange,
   label,
+  passwordInput,
   value,
   placeholder,
   rightEl,
@@ -13,7 +14,12 @@ const AuthInput = ({
   type = 'text',
   errorMessage,
 }) => {
+  const [showPass, setShowPass] = useState(false);
   const handleChange = ({ target }) => onChange(target.value);
+  const handleShowPassword = () => {
+    setShowPass(!showPass);
+    console.log(showPass);
+  };
 
   return (
     <div className={cx('auth-input', className)}>
@@ -33,11 +39,19 @@ const AuthInput = ({
           'auth-input__input',
           errorMessage && 'auth-input__input--error',
         )}
-        type={type}
+        /* eslint-disable-next-line */
+        type={passwordInput ? (showPass ? 'text' : 'password') : type}
         onChange={handleChange}
         value={value}
       />
-      <div className="auth-input__right-el">{rightEl}</div>
+      <div
+        className="auth-input__right-el"
+        role="presentation"
+        style={{ cursor: 'pointer' }}
+        onClick={() => passwordInput && handleShowPassword()}
+      >
+        {rightEl}
+      </div>
       <div className="auth-input__left-el">{leftEl}</div>
       {errorMessage && (
         <span className="auth-input__error-message">{errorMessage}</span>
@@ -51,6 +65,7 @@ AuthInput.propTypes = {
   placeholder: PropTypes.string,
   label: PropTypes.string,
   value: PropTypes.string,
+  passwordInput: PropTypes.bool,
   rightEl: PropTypes.element,
   leftEl: PropTypes.element,
   type: PropTypes.string,

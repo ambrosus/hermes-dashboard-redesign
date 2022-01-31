@@ -8,7 +8,7 @@ const AuthTextarea = ({ label, placeholder, onChange, value }) => {
     <div className="auth-input">
       {label && <label className="auth-input__label">{label}</label>}
       <textarea
-        style={{ padding: 10 }}
+        style={{ padding: 10, minHeight: 150 }}
         placeholder={placeholder}
         className="auth-input__input"
         value={value}
