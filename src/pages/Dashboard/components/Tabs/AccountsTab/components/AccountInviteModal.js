@@ -40,7 +40,6 @@ const AccountInviteModal = () => {
     setEmail((array) => {
       const clone = [...array];
       clone.splice(idx, 1);
-      console.log(clone);
       return clone;
     });
   };
