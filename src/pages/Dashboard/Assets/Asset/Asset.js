@@ -33,7 +33,6 @@ const Asset = () => {
   useEffect(() => {
     dispatch(fetchEventsInfo(assetId));
     dispatch(fetchAssetsInfo([assetId], true));
-
     return () => {
       dispatch(setAssetPageInfo(null));
       dispatch(setEventsData({ data: [], pagination: {} }));

@@ -104,7 +104,7 @@ const AccountsTab = () => {
         <StatusBar type={display} setType={setDisplay} />
         <div className="flex align-items-center">
           <input type="file" id="selectedFile" />
-          {isNodePage && (
+          {isNodePage && false && (
             <UiButton
               onclick={() => getFileHandler()}
               styles={{ fontSize: 12 }}
