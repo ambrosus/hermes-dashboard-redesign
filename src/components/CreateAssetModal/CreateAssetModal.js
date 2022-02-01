@@ -276,10 +276,19 @@ const CreateAssetModal = ({
 
     pairsFieldsNames.forEach((item) => {
       Object.keys(formData[item]).forEach((el) => {
-        const { name, description } = formData[item][el];
+        if (el === 'groupName') {
+          if (!formData[item][el]) {
+            isFilled = false;
+          }
+        } else {
+          const { name, description } = formData[item][el];
 
-        if ((name && !description) || (!name && description)) {
-          isFilled = false;
+          if (
+            ((name || description) && name && !description) ||
+            (!name && description)
+          ) {
+            isFilled = false;
+          }
         }
       });
     });
@@ -647,6 +656,11 @@ const CreateAssetModal = ({
                               formData[`groupPropertyItems${el}`].groupName
                             }
                             onChange={(value) => setGroupName(value, el)}
+                            errorMessage={
+                              isSubmitted &&
+                              !formData[`groupPropertyItems${el}`].groupName &&
+                              'Field required'
+                            }
                           />
                           <AddedField
                             items={additionalFields[`groupPropertyItems${el}`]}

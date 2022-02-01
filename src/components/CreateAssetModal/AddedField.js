@@ -36,7 +36,10 @@ const AddedField = ({
               onChange={(value) => handleChange(el, value)}
               name="name"
               errorMessage={
-                isSubmitted && !fieldsData[el]?.name && 'Field required'
+                isSubmitted &&
+                fieldsData[el]?.description &&
+                !fieldsData[el]?.name &&
+                'Field required'
               }
             />
             <UiInput
@@ -46,7 +49,10 @@ const AddedField = ({
               onChange={(value) => handleChange(el, value)}
               name="description"
               errorMessage={
-                isSubmitted && !fieldsData[el]?.description && 'Field required'
+                isSubmitted &&
+                fieldsData[el]?.name &&
+                !fieldsData[el]?.description &&
+                'Field required'
               }
             />
             {el !== 0 && (
