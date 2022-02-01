@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import { handleModal } from '../../../../../../store/modules/modal';
 import { createInvites } from '../../../../../../utils/organizationService';
 import UiButton from '../../../../../../components/UiButton';
@@ -10,7 +11,7 @@ import closeFillIcon from '../../../../../../assets/svg/close-filled.svg';
 
 const mailFormat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
-const AccountInviteModal = () => {
+const AccountInviteModal = ({ fetchAccounts }) => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState(['']);
 
@@ -33,6 +34,7 @@ const AccountInviteModal = () => {
   const sendInviteHandler = () => {
     createInvites({ email: Array.isArray(email) ? email : [email] }, () => {
       dispatch(handleModal({ name: '' }));
+      fetchAccounts();
     });
   };
 
@@ -97,6 +99,10 @@ const AccountInviteModal = () => {
       </div>
     </UiModal>
   );
+};
+
+AccountInviteModal.propTypes = {
+  fetchAccounts: PropTypes.func,
 };
 
 export default AccountInviteModal;

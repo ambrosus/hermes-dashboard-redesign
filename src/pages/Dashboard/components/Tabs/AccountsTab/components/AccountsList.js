@@ -11,6 +11,7 @@ const AccountsList = ({
   displayAccounts,
   handleAccounts,
   fetchOrganizations,
+  fetchAccounts,
 }) => {
   const dispatch = useDispatch();
   const { data } = useSelector((state) => state.modal.openedModal);
@@ -28,6 +29,7 @@ const AccountsList = ({
             key={item._id}
             info={item}
             fetchOrganizations={fetchOrganizations}
+            fetchAccounts={fetchAccounts}
           />
         ))}
       <UiModal modalName="deleteAccount">
@@ -50,6 +52,7 @@ AccountsList.propTypes = {
   accounts: PropTypes.object,
   handleAccounts: PropTypes.func,
   fetchOrganizations: PropTypes.func,
+  fetchAccounts: PropTypes.func,
 };
 
 export default React.memo(AccountsList);

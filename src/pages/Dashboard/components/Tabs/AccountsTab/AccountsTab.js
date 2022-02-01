@@ -33,18 +33,19 @@ const AccountsTab = () => {
     dispatch(handleModal({ name: 'inviteAccountModal' }));
 
   useEffect(
-    () =>
-      !isNodePage
-        ? getOrganizationAccounts(
-            JSON.parse(sessionStorage.getItem('user_account')).organization,
-          ).then((data) => {
-            if (data) {
-              setAccounts(data);
-            }
-          })
-        : fetchOrganizations(),
+    () => (!isNodePage ? fetchAccounts() : fetchOrganizations()),
     [display],
   );
+
+  const fetchAccounts = () => {
+    getOrganizationAccounts(
+      JSON.parse(sessionStorage.getItem('user_account')).organization,
+    ).then((data) => {
+      if (data) {
+        setAccounts(data);
+      }
+    });
+  };
 
   const fetchOrganizations = () => {
     getOrganizations().then((data) => {
@@ -117,12 +118,13 @@ const AccountsTab = () => {
 
       <div className="space-25" />
 
-      {accounts?.all.length > 0 ? (
+      {accounts.all.length > 0 ? (
         <AccountsList
           handleAccounts={handleAccounts}
           displayAccounts={display}
           accounts={accounts && accounts}
           fetchOrganizations={fetchOrganizations}
+          fetchAccounts={fetchAccounts}
         />
       ) : (
         <div
@@ -130,9 +132,12 @@ const AccountsTab = () => {
           style={{ display: 'block', margin: '0 auto' }}
         />
       )}
-      <AccountInviteModal />
+      <AccountInviteModal fetchAccounts={fetchAccounts} />
       {name === 'memberDetailsModal' && modalData && (
-        <MemberDetailsModal handleUserActive={handleAccounts} />
+        <MemberDetailsModal
+          handleUserActive={handleAccounts}
+          fetchAccounts={fetchAccounts}
+        />
       )}
     </div>
   );
