@@ -106,6 +106,7 @@ const CreateAssetModal = ({
     country: '',
   });
   const [jsonData, setJsonData] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     const dataFromStorage = localStorage.getItem('createAssetData');
@@ -261,30 +262,59 @@ const CreateAssetModal = ({
     }));
   };
 
-  const showResultModal = () => {
-    const data = isJSONForm ? JSON.parse(jsonData) : formData;
-
-    let submitFunc = () => createAsset(data, isJSONForm);
-
-    if (isCreateEvent) {
-      submitFunc = () => createEvent(assetId, formData);
-    }
-    if (!isEmptyObj(bulkEventData)) {
-      submitFunc = () => bulkEvents(bulkEventData.assetsIds, formData);
-      submitCallback();
-    }
-
-    dispatch(
-      handleModal({
-        name: 'createResult',
-        data: {
-          submitFunc,
-          isEvent: isCreateEvent || !isEmptyObj(bulkEventData),
-        },
-      }),
+  const isFieldsPairFilled = () => {
+    const groupFieldsKeys = Object.keys(formData).filter((el) =>
+      el.includes('groupPropertyItems'),
     );
 
-    localStorage.removeItem('createAssetData');
+    const pairsFieldsNames = [
+      ...groupFieldsKeys,
+      'propertiesItems',
+      'identifiersItems',
+    ];
+    let isFilled = true;
+
+    pairsFieldsNames.forEach((item) => {
+      Object.keys(formData[item]).forEach((el) => {
+        const { name, description } = formData[item][el];
+
+        if ((name && !description) || (!name && description)) {
+          isFilled = false;
+        }
+      });
+    });
+
+    return isFilled;
+  };
+
+  const showResultModal = () => {
+    if (isFieldsPairFilled()) {
+      const data = isJSONForm ? JSON.parse(jsonData) : formData;
+
+      let submitFunc = () => createAsset(data, isJSONForm);
+
+      if (isCreateEvent) {
+        submitFunc = () => createEvent(assetId, formData);
+      }
+      if (!isEmptyObj(bulkEventData)) {
+        submitFunc = () => bulkEvents(bulkEventData.assetsIds, formData);
+        submitCallback();
+      }
+
+      dispatch(
+        handleModal({
+          name: 'createResult',
+          data: {
+            submitFunc,
+            isEvent: isCreateEvent || !isEmptyObj(bulkEventData),
+          },
+        }),
+      );
+
+      localStorage.removeItem('createAssetData');
+    } else {
+      setIsSubmitted(true);
+    }
   };
 
   const processFile = (files) => {
@@ -589,6 +619,7 @@ const CreateAssetModal = ({
                         items={additionalFields.propertiesItems}
                         onChange={handleSetFormData}
                         fieldsData={formData.propertiesItems}
+                        isSubmitted={isSubmitted}
                       />
                       <button
                         onClick={addProperties}
@@ -624,6 +655,7 @@ const CreateAssetModal = ({
                             itemName={`groupPropertyItems${el}`}
                             fieldsData={formData[`groupPropertyItems${el}`]}
                             onChange={handleSetFormData}
+                            isSubmitted={isSubmitted}
                           />
                           <button
                             type="button"
@@ -671,6 +703,7 @@ const CreateAssetModal = ({
                         items={additionalFields.identifiersItems}
                         onChange={handleSetFormData}
                         fieldsData={formData.identifiersItems}
+                        isSubmitted={isSubmitted}
                       />
                       <button
                         onClick={addIdentifier}

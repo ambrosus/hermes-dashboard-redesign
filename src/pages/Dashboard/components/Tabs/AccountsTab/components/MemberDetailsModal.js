@@ -40,7 +40,7 @@ const permissionsArray = [
   },
 ];
 
-const MemberDetailsModal = ({ handleUserActive }) => {
+const MemberDetailsModal = ({ handleUserActive, fetchAccounts }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const isNodePage = pathname === '/dashboard/node';
@@ -98,11 +98,16 @@ const MemberDetailsModal = ({ handleUserActive }) => {
 
   const saveHandler = async () => {
     isNodePage
-      ? await modifyOrganization(modalData.organizationId, modifyOrg)
+      ? await modifyOrganization({
+        ...(modifyOrg.legalAddress && { legalAddress: modifyOrg.legalAddress }),
+        ...(modifyOrg.title && { title: modifyOrg.title }),
+      }, modifyOrg)
       : await modifyAccount(modalData?.address, {
-          ...modifyAcc,
+          ...(modifyAcc.fullName && { fullName: modifyAcc.fullName }),
+          ...(modifyAcc.email && { email: modifyAcc.email }),
           permissions: userPermissions,
         });
+    fetchAccounts()
   };
 
   const handleModifyOrg = (keyValue) => {
@@ -139,13 +144,13 @@ const MemberDetailsModal = ({ handleUserActive }) => {
 
   const isDisabled = isNodePage
     ? (modifyOrg.title === modalData.title &&
-        modifyOrg.legalAddress === modalData.legalAddress) ||
-      !modifyOrg.title ||
+      modifyOrg.legalAddress === modalData.legalAddress) ||
+      ((!modifyOrg.title && modalData.title)) ||
       !modifyOrg.legalAddress
     : ((modifyAcc.email === modalData.email &&
         modifyAcc.fullName === modalData.fullName) ||
         !modifyAcc.email ||
-        !modifyAcc.fullName) &&
+        (!modifyAcc.fullName && modalData.fullName)) &&
       permissions.length === userPermissions.length;
 
   return (
@@ -340,6 +345,7 @@ const MemberDetailsModal = ({ handleUserActive }) => {
 
 MemberDetailsModal.propTypes = {
   handleUserActive: PropTypes.func,
+  fetchAccounts: PropTypes.func,
 };
 
 export default React.memo(MemberDetailsModal);

@@ -15,7 +15,12 @@ import {
 } from '../../../../../../utils/organizationService';
 import dateFormatter from '../../../../../../utils/dateFormatter';
 
-const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
+const AccountsListItem = ({
+  info,
+  handleAccounts,
+  fetchOrganizations,
+  fetchAccounts,
+}) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
@@ -74,6 +79,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
   const revokeInviteHandler = async (inviteId) => {
     await deleteInvite(inviteId);
     NotificationManager.success('Invite was revoked');
+    fetchAccounts();
   };
 
   const organisationBackupHandler = async (...args) => {
@@ -86,11 +92,9 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
     }
   };
 
-  // eslint-disable-next-line no-unused-vars
   const openMemberDetailsModal = () =>
     dispatch(handleModal({ name: 'memberDetailsModal', data: info }));
 
-  // eslint-disable-next-line no-unused-vars
   const modifyOrganizationHandler = async (...args) => {
     const { id, data } = args[0];
     try {
@@ -115,7 +119,6 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
     }
   };
 
-  // eslint-disable-next-line no-unused-vars
   const openModal = () => {
     dispatch(
       handleModal({
@@ -161,9 +164,9 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
         {((isNodePage && info.owner === null) ||
           (isNodePage && !!info.owner && info.organizationId)) && (
           <>
-            {/* <button type="button" onClick={openMemberDetailsModal}>
+            <button type="button" onClick={openMemberDetailsModal}>
               <p>Edit</p>
-            </button> */}
+            </button>
             <button
               type="button"
               onClick={() =>
@@ -174,7 +177,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
             >
               <p>Backup</p>
             </button>
-            {/* info.active ? (
+            {info.active ? (
               <button
                 type="button"
                 onClick={() =>
@@ -198,7 +201,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
               >
                 <p>Activate</p>
               </button>
-            ) */}
+            )}
           </>
         )}
       </>
@@ -224,7 +227,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
             </button>
           </>
         )}
-        {/* !info.validUntil && (
+        {!info.validUntil && (
           <>
             <button type="button" onClick={openMemberDetailsModal}>
               <p>Edit</p>
@@ -245,7 +248,7 @@ const AccountsListItem = ({ info, handleAccounts, fetchOrganizations }) => {
               </button>
             )}
           </>
-        ) */}
+        )}
       </>
     </div>
   );
@@ -295,6 +298,7 @@ AccountsListItem.propTypes = {
   info: PropTypes.object,
   handleAccounts: PropTypes.func,
   fetchOrganizations: PropTypes.func,
+  fetchAccounts: PropTypes.func,
 };
 
 export default React.memo(AccountsListItem);

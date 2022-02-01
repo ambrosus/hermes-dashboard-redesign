@@ -44,7 +44,7 @@ const SettingsTab = () => {
   };
 
   const editData = async () => {
-    const { email, legalAddress } = formData;
+    const { email, fullName } = formData;
     await modifyAccount(userInfo.address, {
       ...(formData.password && {
         token: btoa(
@@ -57,13 +57,10 @@ const SettingsTab = () => {
         ),
       }),
       ...(formData.email !== organization.email && { email }),
-      ...(formData.fullName !== organization.fullName && {
-        legalAddress,
-      }),
+      ...(formData.fullName !== organization.fullName && { fullName }),
     });
   };
 
-  // eslint-disable-next-line no-unused-vars
   const handleDisable = async () => {
     await modifyOrganization(userInfo.organization, { active: false });
 
@@ -85,6 +82,7 @@ const SettingsTab = () => {
 
   const isDisabled =
     formData.email === userInfo.email &&
+    organization.fullName &&
     formData.fullName === organization.fullName &&
     (!(!isConfirmMatch && formData.confirmPassword) || isPasswordMatch);
 
@@ -97,9 +95,9 @@ const SettingsTab = () => {
       <div className="space-25" />
       <div className="settings-tab__switch">
         <div className="buttons">
-          {/* <button type="button" className="disable" onClick={handleDisable}>
+          <button type="button" className="disable" onClick={handleDisable}>
             <p>Disable</p>
-          </button> */}
+          </button>
         </div>
         <div className="timestamp">
           <span style={{ fontWeight: 700, marginRight: 4 }}>Created</span>
