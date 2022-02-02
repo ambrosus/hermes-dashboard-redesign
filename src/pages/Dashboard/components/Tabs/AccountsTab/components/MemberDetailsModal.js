@@ -105,6 +105,7 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts }) => {
       : await modifyAccount(modalData?.address, {
           ...(modifyAcc.fullName && { fullName: modifyAcc.fullName }),
           ...(modifyAcc.email && { email: modifyAcc.email }),
+          accessLevel: +userAccessLevel,
           permissions: userPermissions,
         });
     fetchAccounts()
@@ -148,10 +149,10 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts }) => {
       (!modifyOrg.title && modalData.title) ||
       (!modifyOrg.legalAddress && modalData.legalAddress)
     : ((modifyAcc.email === modalData.email &&
-        modifyAcc.fullName === modalData.fullName) ||
-        !modifyAcc.email ||
+        modifyAcc.fullName === (modalData.fullName || '')) ||
         (!modifyAcc.fullName && modalData.fullName)) &&
-      permissions.length === userPermissions.length;
+      permissions.length === userPermissions.length &&
+      +userAccessLevel === +modalData.accessLevel;
 
   return (
     <UiModal
@@ -306,8 +307,8 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts }) => {
                   onChange={(value) => setUserAccessLevel(value)}
                   value={userAccessLevel}
                   label="Access level"
-                  name="AccessLevel"
                   placeholder=""
+                  maxNumber={900}
                 />
               </div>
             </div>

@@ -135,9 +135,13 @@ export const createInvites = (email, callback) => {
   const url = `${apiExtended}/organization/invite`;
   axios
     .post(url, email)
-    .then(() => {
-      NotificationManager.success('Invite was sent');
-      callback();
+    .then(({ data }) => {
+      if (data.data.errors?.[0]?.reason) {
+        NotificationManager.error(data.data.errors?.[0]?.reason);
+      } else {
+        NotificationManager.success('Email was sent');
+        callback();
+      }
     })
     .catch(() => NotificationManager.error('Invite error'));
 };
