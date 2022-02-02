@@ -112,6 +112,7 @@ const DashboardTab = () => {
                   ticks: {
                     beginAtZero: true,
                     callback: (value) => {
+                      console.log(value);
                       if (value % 1 === 0) {
                         return value;
                       }
@@ -130,7 +131,6 @@ const DashboardTab = () => {
       console.log('in generateDiagram error', e);
     }
   };
-
   return (
     <div className="dashboard-tab">
       <div className="organization-container__heading">Dashboard</div>

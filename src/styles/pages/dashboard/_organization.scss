@@ -266,15 +266,16 @@
             }
 
             &__name {
+              max-width: 69%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: block;
               font-style: normal;
               font-weight: 700;
               font-size: 16px;
               line-height: 19px;
-              display: flex;
               align-items: center;
-
               color: #333333;
-
             }
           }
 
@@ -528,15 +529,15 @@
       }
 
       &__name {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
         line-height: 19px;
-        display: flex;
-        align-items: center;
-
         color: #333333;
-
       }
     }
 

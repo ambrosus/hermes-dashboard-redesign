@@ -52,10 +52,10 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts }) => {
   const [userAccessLevel, setUserAccessLevel] = useState(accessLevel);
   const [modifyOrg, setModifyOrg] = useState({
     title: modalData.title,
-    legalAddress: modalData.legalAddress,
+    legalAddress: modalData.legalAddress || '',
   });
   const [modifyAcc, setModifyAcc] = useState({
-    fullName: modalData.fullName,
+    fullName: modalData.fullName || '',
     email: modalData.email,
   });
   const [isActive, setIsActive] = useState(modalData.active);
@@ -144,9 +144,9 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts }) => {
 
   const isDisabled = isNodePage
     ? (modifyOrg.title === modalData.title &&
-      modifyOrg.legalAddress === modalData.legalAddress) ||
-      ((!modifyOrg.title && modalData.title)) ||
-      !modifyOrg.legalAddress
+      modifyOrg.legalAddress === (modalData.legalAddress || '')) ||
+      (!modifyOrg.title && modalData.title) ||
+      (!modifyOrg.legalAddress && modalData.legalAddress)
     : ((modifyAcc.email === modalData.email &&
         modifyAcc.fullName === modalData.fullName) ||
         !modifyAcc.email ||
