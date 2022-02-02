@@ -35,6 +35,7 @@ const AddedField = ({
               placeholder={`${placeholder} name`}
               onChange={(value) => handleChange(el, value)}
               name="name"
+              maxLength={80}
               errorMessage={
                 isSubmitted &&
                 fieldsData[el]?.description &&

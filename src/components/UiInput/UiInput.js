@@ -18,6 +18,7 @@ const UiInput = ({
   rightEl,
   onKeyPress = () => {},
   errorMessage,
+  maxLength = 0,
 }) => {
   const handleInput = ({ target }) =>
     onChange(name ? { [name]: target.value } : target.value);
@@ -28,6 +29,8 @@ const UiInput = ({
     }
     onKeyPress(event);
   };
+
+  const maxLengthAttr = { ...(maxLength && { maxLength }) };
 
   return (
     <div
@@ -47,6 +50,7 @@ const UiInput = ({
         disabled={disabled}
         onChange={handleInput}
         onKeyDown={handleKeyPress}
+        {...maxLengthAttr}
       />
       {imgSrc && (
         <img
@@ -80,6 +84,7 @@ UiInput.propTypes = {
   onKeyPress: PropTypes.func,
   rightEl: PropTypes.element,
   errorMessage: PropTypes.string,
+  maxLength: PropTypes.number,
 };
 
 export default UiInput;

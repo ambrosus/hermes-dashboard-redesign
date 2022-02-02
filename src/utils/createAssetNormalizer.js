@@ -37,9 +37,9 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
   if (isAssetCreating) {
     info.type = 'ambrosus.asset.info';
     info.name = name;
-    info.assetType = customType;
+    info.assetType = customType.toLowerCase();
   } else {
-    info.type = customType;
+    info.type = customType.toLowerCase();
     info.name = name;
   }
   if (rows && rows.length) {
