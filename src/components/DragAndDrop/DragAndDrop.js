@@ -1,22 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { ReactComponent as UploadIcon } from '../../assets/svg/upload.svg';
 
 const DragAndDrop = ({ dropped }) => {
-  const handleChange = ({ target }) => {
-    dropped(target.files);
-  };
+  const [isDragged, setIsDragged] = useState(false);
+
+  const handleChange = ({ target }) => dropped(target.files);
 
   const handleDrop = (e) => {
     dropped([e.dataTransfer.files[0]]);
 
     e.preventDefault();
     e.stopPropagation();
+
+    if (isDragged) {
+      setIsDragged(false);
+    }
   };
 
   const handleDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!isDragged) {
+      setIsDragged(true);
+    }
   };
 
   const handleDragOver = (e) => {
@@ -37,7 +46,8 @@ const DragAndDrop = ({ dropped }) => {
         onDrop={(event) => handleDrop(event)}
         onDragOver={(event) => handleDragOver(event)}
         onDragEnter={(event) => handleDragEnter(event)}
-        className="drag-and-drop"
+        onDragLeave={() => setIsDragged(false)}
+        className={cx('drag-and-drop', isDragged && 'drag-and-drop--dragged')}
         htmlFor="file-upload"
       >
         <UploadIcon /> Choose file or Drag it here

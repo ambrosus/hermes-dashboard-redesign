@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';
 import UiButton from '../UiButton';
 import { handleModal } from '../../store/modules/modal';
@@ -11,7 +10,7 @@ const BulkEvent = () => {
     dispatch(handleModal({ name: 'bulkEvent' }));
   };
 
-  return ReactDOM.createPortal(
+  return (
     <div className="bulk-event-wrapper">
       <div className="bulk-event">
         <p>
@@ -26,8 +25,7 @@ const BulkEvent = () => {
           Bulk Event
         </UiButton>
       </div>
-    </div>,
-    document.querySelector('body'),
+    </div>
   );
 };
 

@@ -137,6 +137,7 @@ const AccountsTab = () => {
         <MemberDetailsModal
           handleUserActive={handleAccounts}
           fetchAccounts={fetchAccounts}
+          fetchOrganizations={fetchOrganizations}
         />
       )}
     </div>

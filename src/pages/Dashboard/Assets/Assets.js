@@ -53,6 +53,7 @@ const Assets = () => {
     if (select) {
       setSelectedAssets([...selectedAssets, assetId]);
     } else {
+      setAllSelected(false);
       setSelectedAssets(selectedAssets.filter((el) => el !== assetId));
     }
   };
@@ -68,47 +69,50 @@ const Assets = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      <div className="assets-options">
-        <h1 className="assets-options__title">My Assets</h1>
-        {userInfo.permissions && userInfo.permissions.includes('create_asset') && (
-          <div className="assets-options__buttons">
-            <UiButton type="secondary" onclick={openPackagingHandler}>
-              Packaging
-            </UiButton>
-            <UiButton type="primary" onclick={openCreateModal}>
-              Create Asset
-            </UiButton>
-          </div>
-        )}
+    <>
+      <div className="dashboard-container">
+        <div className="assets-options">
+          <h1 className="assets-options__title">My Assets</h1>
+          {userInfo.permissions &&
+            userInfo.permissions.includes('create_asset') && (
+              <div className="assets-options__buttons">
+                <UiButton type="secondary" onclick={openPackagingHandler}>
+                  Packaging
+                </UiButton>
+                <UiButton type="primary" onclick={openCreateModal}>
+                  Create Asset
+                </UiButton>
+              </div>
+            )}
+        </div>
+        <Sorting selectAll={selectAll} unselectAll={unselectAll} />
+        <div className="assets-list">
+          <InfiniteScroll handleObserver={showMore}>
+            {assetsList.map((el) => (
+              <AssetItem
+                handleSelect={handleSelectAsset}
+                selected={selectedAssets.includes(el.content.idData.assetId)}
+                assetData={el}
+                key={el.content.idData.assetId}
+              />
+            ))}
+          </InfiniteScroll>
+        </div>
+        <UiModal isFullWindow modalName="createAsset">
+          <CreateAssetModal modalType="createAsset" />
+        </UiModal>
+        <UiModal isFullWindow modalName="bulkEvent">
+          <CreateAssetModal
+            submitCallback={unselectAll}
+            modalType="bulkEvent"
+            bulkEventData={
+              selectedAssets.length ? { assetsIds: selectedAssets } : {}
+            }
+          />
+        </UiModal>
       </div>
-      <Sorting selectAll={selectAll} unselectAll={unselectAll} />
-      <div className="assets-list">
-        <InfiniteScroll handleObserver={showMore}>
-          {assetsList.map((el) => (
-            <AssetItem
-              handleSelect={handleSelectAsset}
-              selected={selectedAssets.includes(el.content.idData.assetId)}
-              assetData={el}
-              key={el.content.idData.assetId}
-            />
-          ))}
-        </InfiniteScroll>
-      </div>
-      <UiModal isFullWindow modalName="createAsset">
-        <CreateAssetModal modalType="createAsset" />
-      </UiModal>
-      <UiModal isFullWindow modalName="bulkEvent">
-        <CreateAssetModal
-          submitCallback={unselectAll}
-          modalType="bulkEvent"
-          bulkEventData={
-            selectedAssets.length ? { assetsIds: selectedAssets } : {}
-          }
-        />
-      </UiModal>
       {!!selectedAssets.length && <BulkEvent />}
-    </div>
+    </>
   );
 };
 

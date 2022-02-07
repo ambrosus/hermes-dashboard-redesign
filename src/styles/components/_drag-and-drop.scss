@@ -18,4 +18,13 @@
   path {
     fill: $color-gray-light;
   }
+
+  &--dragged {
+    filter: grayscale(1);
+    color: $color-primary;
+
+    path {
+      fill: $color-primary;
+    }
+  }
 }

@@ -383,6 +383,7 @@ const CreateAssetModal = ({
 
     if (value) {
       const nameExpansion = value.match(/\w[^.]*$/)[0];
+      console.log(value);
       let name = value.split('/');
       name = name[name.length - 1];
 
@@ -391,7 +392,7 @@ const CreateAssetModal = ({
           rows: [
             ...formData.rows,
             {
-              name,
+              name: name || value,
               data: value,
               nameExpansion,
               type: 'url',

@@ -60,6 +60,7 @@ const Assets = () => {
       setSelectedPackages([...selectedPackages, assetId]);
     } else {
       setSelectedPackages(selectedPackages.filter((el) => el !== assetId));
+      setAllSelected(false);
     }
   };
 

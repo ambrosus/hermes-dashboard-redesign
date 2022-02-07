@@ -123,7 +123,13 @@ const AssetItem = ({ isOnAssetPage, assetData, selected, handleSelect }) => {
           isOnAssetPage && 'asset-item__content--asset-page',
         )}
       >
-        <Link to={`/dashboard/assets/${assetId}`} className="asset-item__title">
+        <Link
+          to={`/dashboard/assets/${assetId}`}
+          className={cx(
+            'asset-item__title',
+            isOnAssetPage && 'asset-item__title--page',
+          )}
+        >
           {assetContentInfo.name && assetContentInfo.name.toString()}
         </Link>
         <div className="asset-item-info">

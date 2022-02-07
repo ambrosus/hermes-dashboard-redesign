@@ -48,7 +48,7 @@
   }
 
   &__text {
-    font-size: 21px;
+    font-size: 18px;
     font-weight: 700;
   }
 }
@@ -207,9 +207,9 @@
   }
 
   &__type img {
-    width: 12px;
-    height: 12px;
-    bottom: 16px;
+    width: 12px!important;
+    height: 12px!important;
+    bottom: 16px!important;
     transform: rotate(180deg);
   }
 
@@ -223,5 +223,10 @@
 
   .form-semicolon-wrapper:not(:first-child) input[placeholder~="Description"] {
     padding-right: 40px;
+  }
+
+  .ui-input img {
+    width: 20px;
+    bottom: 14px;
   }
 }

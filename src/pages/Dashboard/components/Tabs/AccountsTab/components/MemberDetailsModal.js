@@ -40,15 +40,15 @@ const permissionsArray = [
   },
 ];
 
-const MemberDetailsModal = ({ handleUserActive, fetchAccounts }) => {
+const MemberDetailsModal = ({ handleUserActive, fetchAccounts, fetchOrganizations }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const isNodePage = pathname === '/dashboard/node';
-  const { accessLevel, permissions } = useSelector(
+  const { accessLevel } = useSelector(
     (state) => state.auth.userInfo,
   );
   const modalData = useSelector((state) => state.modal.openedModal.data);
-  const [userPermissions, setUserPermissions] = useState(permissions);
+  const [userPermissions, setUserPermissions] = useState(modalData.permissions);
   const [userAccessLevel, setUserAccessLevel] = useState(accessLevel);
   const [modifyOrg, setModifyOrg] = useState({
     title: modalData.title,
@@ -97,18 +97,24 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts }) => {
   };
 
   const saveHandler = async () => {
-    isNodePage
-      ? await modifyOrganization({
+    if (isNodePage) {
+      await modifyOrganization(modalData?.organization || modalData?.organizationId, {
         ...(modifyOrg.legalAddress && { legalAddress: modifyOrg.legalAddress }),
-        ...(modifyOrg.title && { title: modifyOrg.title }),
+        ...(modifyOrg.title && modifyOrg.title !== modalData.title && { title: modifyOrg.title }),
       }, modifyOrg)
-      : await modifyAccount(modalData?.address, {
-          ...(modifyAcc.fullName && { fullName: modifyAcc.fullName }),
-          ...(modifyAcc.email && { email: modifyAcc.email }),
-          accessLevel: +userAccessLevel,
-          permissions: userPermissions,
-        });
-    fetchAccounts()
+
+      fetchOrganizations();
+    } else {
+      await modifyAccount(modalData?.address, {
+        ...(modifyAcc.fullName && { fullName: modifyAcc.fullName }),
+        ...(modifyAcc.email && { email: modifyAcc.email }),
+        ...(+userAccessLevel !== +accessLevel && { accessLevel: +userAccessLevel }),
+        permissions: userPermissions,
+      });
+
+      fetchAccounts();
+    }
+    dispatch(handleModal({ name: '' }));
   };
 
   const handleModifyOrg = (keyValue) => {
@@ -151,7 +157,7 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts }) => {
     : ((modifyAcc.email === modalData.email &&
         modifyAcc.fullName === (modalData.fullName || '')) ||
         (!modifyAcc.fullName && modalData.fullName)) &&
-      permissions.length === userPermissions.length &&
+      modalData.permissions.length === userPermissions.length &&
       +userAccessLevel === +modalData.accessLevel;
 
   return (
@@ -347,6 +353,7 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts }) => {
 MemberDetailsModal.propTypes = {
   handleUserActive: PropTypes.func,
   fetchAccounts: PropTypes.func,
+  fetchOrganizations: PropTypes.func,
 };
 
 export default React.memo(MemberDetailsModal);
