@@ -40,6 +40,13 @@ const createAssetNormalizer = (formData, isAssetCreating) => {
     info.assetType = customType.toLowerCase();
   } else {
     info.type = customType.toLowerCase();
+
+    if (customType.toLowerCase() === 'package') {
+      info.type = 'ambrosus.event.pack';
+    } else if (customType.toLowerCase() === 'unpack') {
+      info.type = 'ambrosus.event.unpack';
+    }
+
     info.name = name;
   }
   if (rows && rows.length) {

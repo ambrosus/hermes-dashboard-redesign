@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import cx from 'classnames';
@@ -14,15 +14,62 @@ const Sorting = ({ selectAll, unselectAll }) => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
-  const { isAssetsLoading } = useSelector((state) => state.assets);
+  const { isAssetsLoading, assetsSearchParams } = useSelector(
+    (state) => state.assets,
+  );
 
-  const [currentTimeFilter, setCurrentTimeFilter] = useState('');
   const [isDateRangeSelected, setIsDateRangeSelected] = useState(false);
+  const [currentTimeFilter, setCurrentTimeFilter] = useState('');
+  const [pickerRefresher, setPickerRefresher] = useState(true);
+
+  useEffect(() => {
+    if (assetsSearchParams.length === 1) {
+      if (assetsSearchParams[0].operator === 'greater-than-equal') {
+        let prevTimeFilter = '';
+
+        timeFilter.forEach((el) => {
+          const checkDate = moment().subtract(1, el.toLowerCase()).unix();
+
+          if (assetsSearchParams[0].value < checkDate) {
+            prevTimeFilter = el;
+          }
+        });
+
+        setCurrentTimeFilter(prevTimeFilter);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!pickerRefresher) {
+      setPickerRefresher(true);
+    }
+  }, [pickerRefresher]);
+
+  const initRangeDates = useMemo(() => {
+    if (assetsSearchParams[0] && assetsSearchParams[0].operator === 'inrange') {
+      setIsDateRangeSelected(true);
+
+      return {
+        endDate: moment
+          .unix(assetsSearchParams[0].value['less-than-equal'])
+          .format('MM/DD/YYYY'),
+        startDate: moment
+          .unix(assetsSearchParams[0].value['greater-than-equal'])
+          .format('MM/DD/YYYY'),
+      };
+    }
+    return {};
+  }, [assetsSearchParams]);
 
   const handleCurrentTimeFilter = (time) => {
     const filterTime = time === currentTimeFilter ? '' : time;
 
     setCurrentTimeFilter(filterTime);
+
+    setPickerRefresher(false);
+    setIsDateRangeSelected(false);
+
     if (filterTime) {
       const timestamp = moment().subtract(1, time.toLowerCase()).unix();
       dispatch(
@@ -41,6 +88,7 @@ const Sorting = ({ selectAll, unselectAll }) => {
 
   const handleDateRange = (event, picker) => {
     setIsDateRangeSelected(true);
+    setCurrentTimeFilter('');
 
     const { startDate, endDate } = picker;
     dispatch(
@@ -94,17 +142,23 @@ const Sorting = ({ selectAll, unselectAll }) => {
         ))}
       </div>
       <div className="assets-sorting__advanced-sorting">
-        <DateRangePicker
-          onApply={handleDateRange}
-          onCancel={cancelDateRangeFilter}
-        >
-          <button
-            type="button"
-            className={cx('btn plain', isDateRangeSelected && 'plain-selected')}
+        {pickerRefresher && (
+          <DateRangePicker
+            onApply={handleDateRange}
+            onCancel={cancelDateRangeFilter}
+            initialSettings={initRangeDates || {}}
           >
-            <DatePickerIcon />
-          </button>
-        </DateRangePicker>
+            <button
+              type="button"
+              className={cx(
+                'btn plain',
+                isDateRangeSelected && 'plain-selected',
+              )}
+            >
+              <DatePickerIcon />
+            </button>
+          </DateRangePicker>
+        )}
       </div>
     </div>
   );

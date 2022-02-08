@@ -29,12 +29,7 @@ const UiSelect = ({
   );
 
   useEffect(() => {
-    if (
-      selectedValue &&
-      options &&
-      options.length &&
-      inputValue !== selectedValue
-    ) {
+    if (selectedValue && options && options.length) {
       const selectedItem = options.find((el) => selectedValue === el.value);
       setInputValue(selectedItem ? selectedItem.label : selectedValue);
     }
@@ -59,8 +54,10 @@ const UiSelect = ({
   const toggleOptionsVisibility = () => setIsOptionsOpened((isOpen) => !isOpen);
 
   const handleChange = (value) => {
-    onChange(name ? { [name]: value } : value);
-    setInputValue(value);
+    if (selectedValue !== value) {
+      onChange(name ? { [name]: value } : value);
+      setInputValue(value);
+    }
     setIsOptionsOpened(false);
   };
 
