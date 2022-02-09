@@ -232,21 +232,22 @@ const AccountsListItem = ({
             <button type="button" onClick={openMemberDetailsModal}>
               <p>Edit</p>
             </button>
-            {info.active ? (
-              <button type="button" onClick={openModal}>
-                <p>Disable</p>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={async () => {
-                  await modifyAccount(info.address, { active: true });
-                  handleAccounts(info.address, true, true);
-                }}
-              >
-                <p>Activate</p>
-              </button>
-            )}
+            {info.accessLevel < userInfo.accessLevel &&
+              (info.active ? (
+                <button type="button" onClick={openModal}>
+                  <p>Disable</p>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await modifyAccount(info.address, { active: true });
+                    handleAccounts(info.address, true, true);
+                  }}
+                >
+                  <p>Activate</p>
+                </button>
+              ))}
           </>
         )}
       </>

@@ -22,7 +22,6 @@ const SettingsTab = () => {
   const [isPasswordConfVisible, setIsPasswordConfVisible] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
-    fullName: '',
     password: '',
     confirmPassword: '',
   });
@@ -31,10 +30,7 @@ const SettingsTab = () => {
     if (!isEmptyObj(userInfo)) {
       getOrganization(userInfo.organization).then((org) => {
         setOrganization(org);
-        setFormData({
-          email: userInfo.email,
-          fullName: org.fullName,
-        });
+        setFormData({ email: userInfo.email });
       });
     }
   }, [userInfo]);
@@ -44,7 +40,7 @@ const SettingsTab = () => {
   };
 
   const editData = async () => {
-    const { email, fullName } = formData;
+    const { email } = formData;
     await modifyAccount(userInfo.address, {
       ...(formData.password && {
         token: btoa(
@@ -57,7 +53,6 @@ const SettingsTab = () => {
         ),
       }),
       ...(formData.email !== organization.email && { email }),
-      ...(formData.fullName !== organization.fullName && { fullName }),
     });
   };
 
@@ -82,8 +77,6 @@ const SettingsTab = () => {
 
   const isDisabled =
     formData.email === userInfo.email &&
-    organization.fullName &&
-    formData.fullName === organization.fullName &&
     (!(!isConfirmMatch && formData.confirmPassword) || isPasswordMatch);
 
   return (
@@ -119,13 +112,6 @@ const SettingsTab = () => {
           value={formData.email}
           label="Email"
           placeholder={organization.email}
-        />
-        <UiInput
-          name="fullName"
-          onChange={handleSetFormData}
-          value={formData.fullName}
-          label="Full name"
-          placeholder={organization.fullName}
         />
         <UiInput
           name="password"

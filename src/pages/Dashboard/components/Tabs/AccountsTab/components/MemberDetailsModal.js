@@ -49,13 +49,11 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts, fetchOrganization
   );
   const modalData = useSelector((state) => state.modal.openedModal.data);
   const [userPermissions, setUserPermissions] = useState(modalData.permissions);
-  const [userAccessLevel, setUserAccessLevel] = useState(accessLevel);
+  const [userAccessLevel, setUserAccessLevel] = useState(modalData.accessLevel);
   const [modifyOrg, setModifyOrg] = useState({
     title: modalData.title,
-    legalAddress: modalData.legalAddress || '',
   });
   const [modifyAcc, setModifyAcc] = useState({
-    fullName: modalData.fullName || '',
     email: modalData.email,
   });
   const [isActive, setIsActive] = useState(modalData.active);
@@ -99,14 +97,12 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts, fetchOrganization
   const saveHandler = async () => {
     if (isNodePage) {
       await modifyOrganization(modalData?.organization || modalData?.organizationId, {
-        ...(modifyOrg.legalAddress && { legalAddress: modifyOrg.legalAddress }),
         ...(modifyOrg.title && modifyOrg.title !== modalData.title && { title: modifyOrg.title }),
       }, modifyOrg)
 
       fetchOrganizations();
     } else {
       await modifyAccount(modalData?.address, {
-        ...(modifyAcc.fullName && { fullName: modifyAcc.fullName }),
         ...(modifyAcc.email && { email: modifyAcc.email }),
         ...(+userAccessLevel !== +accessLevel && { accessLevel: +userAccessLevel }),
         permissions: userPermissions,
@@ -150,13 +146,8 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts, fetchOrganization
   };
 
   const isDisabled = isNodePage
-    ? (modifyOrg.title === modalData.title &&
-      modifyOrg.legalAddress === (modalData.legalAddress || '')) ||
-      (!modifyOrg.title && modalData.title) ||
-      (!modifyOrg.legalAddress && modalData.legalAddress)
-    : ((modifyAcc.email === modalData.email &&
-        modifyAcc.fullName === (modalData.fullName || '')) ||
-        (!modifyAcc.fullName && modalData.fullName)) &&
+    ? modifyOrg.title === modalData.title || !modifyOrg.title
+    : modifyAcc.email === modalData.email &&
       modalData.permissions.length === userPermissions.length &&
       +userAccessLevel === +modalData.accessLevel;
 
@@ -196,36 +187,38 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts, fetchOrganization
           </div>
           <div className="space-10" />
           <div className="buttons-options">
-            <div className="buttons">
-              {isActive ? (
-                <button
-                  type="button"
-                  onClick={() => handleAccountStatus(false)}
-                >
-                  <p>Disable</p>
-                </button>
-              ) : (
-                <button
-                  style={{ backgroundColor: '#1ACD8C' }}
-                  type="button"
-                  onClick={() => handleAccountStatus(true)}
-                >
-                  <p>Activate</p>
-                </button>
-              )}
-              {isNodePage && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    organisationBackupHandler([
-                      { id: modalData?.organizationId, data: {} },
-                    ])
-                  }
-                >
-                  <p>Backup</p>
-                </button>
-              )}
-            </div>
+            {modalData.accessLevel < accessLevel && (
+              <div className="buttons">
+                {isActive ? (
+                  <button
+                    type="button"
+                    onClick={() => handleAccountStatus(false)}
+                  >
+                    <p>Disable</p>
+                  </button>
+                ) : (
+                  <button
+                    style={{ backgroundColor: '#1ACD8C' }}
+                    type="button"
+                    onClick={() => handleAccountStatus(true)}
+                  >
+                    <p>Activate</p>
+                  </button>
+                )}
+                {isNodePage && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      organisationBackupHandler([
+                        { id: modalData?.organizationId, data: {} },
+                      ])
+                    }
+                  >
+                    <p>Backup</p>
+                  </button>
+                )}
+              </div>
+            )}
             {isNodePage && (
               <div className="options">
                 <div className="createdAt">
@@ -255,13 +248,6 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts, fetchOrganization
               disabled
             />
             <UiInput
-              label="Full name"
-              placeholder={modalData?.fullName}
-              name="fullName"
-              onChange={handleModifyAccount}
-              value={modifyAcc?.fullName || ''}
-            />
-            <UiInput
               label="Email"
               name="email"
               onChange={handleModifyAccount}
@@ -282,12 +268,6 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts, fetchOrganization
               onChange={handleModifyOrg}
               name="title"
               value={modifyOrg.title || ''}
-            />
-            <UiInput
-              label="Legal address"
-              name="legalAddress"
-              onChange={handleModifyOrg}
-              value={modifyOrg.legalAddress}
             />
           </>
         )}
