@@ -106,23 +106,20 @@ const DashboardTab = () => {
             title: {
               display: false,
             },
-            scales: {
-              yAxes: [
-                {
-                  ticks: {
-                    beginAtZero: true,
-                    callback: (value) => {
-                      console.log(value);
-                      if (value % 1 === 0) {
-                        return value;
-                      }
-                    },
-                  },
-                  gridLines: {
-                    display: false,
-                  },
+          },
+          scales: {
+            y: {
+              ticks: {
+                beginAtZero: true,
+                callback: (value) => {
+                  if(value % 1 === 0) {
+                    return value;
+                  }
                 },
-              ],
+              },
+              gridLines: {
+                display: false,
+              },
             },
           },
         },
