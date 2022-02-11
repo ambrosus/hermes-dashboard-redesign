@@ -36,6 +36,7 @@ const OwnKey = () => {
             onChange={handleChange}
             label="Your public key"
             className="own-key__input"
+            placeholder="Enter key here"
             leftEl={
               <svg
                 width="24"
