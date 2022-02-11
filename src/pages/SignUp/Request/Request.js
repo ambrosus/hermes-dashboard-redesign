@@ -111,6 +111,7 @@ const Request = () => {
           onChange={handleOrganization}
           label="Organization name*"
           placeholder="Organization name"
+          maxLength={32}
         />
         <AuthInput
           leftEl={

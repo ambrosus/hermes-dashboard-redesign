@@ -36,7 +36,7 @@ const ImportantInfoModal = () => {
         Create a backup.
       </p>
       <AuthButton className="important-btn" onClick={closeInfoModal}>
-        I Understands
+        I Understand
       </AuthButton>
     </div>
   );

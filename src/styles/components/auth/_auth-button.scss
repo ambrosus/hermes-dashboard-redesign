@@ -27,4 +27,9 @@
       color: $color-gray;
     }
   }
+
+  &:disabled {
+    background: #f4f5f6;
+    color: #a6b0c3;
+  }
 }

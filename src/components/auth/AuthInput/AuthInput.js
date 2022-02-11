@@ -13,13 +13,13 @@ const AuthInput = ({
   leftEl,
   type = 'text',
   errorMessage,
+  maxLength = 0,
 }) => {
   const [showPass, setShowPass] = useState(false);
   const handleChange = ({ target }) => onChange(target.value);
-  const handleShowPassword = () => {
-    setShowPass(!showPass);
-    console.log(showPass);
-  };
+  const handleShowPassword = () => setShowPass(!showPass);
+
+  const maxLengthProp = { ...(maxLength && { maxLength }) };
 
   return (
     <div className={cx('auth-input', className)}>
@@ -43,6 +43,7 @@ const AuthInput = ({
         type={passwordInput ? (showPass ? 'text' : 'password') : type}
         onChange={handleChange}
         value={value}
+        {...maxLengthProp}
       />
       <div
         className="auth-input__right-el"
@@ -71,6 +72,7 @@ AuthInput.propTypes = {
   type: PropTypes.string,
   className: PropTypes.string,
   errorMessage: PropTypes.string,
+  maxLength: PropTypes.number,
 };
 
 export default AuthInput;

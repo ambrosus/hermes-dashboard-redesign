@@ -5,6 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
   &__heading{
     width: 100%;
     text-align: left;
@@ -37,6 +38,7 @@
 
   &__checkbox {
     margin-top: 20px;
+    color: #58667E!important;
   }
 
   &__submit {
