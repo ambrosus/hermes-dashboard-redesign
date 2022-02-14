@@ -26,7 +26,7 @@ const TabOptions = ({ period = '7d', setPeriod, type = 'asset', setType }) => {
             <UiButton
               onclick={pushBundleHandler}
               type="primary"
-              styles={{ padding: '1px 40px' }}
+              styles={{ padding: '1px 40px', fontWeight: 700 }}
             >
               Push Bundle
             </UiButton>
