@@ -142,6 +142,7 @@ const SettingsTab = () => {
         )}
         <div className="bottom-label">
           <UiButton
+            type="primary"
             className="save-account"
             disabled={isDisabled}
             onclick={editData}
