@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import PackageListItem from '../../../components/PackageListItem';
@@ -40,10 +40,15 @@ const Assets = () => {
     }
   }, [userInfo]);
 
+  const prevList = useRef();
+
   useEffect(() => {
     if (allSelected) {
-      selectAll();
+      for (let i = prevList.current.length; i < assetsList.length; i += 1) {
+        handlePackageSelect(assetsList[i].content.idData.assetId);
+      }
     }
+    prevList.current = assetsList;
   }, [assetsList]);
 
   const handleSetFormData = (keyValue) => {
@@ -57,10 +62,9 @@ const Assets = () => {
     const select = !selectedPackages.includes(assetId);
 
     if (select) {
-      setSelectedPackages([...selectedPackages, assetId]);
+      setSelectedPackages((state) => [...state, assetId]);
     } else {
       setSelectedPackages(selectedPackages.filter((el) => el !== assetId));
-      setAllSelected(false);
     }
   };
 
