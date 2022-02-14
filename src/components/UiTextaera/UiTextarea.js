@@ -8,6 +8,7 @@ const UiTextaera = ({
   name,
   rows = '10',
   value,
+  className = '',
 }) => {
   const handleChange = ({ target }) => {
     onChange(name ? { [name]: target.value } : target.value);
@@ -18,7 +19,7 @@ const UiTextaera = ({
       {label && <label className="ui-input__label">{label}</label>}
       <textarea
         value={value}
-        className="ui-input__input ui-textarea"
+        className={`ui-input__input ui-textarea ${className}`}
         onChange={handleChange}
         cols="30"
         rows={rows}
@@ -35,6 +36,7 @@ UiTextaera.propTypes = {
   name: PropTypes.string,
   rows: PropTypes.string,
   value: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default UiTextaera;

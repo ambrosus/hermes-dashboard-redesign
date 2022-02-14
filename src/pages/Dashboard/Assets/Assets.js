@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAssets } from '../../../store/modules/assets/actions';
@@ -27,6 +27,7 @@ const Assets = () => {
   );
 
   const { userInfo } = useSelector((state) => state.auth);
+  const prevList = useRef();
 
   useEffect(() => {
     if (!assetsQueryData.data.length && !isEmptyObj(userInfo)) {
@@ -36,8 +37,11 @@ const Assets = () => {
 
   useEffect(() => {
     if (allSelected) {
-      selectAll();
+      for (let i = prevList.current.length; i < assetsList.length; i += 1) {
+        handleSelectAsset(assetsList[i].content.idData.assetId, true);
+      }
     }
+    prevList.current = assetsList;
   }, [assetsList]);
 
   const openCreateModal = () => dispatch(handleModal({ name: 'createAsset' }));
@@ -51,9 +55,8 @@ const Assets = () => {
 
   const handleSelectAsset = (assetId, select) => {
     if (select) {
-      setSelectedAssets([...selectedAssets, assetId]);
+      setSelectedAssets((state) => [...state, assetId]);
     } else {
-      setAllSelected(false);
       setSelectedAssets(selectedAssets.filter((el) => el !== assetId));
     }
   };

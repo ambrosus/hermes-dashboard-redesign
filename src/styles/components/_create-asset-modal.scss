@@ -76,7 +76,7 @@
   &__added-img-wrapper {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 44px;
+    margin-bottom: 8px;
   }
 
   &__set-cover-img {
@@ -103,7 +103,7 @@
     position: relative;
     width: 160px;
     height: 120px;
-    margin-bottom: 32px;
+    margin-bottom: 12px;
     margin-right: 12px;
 
     img {
@@ -229,5 +229,9 @@
   .ui-input img {
     width: 20px;
     bottom: 14px;
+  }
+
+  &__textarea {
+    min-height: 150px;
   }
 }

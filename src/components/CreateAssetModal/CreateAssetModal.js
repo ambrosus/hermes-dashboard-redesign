@@ -526,6 +526,7 @@ const CreateAssetModal = ({
               <UiTextarea
                 placeholder={`${entityName} description`}
                 label="Description"
+                className="create-asset-form__textarea"
                 name="description"
                 value={formData.description}
                 onChange={handleSetFormData}

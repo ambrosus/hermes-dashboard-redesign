@@ -73,6 +73,10 @@
     font-weight: 700;
     text-align: center;
     margin: 5px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    max-width: 90%;
 
     &:first-letter {
       text-transform: uppercase;

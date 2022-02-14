@@ -9,7 +9,6 @@ import { signIn } from './store/modules/auth/actions';
 import UiModal from './components/UiModal';
 import CreateResultModal from './components/CreateResultModal';
 import SearchModal from './components/SearchModal';
-import { environment } from './utils/environment';
 import ImportantInfoModal from './components/ImportantInfoModal';
 import SecureKeysModal from './components/SecureKeysModal';
 import { background } from 'stylelint-order/rules/shorthandData';
@@ -17,7 +16,7 @@ import './styles/Main.scss';
 
 const Main = () => {
   const dispatch = useDispatch();
-  console.log(environment);
+
   useEffect(() => {
     const privateKeyFromSession = sessionStorage.getItem('user_private_key');
     if (privateKeyFromSession) {

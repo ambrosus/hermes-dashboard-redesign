@@ -110,6 +110,7 @@ const Sorting = ({ selectAll, unselectAll }) => {
       setIsDateRangeSelected(false);
       dispatch(handleAssetsListSearch([]));
     }
+    setPickerRefresher(false);
   };
 
   return (
