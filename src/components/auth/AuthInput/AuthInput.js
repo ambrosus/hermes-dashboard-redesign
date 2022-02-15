@@ -46,7 +46,7 @@ const AuthInput = ({
         {...maxLengthProp}
       />
       <div
-        className="auth-input__right-el"
+        className={cx('auth-input__right-el', showPass && 'password-showed')}
         role="presentation"
         style={{ cursor: 'pointer' }}
         onClick={() => passwordInput && handleShowPassword()}

@@ -229,9 +229,11 @@ const AccountsListItem = ({
         )}
         {!info.validUntil && (
           <>
-            <button type="button" onClick={openMemberDetailsModal}>
-              <p>Edit</p>
-            </button>
+            {info.accessLevel !== 900 && (
+              <button type="button" onClick={openMemberDetailsModal}>
+                <p>Edit</p>
+              </button>
+            )}
             {info.accessLevel < userInfo.accessLevel &&
               (info.active ? (
                 <button type="button" onClick={openModal}>

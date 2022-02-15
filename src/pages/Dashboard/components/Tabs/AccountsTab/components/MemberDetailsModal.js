@@ -19,10 +19,6 @@ import {
 
 const permissionsArray = [
   {
-    label: 'Super account',
-    key: 'super_account',
-  },
-  {
     label: 'Manage accounts',
     key: 'manage_accounts',
   },
@@ -147,8 +143,7 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts, fetchOrganization
 
   const isDisabled = isNodePage
     ? modifyOrg.title === modalData.title || !modifyOrg.title
-    : modifyAcc.email === modalData.email &&
-      modalData.permissions.length === userPermissions.length &&
+    : modalData.permissions.length === userPermissions.length &&
       +userAccessLevel === +modalData.accessLevel;
 
   return (
@@ -250,8 +245,10 @@ const MemberDetailsModal = ({ handleUserActive, fetchAccounts, fetchOrganization
             <UiInput
               label="Email"
               name="email"
+              imgSrc={lockIcon}
+              disabled
               onChange={handleModifyAccount}
-              value={modifyAcc?.email || ''}
+              placeholder={modifyAcc?.email || ''}
             />
           </>
         ) : (

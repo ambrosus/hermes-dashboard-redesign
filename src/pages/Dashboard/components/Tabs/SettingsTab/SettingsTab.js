@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { ReactSVG } from 'react-svg';
 import { useSelector } from 'react-redux';
+import cx from 'classnames';
 import UiInput from '../../../../../components/UiInput';
 import lockIcon from '../../../../../assets/svg/lock.svg';
 import personIcon from '../../../../../assets/svg/person.svg';
@@ -9,10 +10,9 @@ import UiButton from '../../../../../components/UiButton';
 import {
   getOrganization,
   modifyAccount,
-  modifyOrganization,
 } from '../../../../../utils/organizationService';
 import { isEmptyObj } from '../../../../../utils/isEmptyObj';
-import eyeIcon from '../../../../../assets/svg/eye.svg';
+import { ReactComponent as EyeIcon } from '../../../../../assets/svg/eye.svg';
 
 const SettingsTab = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -56,16 +56,6 @@ const SettingsTab = () => {
     });
   };
 
-  const handleDisable = async () => {
-    await modifyOrganization(userInfo.organization, { active: false });
-
-    sessionStorage.removeItem('user_private_key');
-    sessionStorage.removeItem('user_account');
-    localStorage.removeItem('createAssetData');
-
-    window.location.reload();
-  };
-
   const handlePasswordVisible = () => setIsPasswordVisible((state) => !state);
   const handlePasswordConfVisible = () =>
     setIsPasswordConfVisible((state) => !state);
@@ -76,8 +66,7 @@ const SettingsTab = () => {
   const isConfirmMatch = formData.password !== formData.confirmPassword;
 
   const isDisabled =
-    formData.email === userInfo.email &&
-    (!(!isConfirmMatch && formData.confirmPassword) || isPasswordMatch);
+    !(!isConfirmMatch && formData.confirmPassword) || isPasswordMatch;
 
   return (
     <div className="settings-tab">
@@ -87,11 +76,6 @@ const SettingsTab = () => {
       </div>
       <div className="space-25" />
       <div className="settings-tab__switch">
-        <div className="buttons">
-          <button type="button" className="disable" onClick={handleDisable}>
-            <p>Disable</p>
-          </button>
-        </div>
         <div className="timestamp">
           <span style={{ fontWeight: 700, marginRight: 4 }}>Created</span>
           {moment.unix(organization.createdOn).format('DD MMM YYYY')}
@@ -108,17 +92,22 @@ const SettingsTab = () => {
         />
         <UiInput
           name="email"
+          imgSrc={lockIcon}
           onChange={handleSetFormData}
-          value={formData.email}
+          placeholder={userInfo.email}
           label="Email"
-          placeholder={organization.email}
+          disabled
         />
         <UiInput
           name="password"
           onChange={handleSetFormData}
           value={formData.password}
           label="Password"
-          imgSrc={eyeIcon}
+          rightEl={
+            <span className={cx(!isPasswordVisible && 'password-hidden')}>
+              <EyeIcon />
+            </span>
+          }
           onImageClick={handlePasswordVisible}
           type={isPasswordVisible ? 'text' : 'password'}
         />
@@ -133,7 +122,11 @@ const SettingsTab = () => {
           onChange={handleSetFormData}
           value={formData.confirmPassword}
           label="Confirm password"
-          imgSrc={eyeIcon}
+          rightEl={
+            <span className={cx(!isPasswordConfVisible && 'password-hidden')}>
+              <EyeIcon />
+            </span>
+          }
           onImageClick={handlePasswordConfVisible}
           type={isPasswordConfVisible ? 'text' : 'password'}
         />

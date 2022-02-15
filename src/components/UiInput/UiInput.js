@@ -68,7 +68,15 @@ const UiInput = ({
           className="ui-input__icon"
         />
       )}
-      {rightEl && <div className="ui-input__el">{rightEl}</div>}
+      {rightEl && (
+        <div
+          role="presentation"
+          className="ui-input__el"
+          onClick={onImageClick}
+        >
+          {rightEl}
+        </div>
+      )}
       {errorMessage && <span className="error-message">{errorMessage}</span>}
     </div>
   );
