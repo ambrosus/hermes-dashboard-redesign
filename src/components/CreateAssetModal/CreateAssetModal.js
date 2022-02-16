@@ -588,7 +588,11 @@ const CreateAssetModal = ({
               />
               <div className="create-asset-form__added-img-wrapper">
                 {formData.rows.map((el) => (
-                  <div key={el} className="create-asset-form__added-img">
+                  <div
+                    key={el}
+                    className="create-asset-form__added-img"
+                    style={{ marginBottom: 30 }}
+                  >
                     <img src={el.background} alt="row-file" />
                     <button
                       type="button"

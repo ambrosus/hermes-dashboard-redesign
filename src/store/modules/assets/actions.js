@@ -212,7 +212,7 @@ export const createEvent =
           if (!isBulk) {
             dispatch(
               setCreateResult({
-                resultData: { data: err.response.data, isSuccess: false },
+                resultData: { data: err?.response?.data, isSuccess: false },
                 percentsComplete: 100,
               }),
             );
